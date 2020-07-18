@@ -102,4 +102,9 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_get_question_detail
 );
+//test
+router.get(
+    '/user/list/student',
+    AdminController.admin_get_student_list
+);
 module.exports = router;

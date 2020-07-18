@@ -104,7 +104,7 @@ router.get(
 );
 //test
 router.get(
-    '/user/list/student',
+    '/user/list/student/test',
     AdminController.admin_get_student_list
 );
 module.exports = router;

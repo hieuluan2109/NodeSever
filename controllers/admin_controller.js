@@ -5,9 +5,7 @@ module.exports = {
     admin_change_password: async function (req, res) {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
-            return res
-                .status(400)
-                .json({'success': false, 'errors': errors.array()})
+            return resstatus(400).json({'success': false, 'errors': errors.array()})
         }
         const [{ _id, password, password1 }, option ] = [ req.body, { new: true, useFindAndModify: false }]
         const check = await NguoidungSchema
@@ -15,9 +13,7 @@ module.exports = {
             .then(user => checkPassword(password, user.mat_khau))
             .catch(err => false); // Focus on here
         if (!check) {
-            return res
-                .status(400)
-                .json({'success': false, 'errors': 'Mật khẩu cũ không đúng'})
+            return res.status(400).json({'success': false, 'errors': 'Mật khẩu cũ không đúng'})
         } else {
             const update = {
                 mat_khau: await hashPassWord(password1)
@@ -25,13 +21,7 @@ module.exports = {
             NguoidungSchema.findByIdAndUpdate(_id, {
                 $set: update
             }, option, function (err, updated) { // need some attention
-                if (err) 
-                    return res
-                        .status(400)
-                        .json({'success': false, 'errors': 'Lỗi không xác định'})
-                return res
-                    .status(200)
-                    .json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'})
+                err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'})
             })
         }
     },
@@ -49,13 +39,7 @@ module.exports = {
         NguoidungSchema.findByIdAndUpdate(_id, {
             $set: update
         }, option, function (err, updated) {
-            if (err) 
-                return res
-                    .status(400)
-                    .json({'success': false, 'errors': 'Lỗi không xác định'})
-            return res
-                .status(200)
-                .json({'success': true, 'msg': 'Cập nhật thành công'})
+            err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
         })
     },
     admin_get_profile: async function (req, res) {
@@ -63,15 +47,11 @@ module.exports = {
             .findOne({_id: req.user._id})
             .exec((err, user) => {
                 if (err) 
-                    return res
-                        .status(200)
-                        .json({'success': false, 'errors': err})
+                    return res.status(200).json({'success': false, 'errors': err})
                 else {
                     let data = user.toObject();
                     delete data.mat_khau;
-                    return res
-                        .status(200)
-                        .json({'success': true, 'data': data})
+                    return res.status(200).json({'success': true, 'data': data})
                 }
             });
     }

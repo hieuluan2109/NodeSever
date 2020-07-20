@@ -5,9 +5,7 @@ module.exports = {
     admin_add_teacher: async function (req, res) {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
-            return res
-                .status(400)
-                .json({'success': false, 'errors': errors.array()})
+            return res.status(400).json({'success': false, 'errors': errors.array()})
         }
         const data = req.body;
         const check = await NguoidungSchema
@@ -15,9 +13,7 @@ module.exports = {
             .count((count) => count)
             .catch(err => 0);
         if (check) 
-            return res
-                .status(400)
-                .json({'success': false, 'errors': 'Email đã tồn tại'})
+            return res.status(400).json({'success': false, 'errors': 'Email đã tồn tại'})
         else {
             const gv = new NguoidungSchema({
                 'ho': capitalizeFirstLetter(data.ho),
@@ -28,22 +24,15 @@ module.exports = {
                 'nguoi_tao_id': req.user._id
             })
             gv.save(function (err, doc) {
-                if (err) 
-                    return res
-                        .status(400)
-                        .json({'success': false, 'errors': err})
-                res
-                    .status(200)
-                    .json({'success': true, 'msg': 'Thêm giáo viên thành công'})
+                err ? res.status(400) .json({'success': false, 'errors': err})
+                    : res.status(200).json({'success': true, 'msg': 'Thêm giáo viên thành công'})
             })
         }
     },
     admin_add_student: async function (req, res) {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
-            return res
-                .status(400)
-                .json({'success': false, 'errors': errors.array()})
+            return res.status(400).json({'success': false, 'errors': errors.array()})
         }
         const data = req.body;
         const check = await SinhvienSchema
@@ -52,9 +41,7 @@ module.exports = {
             .count((count) => count)
             .catch(err => 0);
         if (check) 
-            return res
-                .status(400)
-                .json({'success': false, 'errors': 'Email hoặc mã số sinh viên đã tồn tại'})
+            return res.status(400) .json({'success': false, 'errors': 'Email hoặc mã số sinh viên đã tồn tại'})
         else {
             const sv = new SinhvienSchema({
                 'ma_sv': data.ma_sv,
@@ -66,13 +53,8 @@ module.exports = {
                 'nguoi_tao_id': req.user._id
             })
             sv.save(function (err, doc) {
-                if (err) 
-                    return res
-                        .status(400)
-                        .json({'success': false, 'errors': err})
-                res
-                    .status(200)
-                    .json({'success': true, 'msg': 'Thêm sinh viên thành công'})
+                err ? res.status(400).json({'success': false, 'errors': err})
+                    : res.status(200).json({'success': true, 'msg': 'Thêm sinh viên thành công'})
             })
         }
     },
@@ -84,25 +66,15 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
-                if (err) 
-                    res
-                        .status(400)
-                        .json({'success': false, 'errors': err})
                 NguoidungSchema.countDocuments(
-                    (err, count) => {
-                        if (err) 
-                            res
-                                .status(400)
-                                .json({'success': false, 'errors': err})
-                        res
-                            .status(200)
-                            .json({
-                                success: true, data,
-                                current: page,
-                                pages: Math.ceil(count / perPage)
-                            });
-                    }
-                );
+                (err, count) => {
+                    err ? res.status(400).json({'success': false, 'errors': err})
+                        : res.status(200).json({
+                            success: true, data,
+                            current: page,
+                            pages: Math.ceil(count / perPage)
+                    });
+                });
             });
     },
     admin_get_student_list: async function (req, res) {
@@ -113,26 +85,16 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
-                if (err) 
-                    res
-                        .status(400)
-                        .json({'success': false, 'errors': err})
-                    SinhvienSchema.countDocuments(
-                    (err, count) => {
-                        if (err) 
-                            res
-                                .status(400)
-                                .json({'success': false, 'errors': err})
-                        res
-                            .status(200)
-                            .json({
-                                success: true,
-                                data,
-                                current: page,
-                                pages: Math.ceil(count / perPage)
-                            });
-                    }
-                );
+                SinhvienSchema.countDocuments(
+                (err, count) => {
+                    err ? res.status(400).json({'success': false, 'errors': err})
+                        : res.status(200).json({
+                            success: true,
+                            data,
+                            current: page,
+                            pages: Math.ceil(count / perPage)
+                    });
+                });
             });
     },
     admin_get_teacher_detail: async function (res, next, id) {
@@ -150,13 +112,9 @@ module.exports = {
             .exec((err, result) => {
                 if (err) 
                     next(err);
-                if (!result || result.length < 1) 
-                    return res
-                        .status(400)
-                        .json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
-                return res
-                    .status(200)
-                    .json({'success': true, 'data': result})
+                (!result || result.length < 1)
+                ? res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
+                : res.status(200).json({'success': true, 'data': result})
             })
     },
     admin_get_student_detail: async function (res, next, id) {
@@ -178,13 +136,9 @@ module.exports = {
             .exec((err, result) => {
                 if (err) 
                     next(err);
-                if (!result || result.length < 1) 
-                    return res
-                        .status(400)
-                        .json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
-                return res
-                    .status(200)
-                    .json({'success': true, 'data': result})
+                (!result || result.length < 1) 
+                    ? res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
+                    : res.status(200).json({'success': true, 'data': result})
             })
     }
 };

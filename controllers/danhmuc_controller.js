@@ -26,26 +26,17 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
-                if (err) 
-                    res
-                        .status(400)
-                        .json({'success': false, 'errors': err})
-                    DanhMucSchema.countDocuments(
-                    (err, count) => {
-                        if (err) 
-                            res
-                                .status(400)
-                                .json({'success': false, 'errors': err})
-                        res
-                            .status(200)
-                            .json({
-                                success: true,
-                                data,
-                                current: page,
-                                pages: Math.ceil(count / perPage)
-                            });
-                    }
-                );
+                DanhMucSchema.countDocuments(
+                (err, count) => {
+                    err ? res.status(400).json({'success': false, 'errors': err})
+                        : res.status(200).json({
+                            success: true,
+                            data,
+                            current: page,
+                            pages: Math.ceil(count / perPage)
+                        });
+                }
+            );
             });
     },
     admin_get_detail_category: async function (req, res) {
@@ -53,13 +44,7 @@ module.exports = {
             .findOne({'_id': req.params.id})
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
-                if (err) 
-                    res
-                        .status(400)
-                        .json({'success': false, 'errors': err})
-                res
-                    .status(200)
-                    .json({'success': true, 'data': result})
+                err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
             })
     }
 }

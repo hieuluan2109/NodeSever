@@ -25,24 +25,20 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
-                if (err) 
-                    res
-                        .status(400)
-                        .json({'success': false, 'errors': err})
-                    LopHocSchema.countDocuments(
-                    (err, count) => {
-                        if (err) 
-                            res
-                                .status(400)
-                                .json({'success': false, 'errors': err})
+                LopHocSchema.countDocuments(
+                (err, count) => {
+                    if (err) 
                         res
-                            .status(200)
-                            .json({
-                                success: true,
-                                data,
-                                current: page,
-                                pages: Math.ceil(count / perPage)
-                            });
+                            .status(400)
+                            .json({'success': false, 'errors': err})
+                    res
+                        .status(200)
+                        .json({
+                            success: true,
+                            data,
+                            current: page,
+                            pages: Math.ceil(count / perPage)
+                        });
                     }
                 );
             });
@@ -67,13 +63,7 @@ module.exports = {
                 select: ['_id', 'tieu_de', 'trang_thai']
             })
             .exec((err, result) => {
-                if (err) 
-                    res
-                        .status(400)
-                        .json({'success': false, 'errors': err})
-                res
-                    .status(200)
-                    .json({'success': true, 'data': result})
+                err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
             })
     }
 }

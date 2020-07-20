@@ -78,7 +78,6 @@ let validateChangePassword = (req, res, next) => {
         ),
         check('password1').custom((value, {req, loc, path}) => {
             if (value == req.body.password) {
-                // trow error if passwords do not match
                 throw new Error('Mật khẩu mới không được giống mật khẩu cũ');
             } else {
                 return value;
@@ -86,7 +85,6 @@ let validateChangePassword = (req, res, next) => {
         }),
         check('password2').custom((value, {req, loc, path}) => {
             if (value !== req.body.password1) {
-                // trow error if passwords do not match
                 throw new Error('Nhập lại mật khẩu mới không chính xác');
             } else {
                 return value;
@@ -105,15 +103,28 @@ let validateCreateQuestion = () => {
         check('dap_an_dung')
             .not()
             .isEmpty()
-            .withMessage('Đáp án đúng không được để trống'),
+            .withMessage('Đáp án đúng không được để trống')
+    ];
+};
+let validateCreateCategory = () => {
+    return [
+        check('tieu_de')
+            .not()
+            .isEmpty()
+            .withMessage('Tiêu đề không được để trống'),
+        check('mo_ta')
+            .not()
+            .isEmpty()
+            .withMessage('Mô tả không được để trống')
     ];
 };
 let validate = {
+    validateCreateCategory: validateCreateCategory,
     validateLogin: validateLogin,
     validateSignUpTecher: validateSignUpTecher,
     validateChangePassword: validateChangePassword,
     validateSignUpStudent: validateSignUpStudent,
-    validateCreateQuestion: validateCreateQuestion,
+    validateCreateQuestion: validateCreateQuestion
 };
 module.exports = {
     validate

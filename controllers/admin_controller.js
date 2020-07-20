@@ -2,28 +2,6 @@ const {hashPassWord, checkPassword} = require('./admin_function');
 const {NguoidungSchema} = require('../model/Schema');
 const {validationResult} = require('express-validator');
 module.exports = {
-   admin_get_test_pagination: async function (req, res) {
-    let perPage = 2;
-    let page = req.query.page || 1;
-        NguoidungSchema
-        .find() //find tất cả các data
-        .skip((perPage * page) - perPage) //Trong page đầu tiên sẽ bỏ qua giá trị là 0
-        .limit(perPage)
-        .exec((err, products) => {
-            Schema
-                .SinhvienSchema
-                .countDocuments((err, count) => { //đếm để tính xem có bao nhiêu trang
-                    if (err) 
-                        return
-                    next(err);
-                    res.json({
-                        products,//sản phẩm trên một page 
-                        current: page, //page hiện tại 
-                        pages: Math.ceil(count / perPage) //tổng số các page
-                    });
-                });
-        });
-},
     admin_change_password: async function (req, res) {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
@@ -64,7 +42,7 @@ module.exports = {
                 .status(400)
                 .json({'success': false, 'errors': errors.array()})
         };
-        const [{ _id }, option ] = [ req.body, { new: true, useFindAndModify: false }];
+        const [{ data }, option ] = [ req.body, { new: true, useFindAndModify: false }];
         const update = {
             mat_khau: hashPassWord()
         };

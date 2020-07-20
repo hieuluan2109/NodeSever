@@ -2,19 +2,36 @@ const {validationResult} = require('express-validator');
 const {CauHoiSchema} = require('../model/Schema');
 module.exports = {
     admin_get_question_list: async function (req, res) {
+        let perPage = 10;
+        let page = req.query.page || 1;
         await CauHoiSchema
             .find({})
             .populate('danh_muc_id', ['_id', 'tieu_de'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .exec((err, result) => {
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
+            .exec((err, data) => {
                 if (err) 
                     res
                         .status(400)
                         .json({'success': false, 'errors': err})
-                res
-                    .status(200)
-                    .json({'success': true, 'data': result})
-            })
+                    CauHoiSchema.countDocuments(
+                    (err, count) => {
+                        if (err) 
+                            res
+                                .status(400)
+                                .json({'success': false, 'errors': err})
+                        res
+                            .status(200)
+                            .json({
+                                success: true,
+                                data,
+                                current: page,
+                                pages: Math.ceil(count / perPage)
+                            });
+                    }
+                );
+            });
     },
     admin_get_question_detail: async function (req, res) {
         await CauHoiSchema

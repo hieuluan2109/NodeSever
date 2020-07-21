@@ -81,7 +81,9 @@ module.exports = {
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
-                            success: true, data: result,
+                            success: true,
+                            count,
+                            data: result,
                             current: page,
                             pages: Math.ceil(count / perPage)
                     });
@@ -111,6 +113,7 @@ module.exports = {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
                             success: true,
+                            count,
                             data: result,
                             current: page,
                             pages: Math.ceil(count / perPage)

@@ -17,11 +17,11 @@ const BaiTapSchema = new Schema({
         ref: 'LopHoc'
     },
     han_nop_bai: {
-        required: true,
+        required: [true, 'Bắt buộc phải có hạn nộp'],
         type: Date,
     },
     tep_tin: {
-        required: true,
+        default: '',
         type: String,
     },
     trang_thai: {

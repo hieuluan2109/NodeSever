@@ -87,7 +87,7 @@ router.get(
     Controller.QuestionController.admin_get_question_list
 );
 router.get(
-    '/question/detail/:id',
+    '/question/detail',
     passport.authenticate('jwt', {session: false}),
     Controller.QuestionController.admin_get_question_detail
 );

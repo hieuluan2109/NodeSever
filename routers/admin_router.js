@@ -22,7 +22,7 @@ router.post(
     Controller.UserController.admin_add_teacher
 );
 router.post(
-    'user/add/student',
+    '/user/add/student',
     passport.authenticate('jwt', {session: false}),
     validate.validateSignUpStudent(),
     Controller.UserController.admin_add_student
@@ -77,6 +77,7 @@ router.get(
 router.post(
     '/category/create',
     passport.authenticate('jwt', {session: false}),
+    validate.validateCreateCategory(),
     Controller.CategoryController.admin_create_category
 )
 //question

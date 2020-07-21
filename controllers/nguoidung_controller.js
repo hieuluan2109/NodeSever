@@ -1,6 +1,7 @@
 const {validationResult} = require('express-validator');
 const {SinhvienSchema, NguoidungSchema} = require('../model/Schema');
 const {capitalizeFirstLetter, hashPassWord} = require('./admin_function');
+const moment = require('moment');
 module.exports = {
     admin_add_teacher: async function (req, res) {
         const errors = await validationResult(req);
@@ -19,7 +20,7 @@ module.exports = {
                 'ho': capitalizeFirstLetter(data.ho),
                 'ten': capitalizeFirstLetter(data.ten),
                 'email': data.email,
-                'ngay_sinh': data.ngay_sinh,
+                'ngay_sinh': moment(data.ngay_sinh).format('YYYY-MM-DD'),
                 'mat_khau': await hashPassWord(data.password),
                 'nguoi_tao_id': req.user._id
             })
@@ -48,7 +49,7 @@ module.exports = {
                 'ho': capitalizeFirstLetter(data.ho),
                 'ten': capitalizeFirstLetter(data.ten),
                 'email': data.email,
-                'ngay_sinh': data.ngay_sinh,
+                'ngay_sinh': moment(data.ngay_sinh).format('YYYY-MM-DD'),
                 'mat_khau': await hashPassWord(data.password),
                 'nguoi_tao_id': req.user._id
             })
@@ -81,10 +82,15 @@ module.exports = {
         let perPage = 10;
         let page = req.query.page || 1;
         await SinhvienSchema
-            .find({}, ['ho', 'ten', '_id', 'email'])
+            .find({}, ['ho', 'ten', '_id', 'email', 'ngay_sinh'])
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
+                // data =  data.map( function(a){
+                //     const {ngay_sinh} = a;
+                //     return {...a, ngay_sinh: moment(ngay_sinh).format('YYYY-MM-DD')}
+                // })
+                //     console.log(data)
                 SinhvienSchema.countDocuments(
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})

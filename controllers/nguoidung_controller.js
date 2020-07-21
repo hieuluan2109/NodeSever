@@ -67,11 +67,21 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
+                let result = [];
+                data.map((item) => {
+                    result.push({
+                        ho: item.ho,
+                        ten: item.ten,
+                        _id: item._id,
+                        email: item.email,
+                        ngay_sinh: moment(item.ngay_sinh).format('YYYY-MM-DD'),
+                    })
+                })
                 NguoidungSchema.countDocuments(
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
-                            success: true, data,
+                            success: true, data: result,
                             current: page,
                             pages: Math.ceil(count / perPage)
                     });
@@ -86,17 +96,22 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
-                // data =  data.map( function(a){
-                //     const {ngay_sinh} = a;
-                //     return {...a, ngay_sinh: moment(ngay_sinh).format('YYYY-MM-DD')}
-                // })
-                //     console.log(data)
+                let result = [];
+                data.map((item) => {
+                    result.push({
+                        ho: item.ho,
+                        ten: item.ten,
+                        _id: item._id,
+                        email: item.email,
+                        ngay_sinh: moment(item.ngay_sinh).format('YYYY-MM-DD'),
+                    })
+                })
                 SinhvienSchema.countDocuments(
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
                             success: true,
-                            data,
+                            data: result,
                             current: page,
                             pages: Math.ceil(count / perPage)
                     });

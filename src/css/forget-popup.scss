@@ -1,0 +1,55 @@
+.container{
+   font-size: 12px;
+   height: 100px;
+
+}
+
+
+  .header-popup {
+    width: 100%;
+    border-bottom: 1px solid gray;
+    font-size: 18px;
+    text-align: left;
+    padding: 5px;
+  }
+  .content-popup {
+    width: 100%;
+    padding: 10px 50px;
+    .mail{
+    color:black;
+    font-weight: 2;
+    width: 400px;
+    height: 30px;
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid purple;
+    outline: none;
+    font-size: 18px;
+  }
+   
+    #btn-xacnhan{
+      height: 30px;
+      margin-left: 10px;
+      padding: 5px;
+      border-radius: 15px ;
+      cursor: pointer;
+      outline: none;
+      font-size: 14px;
+    }
+  }
+  .close {
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    padding: 2px 5px;
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+  }
+
+  
+  

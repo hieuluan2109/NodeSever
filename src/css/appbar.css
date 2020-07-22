@@ -1,0 +1,21 @@
+.admin{
+    background-color: #ececec;
+    height: 100vh;
+    /* #f5f6f8 */
+}
+.profile{
+    background-color: #ececec;
+    height: 110vh;
+   position: relative;
+}
+.users,.students,.threads{
+    background-color: #ececec;
+    height: 135vh;
+   position: relative;
+}
+.questions{
+    background-color: #ececec;
+    height: 135vh;
+    max-height: 300vh;
+   position: relative;
+}

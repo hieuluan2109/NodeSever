@@ -126,8 +126,7 @@ module.exports = {
             .findOne({ '_id': id, 'loai': false}, ['ho', 'ten', '_id', 'email', 'anh_dai_dien', 'nguoi_tao_id', 'ngay_sinh', 'createdAt', 'updatedAt'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {
-                let result = [];
-                result.push({
+                let result = {
                     _id: data._id,
                     ho : data.ho,
                     ten: data.ten,
@@ -137,7 +136,7 @@ module.exports = {
                     ngay_sinh : customDatetime(data.ngay_sinh),
                     createdAt : customDatetime(data.createdAt),
                     updatedAt : customDatetime(data.updatedAt),
-                });
+                };
                 if (err) 
                     next(err);
                 (!data || data.length < 1)
@@ -151,8 +150,7 @@ module.exports = {
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate({path: 'ds_lop_hoc', model: 'LopHoc'})
             .exec((err, data) => {
-                let result = [];
-                result.push({
+                let result = {
                     ma_sv: data.ma_sv,
                     ds_lop_hoc: data.ds_lop_hoc,
                     _id: data._id,
@@ -164,7 +162,7 @@ module.exports = {
                     ngay_sinh : customDatetime(data.ngay_sinh),
                     createdAt : customDatetime(data.createdAt),
                     updatedAt : customDatetime(data.updatedAt),
-                });
+                };
                 if (err) 
                     next(err);
                 (!data || data.length < 1) 

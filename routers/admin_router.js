@@ -14,6 +14,7 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     Controller.LoginController.admin_logout
 );
+router.get('/forgot',Controller.AdminController.admin_forgot_password)
 //dashboard
 // router.get(
 //     '/dashboard',

@@ -14,14 +14,11 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     Controller.LoginController.admin_logout
 );
-<<<<<<< Updated upstream
-=======
 //dashboard
 // router.get(
 //     '/dashboard',
 //     Controller.DashBoard.get_dashboard
 // );
->>>>>>> Stashed changes
 // users
 router.post(
     '/user/add/teacher',
@@ -71,14 +68,11 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     Controller.AdminController.admin_get_profile
 );
-<<<<<<< Updated upstream
-=======
 router.post(
     '/profile/update',
     passport.authenticate('jwt', {session: false}),
     Controller.AdminController.admin_update_profile
 );
->>>>>>> Stashed changes
 //category
 router.get(
     '/category/list',

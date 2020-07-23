@@ -1,10 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-<<<<<<< Updated upstream
-=======
 const Schema = require('../model/index.schema')
 const moment = require('moment');
->>>>>>> Stashed changes
 module.exports = {
     capitalizeFirstLetter: function (string) {
         return string
@@ -46,12 +43,8 @@ module.exports = {
       },
     checkPassword: function(password, password2) {
         return bcrypt.compareSync(password, password2);
-<<<<<<< Updated upstream
-    }
-=======
     },
     customDatetime: function(date){
         return moment(date).format('YYYY-MM-DD');
     },
->>>>>>> Stashed changes
 } 

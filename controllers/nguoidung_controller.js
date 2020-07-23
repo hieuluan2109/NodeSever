@@ -1,11 +1,6 @@
 const {validationResult} = require('express-validator');
-<<<<<<< Updated upstream
-const {SinhvienSchema, NguoidungSchema} = require('../model/Schema');
-const {capitalizeFirstLetter, hashPassWord} = require('./admin_function');
-=======
 const {SinhvienSchema, NguoidungSchema} = require('../model/index.schema');
 const {capitalizeFirstLetter, hashPassWord, customDatetime} = require('./admin_function');
->>>>>>> Stashed changes
 const moment = require('moment');
 module.exports = {
     admin_add_teacher: async function (req, res) {
@@ -25,11 +20,7 @@ module.exports = {
                 'ho': capitalizeFirstLetter(data.ho),
                 'ten': capitalizeFirstLetter(data.ten),
                 'email': data.email,
-<<<<<<< Updated upstream
-                'ngay_sinh': moment(data.ngay_sinh).format('YYYY-MM-DD'),
-=======
                 'ngay_sinh': customDatetime(data.ngay_sinh),
->>>>>>> Stashed changes
                 'mat_khau': await hashPassWord(data.password),
                 'nguoi_tao_id': req.user._id
             })
@@ -58,11 +49,7 @@ module.exports = {
                 'ho': capitalizeFirstLetter(data.ho),
                 'ten': capitalizeFirstLetter(data.ten),
                 'email': data.email,
-<<<<<<< Updated upstream
-                'ngay_sinh': moment(data.ngay_sinh).format('YYYY-MM-DD'),
-=======
                 'ngay_sinh': customDatetime(data.ngay_sinh),
->>>>>>> Stashed changes
                 'mat_khau': await hashPassWord(data.password),
                 'nguoi_tao_id': req.user._id
             })
@@ -136,22 +123,6 @@ module.exports = {
     },
     admin_get_teacher_detail: async function (res, next, id) {
         await NguoidungSchema
-<<<<<<< Updated upstream
-            .findOne({ '_id': id, 'loai': false}, [
-                'ho',
-                'ten',
-                '_id',
-                'email',
-                'anh_dai_dien',
-                'nguoi_tao_id',
-                'createdAt',
-                'updatedAt' ])
-            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .exec((err, result) => {
-                if (err) 
-                    next(err);
-                (!result || result.length < 1)
-=======
             .findOne({ '_id': id, 'loai': false}, ['ho', 'ten', '_id', 'email', 'anh_dai_dien', 'nguoi_tao_id', 'ngay_sinh', 'createdAt', 'updatedAt'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {
@@ -170,33 +141,12 @@ module.exports = {
                 if (err) 
                     next(err);
                 (!data || data.length < 1)
->>>>>>> Stashed changes
                 ? res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
                 : res.status(200).json({'success': true, 'data': result})
             })
     },
     admin_get_student_detail: async function (res, next, id) {
         await SinhvienSchema
-<<<<<<< Updated upstream
-            .findOne({ '_id': id }, [
-                'ma_sv',
-                'ds_lop_hoc',
-                'ho',
-                'ten',
-                '_id',
-                'email',
-                'anh_dai_dien',
-                'nguoi_tao_id',
-                'createdAt',
-                'updatedAt'
-            ])
-            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .populate({path: 'ds_lop_hoc', model: 'LopHoc'})
-            .exec((err, result) => {
-                if (err) 
-                    next(err);
-                (!result || result.length < 1) 
-=======
             .findOne({ '_id': id }, ['ma_sv', 'ds_lop_hoc', 'ho', 'ten', '_id', 'email', 'ngay_sinh', 'anh_dai_dien', 'nguoi_tao_id', 'createdAt', 'updatedAt'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate({path: 'ds_lop_hoc', model: 'LopHoc'})
@@ -218,7 +168,6 @@ module.exports = {
                 if (err) 
                     next(err);
                 (!data || data.length < 1) 
->>>>>>> Stashed changes
                     ? res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
                     : res.status(200).json({'success': true, 'data': result})
             })

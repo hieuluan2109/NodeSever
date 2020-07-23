@@ -1,9 +1,5 @@
 const {validationResult} = require('express-validator');
-<<<<<<< Updated upstream
-const {LopHocSchema} = require('../model/Schema');
-=======
 const {LopHocSchema} = require('../model/index.schema');
->>>>>>> Stashed changes
 module.exports = {
     admin_get_class_list: async function (req, res) {
         let perPage = 10;
@@ -31,21 +27,10 @@ module.exports = {
             .exec((err, data) => {
                 LopHocSchema.countDocuments(
                 (err, count) => {
-<<<<<<< Updated upstream
-                    if (err) 
-                        res
-                            .status(400)
-                            .json({'success': false, 'errors': err})
-                    res
-                        .status(200)
-                        .json({
-                            success: true,
-=======
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
                             success: true,
                             count,
->>>>>>> Stashed changes
                             data,
                             current: page,
                             pages: Math.ceil(count / perPage)

@@ -1,10 +1,5 @@
-<<<<<<< Updated upstream
-const {hashPassWord, checkPassword} = require('./admin_function');
-const {NguoidungSchema} = require('../model/Schema');
-=======
 const {hashPassWord, checkPassword, customDatetime} = require('./admin_function');
 const {NguoidungSchema} = require('../model/index.schema');
->>>>>>> Stashed changes
 const {validationResult} = require('express-validator');
 module.exports = {
     admin_change_password: async function (req, res) {
@@ -37,23 +32,12 @@ module.exports = {
                 .status(400)
                 .json({'success': false, 'errors': errors.array()})
         };
-<<<<<<< Updated upstream
-        const [{ data }, option ] = [ req.body, { new: true, useFindAndModify: false }];
-        const update = {
-            mat_khau: hashPassWord()
-        };
-        NguoidungSchema.findByIdAndUpdate(_id, {
-            $set: update
-        }, option, function (err, updated) {
-            err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
-=======
         const [{ ho, ten, ngay_sinh, anh_dai_dien }, option] = [ req.body, { new: true, useFindAndModify: false }];
         const update = !anh_dai_dien ? { ho, ten, ngay_sinh } : {anh_dai_dien};
         NguoidungSchema.findByIdAndUpdate(req.user._id, {
             $set: update
         }, option, function (err, updated) {
             err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
->>>>>>> Stashed changes
         })
     },
     admin_get_profile: async function (req, res) {

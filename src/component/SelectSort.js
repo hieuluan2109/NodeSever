@@ -4,7 +4,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
+import View from '../view/Profile'
+import View1 from '../view/Question'
 const styles = theme => ({
     
    
@@ -22,7 +23,7 @@ class SelectSort extends Component {
         super(props)
         this.state = {
             open:false,
-            role:this.props.GV
+            role:this.props.GV,
       };
     }
         handleChange = (event) => {
@@ -57,6 +58,7 @@ class SelectSort extends Component {
             {/* <MenuItem value={30}>Thirty</MenuItem> */}
           </Select>
         </FormControl>
+      
       </div>
       
     );

@@ -11,6 +11,7 @@ import Avatar from "@material-ui/core/Avatar";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import TextField from '@material-ui/core/TextField';
 import axios from "axios";
 import Cookies from "js-cookie";
 const useStyles = makeStyles((theme) => ({
@@ -46,12 +47,7 @@ const useStyles = makeStyles((theme) => ({
     height: "70vh",
     background: "white",
   },
-  titleformInfo: {
-    position: "absolute",
-    marginTop: "65px",
-    marginLeft: 60,
-    fontSize: 17,
-  },
+ 
   formControl: {
     paddingTop: "30px",
     paddingLeft: "30px",
@@ -85,8 +81,14 @@ const useStyles = makeStyles((theme) => ({
     background: "rgb(253, 216, 53)",
     width: "120px",
     height: "40px",
-    marginLeft: "125px",
+    marginLeft: "150px",
     cursor: "pointer",
+  },
+  time:{
+    marginBottom:'50px'
+  },
+  textField: {
+    width: 150,
   },
 }));
 export default function MenuProfile() {
@@ -102,7 +104,6 @@ export default function MenuProfile() {
     setSelectedIndex(index);
   };
 
-  
   function Repeat(props) {
     const items = [];
     for (let i = props.index; i <= props.num; i++) {
@@ -117,34 +118,36 @@ export default function MenuProfile() {
   const [getDataProfile, setDataProfile] = useState([]);
   const [date, setDateTime] = useState([]);
   const token = Cookies.get("token");
-  
+
   useEffect(() => {
     axios
-      .get("https://navilearn.herokuapp.com/admin/profile", 
-      {headers: { Authorization: `Bearer ${token}` }
+      .get("https://navilearn.herokuapp.com/admin/profile", {
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         const { data } = res.data;
         setDataProfile(data); //State để lấy dữ liệu profile admin từ api
-        var splitted = data.ngay_sinh.split("-", 3); //Tách chuỗi để lấy ngày tháng năm
-        var ngay = splitted[2].split("T", 2);
-        const getDay = Number(ngay[0]);
-        const getMonth = Number(splitted[1]);
-        const getYear = Number(splitted[0]);
-        setDateTime({
-          date: getDay,
-          month: getMonth,
-          year: getYear,
-        });
+        // var splitted = data.ngay_sinh.split("-", 3); //Tách chuỗi để lấy ngày tháng năm
+        // var ngay = splitted[2].split("T", 2);
+        // const getDay = Number(ngay[0]);
+        // const getMonth = Number(splitted[1]);
+        // const getYear = Number(splitted[0]);
+        // setDateTime({
+        //   date: getDay,
+        //   month: getMonth,
+        //   year: getYear,
+        // });
       });
-  },[]);
+  }, []);
   const handleChange = (event) => {
     setDataProfile({
       [event.target.name]: event.target.value,
     });
-    console.log(event.target.value)
+    setDateTime({
+      [event.target.name]: event.target.value,
+    });
+    console.log(event.target.value);
   };
-
   return (
     <div className="row">
       <div className="col span-1-of-4">
@@ -204,7 +207,7 @@ export default function MenuProfile() {
                 className={classes.contentFormControl}
                 name="ho"
                 type="text"
-                value={getDataProfile.ho||getDataProfile.ho}
+                value={getDataProfile.ho}
                 onChange={handleChange}
               />
             </div>
@@ -249,69 +252,25 @@ export default function MenuProfile() {
                     <input type="radio" name="gender" />
                     Nữ
                     </div> */}
-            <div className={classes.formControl}>
-              <label
-                className={classes.titleFormControl}
-                style={{ marginTop: "15px" }}
-              >
-                Ngày sinh
-              </label>
+                    <div className={classes.formControl}>
+                  <label className={classes.titleFormControl}>Ngày sinh</label>
+            
+                  <TextField
+                    
+                    id="date"
+                    label="Birthday"
+                    type="date"
+                    defaultValue={getDataProfile.ngay_sinh}
+                    className={classes.textField}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={handleChange}
+                  />
+                
+            </div>
               {/* <input className={classes.contentFormControl} type="text" value="Nguyễn Hiếu Luân" /> */}
-              <FormControl variant="outlined" className={classes.selectDate}>
-                <InputLabel htmlFor="outlined-age-native-simple">
-                  Ngày
-                </InputLabel>
-                <Select
-                  native
-                  name="date"
-                  value={date.date||''}
-                  onChange={handleChange}
-                  label="Ngày"
-                  inputProps={{
-                    name: "date",
-                  }}
-                >
-                  <option aria-label="None" value="" />
-                  <Repeat index={1} num={31} />
-                </Select>
-              </FormControl>
-              <FormControl variant="outlined" className={classes.selectDate}>
-                <InputLabel htmlFor="outlined-age-native-simple">
-                  Tháng
-                </InputLabel>
-                <Select
-                  native
-                  value={date.month||""}
-                  onChange={handleChange}
-                  label="Tháng"
-                  inputProps={{
-                    name: "thang",
-                  }}
-                >
-                  <option aria-label="None" value="" />
-                  <Repeat index={1} num={12} />
-                </Select>
-              </FormControl>
-              <FormControl variant="outlined" className={classes.selectDate}>
-                <InputLabel htmlFor="outlined-age-native-simple">
-                  Năm
-                </InputLabel>
-                <Select
-                  native
-                  value={date.year||""}
-                  onChange={handleChange}
-                  label="Năm"
-                  inputProps={{
-                    name: "year",
-                  }}
-                >
-                  <option aria-label="None" value="" />
-                  {/* <Repeat num={2020}>
-                    {(index) => <option value={index}>{index}</option>}
-                  </Repeat> */}
-                  <Repeat index={1955} num={2020} />
-                </Select>
-              </FormControl>
+
 
               <div className={classes.formControl}>
                 <input
@@ -319,7 +278,6 @@ export default function MenuProfile() {
                   type="button"
                   value="Cập Nhật"
                 />
-              </div>
             </div>
           </div>
         </form>

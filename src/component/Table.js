@@ -13,9 +13,8 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ListItem from "@material-ui/core/ListItem";
 import MenuItem from '@material-ui/core/MenuItem';
-import SearchButton from '../Search'
-import SelectSort from '../SelectSort'
-import DialogThem from '../DialogThem'
+import SearchButton from '../component/Search'
+import SelectSort from '../component/SelectSort'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "50px",
     marginRight: "6%",
 
-    height: "160vh",
+    height: "100vh",
     background: "white",
     borderRadius: 10,
   },
@@ -102,9 +101,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function QuestionList(props) {
+export default function Table1(props) {
   const classes = useStyles();
-  const {TITLE,STT,CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO}=props
+  const [title,setTitle]=useState(
+      {
+        stt:'Số TT',
+       ho:'Họ',
+       ten:'Tên',
+       email:'Email',
+       ngaysinh:'Ngày sinh'
+      })
   const [selectedIndex, setSelectedIndex] = React.useState(1);
  
   
@@ -112,43 +118,14 @@ export default function QuestionList(props) {
     setSelectedIndex(index);
   };
   const [getList,setGetList]=useState([])
-  const token=Cookies.get('token')
-  useEffect(() => {
-        axios.get('https://navilearn.herokuapp.com/admin/question/list',
-        {headers:{"Authorization":`Bearer ${token}`}
-      }).then(res=>{
-        const {data}=res.data
-        console.log(data)
-         setGetList(data)
-      }).catch((error)=>{
-        console.log("Lỗi", error)
-      })
-        
-  },[]);
- 
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
      
-        <div className={classes.titleformInfo}> {TITLE} </div>
+        <div className={classes.titleformInfo}> Tài khoản người dùng </div>
         
         <form>
-        <SearchButton /> 
-{/*        
-         <SelectSort 
-          title='Phân loại'
-          GV='Trắc nghiệm'
-          SV='Tự Luận'
-        /> */}
-        
-        <DialogThem >
-            {/* <SelectSort 
-            title='Phân loại'
-            GV='Trắc nghiệm'
-            SV='Tự Luận'
-            /> */}
-        </DialogThem>
 
           <div className={classes.formInfo}>
             <TableContainer>
@@ -161,45 +138,27 @@ export default function QuestionList(props) {
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {STT}
+                      {title.stt}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                       {CAUHOI}
+                       {title.ho}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DAPANA}
+                      {title.ten}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DAPANB}
+                      {title.email}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DAPANC}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DAPAND}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DAPANDUNG}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DIEM}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {NGUOITAO}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {NGAYTAO}
-                    </TableCell>
-                    
-                    <TableCell align="center">
+                      {title.ngaysinh}
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {getList.map((row, index) => (
                     <TableRow key={index + 1} hover>
-                      <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">{row.noi_dung}</TableCell>
+                      <TableCell align="center"></TableCell>
+                      <TableCell align="center"></TableCell>
                       <TableCell align="center"></TableCell>
                       <TableCell align="center"></TableCell>
                       <TableCell align="center"></TableCell>
@@ -210,7 +169,7 @@ export default function QuestionList(props) {
                     
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
-                            <VisibilityIcon />
+                          <VisibilityIcon />
                         </IconButton>
                         <IconButton size="small" className={classes.eyes}>
                           <CreateIcon />
@@ -222,64 +181,6 @@ export default function QuestionList(props) {
               </Table>
          
 
-            <IconButton size="small" className={classes.containerNext}>
-              <ArrowForwardIosIcon className={classes.next} />
-            </IconButton>
-            <ul className={classes.page}>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 1}
-                onClick={(event) => handleListItemClick(event, 1)}
-              >
-                1
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 2}
-                onClick={(event) => handleListItemClick(event, 2)}
-              >
-                2
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 3}
-                onClick={(event) => handleListItemClick(event, 3)}
-              >
-                3
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 4}
-                onClick={(event) => handleListItemClick(event, 4)}
-              >
-                4
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 5}
-                onClick={(event) => handleListItemClick(event, 5)}
-              >
-                5
-              </ListItem>
-
-              {/* <li className={classes.buttonPageNumber}  button
-                        selected={selectedIndex === 1}
-                        onClick={(event) => handleListItemClick(event, 1)}>1</li>
-                            <li className={classes.buttonPageNumber}  button
-                        selected={selectedIndex === 2}
-                        onClick={(event) => handleListItemClick(event, 2)}>2</li>
-                            <li className={classes.buttonPageNumber}>3</li>
-                            <li className={classes.buttonPageNumber}>4</li>
-                            <li className={classes.buttonPageNumber}>5</li> */}
-            </ul>
-            <IconButton size="small" className={classes.containerBack}>
-              <ArrowBackIosIcon className={classes.back} />
-            </IconButton>
             </TableContainer>
           </div>
         </form>

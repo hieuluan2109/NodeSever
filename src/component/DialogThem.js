@@ -11,6 +11,7 @@ import Icon from "@material-ui/core/Icon";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SelectSort from "./SelectSort";
 
+
 const styles = (theme) => ({
   btnThem: {
     position: "absolute",
@@ -45,12 +46,10 @@ class DialogThem extends Component {
     super(props);
     this.state = {
       open: false,
-      age: "",
-      date: "",
-      month: "",
-      year: "",
+      value:this.props.value
     };
   }
+ 
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -64,6 +63,7 @@ class DialogThem extends Component {
   //   };
 
   render() {
+    console.log("aaa",this.state.value)
     const { classes,children } = this.props;
     const { open } = this.state;
     return (

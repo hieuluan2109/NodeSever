@@ -30,15 +30,12 @@ class Routers extends Component {
     // this.state={
     //     loggedIn
     // }
-    const token=Cookies.get('token');
+  
     // console.log("c",token)
   }
 
   render() {
    
-    //   if(localStorage.getItem('token')==null){
-    //       return <Redirect to='/' />
-    //   }
     return (
       <BrowserRouter>
         <div>

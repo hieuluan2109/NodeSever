@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import ForgotPassword from './ForgotPassword';
 import { Redirect } from 'react-router'
 import Cookies from 'js-cookie'
+
 class LoginForm extends Component {
     constructor(props) {
         super(props)
@@ -99,9 +100,12 @@ class LoginForm extends Component {
         // }
       
             const token=Cookies.get('token');
+            console.log(token)
             if(token!=null){
                 return <Redirect to='/admin' />
             }
+            
+           
         return (
             <div>
 

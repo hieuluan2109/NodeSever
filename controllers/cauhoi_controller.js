@@ -1,5 +1,9 @@
 const {validationResult} = require('express-validator');
+<<<<<<< Updated upstream
 const {CauHoiSchema, TracNghiemSchema, TuLuanSchema} = require('../model/Schema');
+=======
+const {CauHoiSchema, TracNghiemSchema, TuLuanSchema} = require('../model/index.schema');
+>>>>>>> Stashed changes
 module.exports = {
     admin_get_question_list: async function (req, res) {
         let perPage = 10;

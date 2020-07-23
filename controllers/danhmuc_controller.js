@@ -1,12 +1,20 @@
 const {validationResult} = require('express-validator');
+<<<<<<< Updated upstream
 const {DanhMucSchema} = require('../model/Schema');
+=======
+const {DanhMucSchema} = require('../model/index.schema');
+>>>>>>> Stashed changes
 module.exports = {
     admin_create_category: async function (req, res) {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
+<<<<<<< Updated upstream
             return res
                 .status(400)
                 .json({'success': false, 'errors': errors.array()})
+=======
+            return res.status(400).json({'success': false, 'errors': errors.array()})
+>>>>>>> Stashed changes
         }
         const data = req.body;
         const newRC = new DanhMucSchema;

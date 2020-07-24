@@ -9,7 +9,7 @@ const CauHoiTNSchema = new Schema({
     },
     diem: {
         type: Number,
-        required: true
+        default: 10
     },
     lua_chon: [luachon],
     dap_an: dapAn,

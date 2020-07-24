@@ -7,7 +7,7 @@ const TuLuanSchema = new Schema({
     },
     diem: {
         type: Number,
-        required: true
+        default: 10,
     },
     danh_muc: {
         type: Schema.Types.ObjectId,

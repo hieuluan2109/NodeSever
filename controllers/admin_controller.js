@@ -34,7 +34,7 @@ module.exports = {
                 .json({'success': false, 'errors': errors.array()})
         };
         const [{ ho, ten, ngay_sinh, anh_dai_dien }, option] = [ req.body, { new: true, useFindAndModify: false }];
-        const update = !anh_dai_dien ? { ho, ten, ngay_sinh } : {anh_dai_dien};
+        const update = !anh_dai_dien ? { 'ho': ho, 'ten': ten, 'ngay_sinh': ngay_sinh } : {'anh_dai_dien': anh_dai_dien};
         NguoidungSchema.findByIdAndUpdate(req.user._id, {
             $set: update
         }, option, function (err, updated) {
@@ -54,6 +54,9 @@ module.exports = {
                     return res.status(200).json({'success': true, 'data': data})
                 }
             });
+    },
+    admin_searching: async function (req, res) {
+        const data = req.body;
     },
     admin_forgot_password: async function(req, res, next) {
         var transporter =  nodemailer.createTransport({ // config mail server

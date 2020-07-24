@@ -11,7 +11,7 @@ module.exports = {
         const data = req.body;
         const check = await NguoidungSchema
             .findOne({email: data.email})
-            .count((count) => count)
+            .countDocuments((count) => count)
             .catch(err => 0);
         if (check) 
             return res.status(400).json({'success': false, 'errors': 'Email đã tồn tại'})
@@ -39,7 +39,7 @@ module.exports = {
         const check = await SinhvienSchema
             .find({$or: [{ email: data.email }, { ma_sv: data.ma_sv }]
             })
-            .count((count) => count)
+            .countDocuments((count) => count)
             .catch(err => 0);
         if (check) 
             return res.status(400) .json({'success': false, 'errors': 'Email hoặc mã số sinh viên đã tồn tại'})
@@ -169,5 +169,18 @@ module.exports = {
                     ? res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
                     : res.status(200).json({'success': true, 'data': result})
             })
-    }
+    },
+    admin_update_user: async function (req, res) {
+        const [{ma_sv, id}, data, option]= [req.query, req.body, { new: true, useFindAndModify: false }];
+        const update = data
+        console.log(update)
+        ma_sv ? (
+            SinhvienSchema.findOneAndUpdate({'ma_sv': ma_sv}, { $set: update}, option, function (err, updated){
+                err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
+            })
+        ) : (
+            NguoidungSchema.findOneAndUpdate({ '_id':id }, { $set: update}, option, function (err, updated){
+                err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
+            }))
+    },
 };

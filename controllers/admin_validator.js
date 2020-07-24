@@ -1,5 +1,6 @@
 const {check} = require('express-validator');
 const {regex} = require('./admin_function');
+const moment = require('moment');
 let validateLogin = () => {
     return [
         check('email', 'email không được bỏ trống')
@@ -30,6 +31,11 @@ let validateSignUpTecher = () => {
         check('ngay_sinh', 'Ngày sinh không được bỏ trống')
             .not()
             .isEmpty(),
+        check('ngay_sinh').custom((value, {req, loc, path}) => {
+            if (value < moment(value).format('YYYY-MM-DD')) {
+                throw new Error('Ngày sinh không hợp lệ');
+            } else {return value; }
+        }),
         check('ngay_sinh', 'Ngày sinh không hợp lệ').matches(regex().ngay_sinh),
         check('password', 'password không được bỏ trống')
             .not()
@@ -58,6 +64,11 @@ let validateSignUpStudent = () => {
         check('ngay_sinh', 'Ngày sinh không được bỏ trống')
             .not()
             .isEmpty(),
+        check('ngay_sinh').custom((value, {req, loc, path}) => {
+                if (value < moment(value).format('YYYY-MM-DD')) {
+                    throw new Error('Ngày sinh không hợp lệ');
+                } else {return value; }
+            }),
         check('ngay_sinh', 'Ngày sinh không hợp lệ').matches(regex.ngay_sinh),
         check('password', 'password không được bỏ trống')
             .not()
@@ -92,7 +103,7 @@ let validateChangePassword = (req, res, next) => {
         })
     ];
 };
-let validateCreateQuestion = () => {
+let validateCreateChoiceQuestion = () => {
     return [
         check('noi_dung')
             .not()
@@ -100,11 +111,25 @@ let validateCreateQuestion = () => {
             .withMessage('Nội dung không được để trống')
             .isLength({min: 5})
             .withMessage('Nội dung câu hỏi quá ngắn'),
-        check('dap_an_dung')
+        check('dap_an')
             .not()
             .isEmpty()
-            .withMessage('Đáp án đúng không được để trống')
+            .withMessage('Đáp án không được để trống'),
+        check('lua_chon')
+            .not()
+            .isEmpty()
+            .withMessage('Lựa chọn không được để trống')
     ];
+};
+let validateCreateAssayQuestion = () => {
+    return [
+        check('noi_dung')
+            .not()
+            .isEmpty()
+            .withMessage('Nội dung không được để trống')
+            .isLength({min: 5})
+            .withMessage('Nội dung câu hỏi quá ngắn'),
+    ]
 };
 let validateCreateCategory = () => {
     return [
@@ -124,7 +149,8 @@ let validate = {
     validateSignUpTecher: validateSignUpTecher,
     validateChangePassword: validateChangePassword,
     validateSignUpStudent: validateSignUpStudent,
-    validateCreateQuestion: validateCreateQuestion
+    validateCreateChoiceQuestion: validateCreateChoiceQuestion,
+    validateCreateAssayQuestion: validateCreateAssayQuestion,
 };
 module.exports = {
     validate

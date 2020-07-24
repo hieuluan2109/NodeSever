@@ -22,7 +22,7 @@ const SinhVienSchema = new Schema({
     anh_dai_dien: String,
     ngay_sinh: {
         required: true,
-        type: Date
+        type: Date,
     },
     mat_khau: {
         required: true,

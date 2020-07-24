@@ -1,13 +1,14 @@
 const {validationResult} = require('express-validator');
-const {CauHoiSchema, TracNghiemSchema, TuLuanSchema} = require('../model/index.schema');
+const {TracNghiemSchema, TuLuanSchema} = require('../model/index.schema');
 module.exports = {
     admin_get_question_list: async function (req, res) {
         let perPage = 10;
         let page = req.query.page || 1;
-        let {loai} = req.query;
+        const {loai, q} = req.query;
+        // const search = q ? {'noi_dung' : '/^'+q+'/'} : {};
         (( loai ? loai : 'TracNghiem') == 'TuLuan')
         ?   (await TuLuanSchema
-            .find({})
+            .find()
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
@@ -62,17 +63,44 @@ module.exports = {
                 err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
             }))
     },
-    admin_create_question: async function (req, res, next) {
+    admin_create_question_choice: async function (req, res, next) {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({'success': false, 'errors': errors.array()})
+            return res
+                .status(400)
+                .json({'success': false, 'errors': errors.array()})
         }
         const data = req.body;
-        const question = new CauHoiSchema(
-            {'noi_dung': data.noi_dung, 'dap_an': data.dap_an, 'nguoi_tao_id': req.user._id, 'dap_an_dung': data.dap_an_dung, 'danh_muc_id': data.danh_muc_id}
-        );
+        let question = new TracNghiemSchema({
+                'noi_dung': data.noi_dung,
+                'dap_an': data.dap_an,
+                'nguoi_tao_id': req.user._id,
+                'lua_chon': data.lua_chon,
+                'danh_muc': data.danh_muc,
+                'diem': data.diem ? data.diem : 10, })
         question.save(function (err, doc) {
-            err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'msg': 'Thêm câu hỏi thành công'})
+            err
+                ? res.status(400).json({'success': false, 'errors': err})
+                : res.status(200).json({'success': true, 'msg': 'Thêm câu hỏi thành công'})
         });
-    }
+    },
+    admin_create_question_assay: async function (req, res, next) {
+        const errors = await validationResult(req);
+        if (!errors.isEmpty()) {
+            return res
+                .status(400)
+                .json({'success': false, 'errors': errors.array()})
+        }
+        const data = req.body;
+        let question = new TuLuanSchema({
+                'noi_dung': data.noi_dung,
+                'nguoi_tao_id': req.user._id,
+                'danh_muc': data.danh_muc,
+                'diem': data.diem ? data.diem : 10 });
+        question.save(function (err, doc) {
+            err
+                ? res.status(400).json({'success': false, 'errors': err})
+                : res.status(200).json({'success': true, 'msg': 'Thêm câu hỏi thành công'})
+        });
+    },
 }

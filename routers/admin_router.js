@@ -14,13 +14,10 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     Controller.LoginController.admin_logout
 );
-router.get('/forgot',Controller.AdminController.admin_forgot_password)
-//dashboard
-// router.get(
-//     '/dashboard',
-//     Controller.DashBoard.get_dashboard
-// );
-// users
+router.get('/forgot', Controller.AdminController.admin_forgot_password)
+// dashboard router.get(     '/dashboard',
+// Controller.DashBoard.get_dashboard ); 
+//users
 router.post(
     '/user/add/teacher',
     passport.authenticate('jwt', {session: false}),
@@ -39,12 +36,8 @@ router.get(
     (req, res, next) => {
         const {user, id} = req.params;
         user == 'teacher'
-            ? Controller
-                .UserController
-                .admin_get_teacher_detail(res, next, id)
-            : Controller
-                .UserController
-                .admin_get_student_detail(res, next, id)
+            ? Controller.UserController.admin_get_teacher_detail(res, next, id)
+            : Controller.UserController.admin_get_student_detail(res, next, id)
     },
 );
 router.get(
@@ -57,6 +50,11 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     Controller.UserController.admin_get_student_list
 );
+router.get(
+    '/user/update',
+    passport.authenticate('jwt', {session: false}),
+    Controller.UserController.admin_update_user
+)
 //admin info
 router.post(
     '/changepassword',
@@ -91,9 +89,15 @@ router.post(
     validate.validateCreateCategory(),
     Controller.CategoryController.admin_create_category
 )
+router.post(
+    '/category/update',
+    passport.authenticate('jwt', {session: false}),
+    validate.validateCreateCategory,
+    Controller.CategoryController.admin_update_category
+)
 //question
 router.get(
-    '/question/list',
+    '/question/list/',
     passport.authenticate('jwt', {session: false}),
     Controller.QuestionController.admin_get_question_list
 );
@@ -103,10 +107,16 @@ router.get(
     Controller.QuestionController.admin_get_question_detail
 );
 router.post(
-    '/question/create',
+    '/question/create/choice',
     passport.authenticate('jwt', {session: false}),
-    validate.validateCreateQuestion(),
-    Controller.QuestionController.admin_create_question
+    validate.validateCreateChoiceQuestion(),
+    Controller.QuestionController.admin_create_question_choice
+);
+router.post(
+    '/question/create/assay',
+    passport.authenticate('jwt', {session: false}),
+    validate.validateCreateAssayQuestion(),
+    Controller.QuestionController.admin_create_question_assay
 );
 //class
 router.get(

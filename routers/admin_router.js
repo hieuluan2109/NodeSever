@@ -3,6 +3,10 @@ const router = express.Router();
 const passport = require('passport');
 const {validate} = require('../controllers/admin_validator');
 const Controller = require('../controllers/index.controller');
+
+router.get('/test/updateuser',
+    Controller.UserController.test
+);
 //login
 router.post(
     '/login',
@@ -50,7 +54,7 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     Controller.UserController.admin_get_student_list
 );
-router.get(
+router.post(
     '/user/update',
     passport.authenticate('jwt', {session: false}),
     Controller.UserController.admin_update_user

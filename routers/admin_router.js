@@ -4,9 +4,9 @@ const passport = require('passport');
 const {validate} = require('../controllers/admin_validator');
 const Controller = require('../controllers/index.controller');
 
-router.get('/test/updateuser',
-    Controller.UserController.test
-);
+// router.get('/test/updateuser',
+//     Controller.UserController.test
+// );
 //login
 router.post(
     '/login',

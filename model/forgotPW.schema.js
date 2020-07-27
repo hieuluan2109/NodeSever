@@ -13,5 +13,4 @@ const QuenMatKhauSchema = new Schema({
     expire: {type: Number, default: setDateTime(3600*1000)},
     email: String,
 });
-
 module.exports = mongoose.model('QuenMatKhau', QuenMatKhauSchema, 'quen_mat_khau')

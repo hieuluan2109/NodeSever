@@ -14,8 +14,7 @@ const [loginRouter, adminRouter, userRouter, classRouter, questionRouter, catego
     require('./routers/user.router'),
     require('./routers/class.router'),
     require('./routers/question.router'),
-    require('./routers/category.router'),
-];
+    require('./routers/category.router')];
 require('./config/passport')(passport);
 app.use(cors());
 app.use(express.json());

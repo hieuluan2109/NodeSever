@@ -11,9 +11,9 @@ module.exports = {
             .find()
             .skip((perPage * page) - perPage)
             .limit(perPage)
-            .populate('danh_muc',['mo_ta'])
+            .populate('danh_muc',['tieu_de'])
             .exec((err, data) => {
-                console.log(data[0].danh_muc.mo_ta)
+                console.log(data[0].danh_muc.tieu_de)
                 TuLuanSchema.countDocuments(
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
@@ -31,7 +31,7 @@ module.exports = {
             .find({},['trang_thai', 'noi_dung', 'danh_muc', 'diem'])
             .skip((perPage * page) - perPage)
             .limit(perPage)
-            .populate('danh_muc',['mo_ta'])
+            .populate('danh_muc',['tieu_de'])
             .exec((err, data) => {
                 TracNghiemSchema.countDocuments(
                 (err, count) => {
@@ -52,14 +52,14 @@ module.exports = {
         (loai == 'choice')
         ? (await TracNghiemSchema
             .findOne({_id: q_id})
-            .populate('danh_muc', ['_id', 'tieu_de'])
+            .populate('danh_muc', ['_id', 'tieu_de', 'mo_ta'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
                 err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
             }))
         : (await TuLuanSchema
             .findOne({_id: q_id})
-            .populate('danh_muc', ['_id', 'tieu_de'])
+            .populate('danh_muc', ['_id', 'tieu_de', 'mo_ta'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
                 err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})

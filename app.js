@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const cors = require('cors');
+// const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -16,8 +16,8 @@ const [loginRouter, adminRouter, userRouter, classRouter, questionRouter, catego
     require('./routers/question.router'),
     require('./routers/category.router')];
 require('./config/passport')(passport);
-app.use(cors());
-// app.use( require('./config/header') );
+// app.use(cors());
+app.use( require('./config/header') );
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(session({

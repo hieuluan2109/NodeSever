@@ -1,5 +1,5 @@
 const {validationResult} = require('express-validator');
-const {SinhvienSchema, NguoidungSchema} = require('../model/index.schema');
+const {SinhvienSchema, NguoidungSchema, SuaThongTin} = require('../model/index.schema');
 const {capitalizeFirstLetter, hashPassWord, customDatetime} = require('./admin_function');
 const moment = require('moment');
 module.exports = {
@@ -170,14 +170,17 @@ module.exports = {
                     : res.status(200).json({'success': true, 'data': result})
             })
     },
-    // admin_get_edit_profile_user: async function(req, res){
-    //     const
-    // },
+    admin_get_edit_profile_user: async function(req, res){
+        const {id} = req.query; 
+        SuaThongTin.findById(id).exec((err, data)=>{
+            err ? res.status(400).json({ success: false, 'err': err }) : res.status(200).json({'success': true, data})
+        })
+    },
     admin_update_user: async function (req, res) {
-        const [{ma_sv, id}, data, option]= [req.query, req.body, { new: true, useFindAndModify: false }];
+        const [{id}, data, option]= [req.query, req.body, { new: true, useFindAndModify: false }];
         const update = data
         console.log(update)
-        ma_sv ? (
+        data.loai ? (
             SinhvienSchema.findOneAndUpdate({'ma_sv': ma_sv}, { $set: update}, option, function (err, updated){
                 err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
             })

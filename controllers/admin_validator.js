@@ -14,7 +14,6 @@ let validateLogin = () => {
     ];
 };
 let validateSignUpTecher = () => {
-
     return [
         check('ten', 'Tên không được bỏ trống')
             .not()
@@ -32,7 +31,9 @@ let validateSignUpTecher = () => {
             .not()
             .isEmpty(),
         check('ngay_sinh').custom((value, {req, loc, path}) => {
-            if (value < moment(value).format('YYYY-MM-DD')) {
+            const date = new Date();
+            console.log(value < moment(date).format('YYYY-MM-DD'))
+            if ( value > moment(date).format('YYYY-MM-DD')) {
                 throw new Error('Ngày sinh không hợp lệ');
             } else {return value; }
         }),
@@ -65,10 +66,12 @@ let validateSignUpStudent = () => {
             .not()
             .isEmpty(),
         check('ngay_sinh').custom((value, {req, loc, path}) => {
-                if (value < moment(value).format('YYYY-MM-DD')) {
-                    throw new Error('Ngày sinh không hợp lệ');
-                } else {return value; }
-            }),
+            const date = new Date();
+            console.log(value < moment(date).format('YYYY-MM-DD'))
+            if ( value > moment(date).format('YYYY-MM-DD')) {
+                throw new Error('Ngày sinh không hợp lệ');
+            } else {return value; }
+        }),
         check('ngay_sinh', 'Ngày sinh không hợp lệ').matches(regex.ngay_sinh),
         check('password', 'password không được bỏ trống')
             .not()
@@ -109,7 +112,7 @@ let validateCreateChoiceQuestion = () => {
             .not()
             .isEmpty()
             .withMessage('Nội dung không được để trống')
-            .isLength({min: 5})
+            .isLength({min: 4})
             .withMessage('Nội dung câu hỏi quá ngắn'),
         check('dap_an')
             .not()
@@ -118,7 +121,11 @@ let validateCreateChoiceQuestion = () => {
         check('lua_chon')
             .not()
             .isEmpty()
-            .withMessage('Lựa chọn không được để trống')
+            .withMessage('Lựa chọn không được để trống'),
+        check('danh_muc')
+            .not()
+            .isEmpty()
+            .withMessage('Lựa chọn không được để trống'),
     ];
 };
 let validateCreateAssayQuestion = () => {
@@ -129,6 +136,10 @@ let validateCreateAssayQuestion = () => {
             .withMessage('Nội dung không được để trống')
             .isLength({min: 5})
             .withMessage('Nội dung câu hỏi quá ngắn'),
+        check('danh_muc')
+            .not()
+            .isEmpty()
+            .withMessage('Lựa chọn không được để trống'),
     ]
 };
 let validateCreateCategory = () => {
@@ -143,6 +154,26 @@ let validateCreateCategory = () => {
             .withMessage('Mô tả không được để trống')
     ];
 };
+let validateUpdateAdminProfile = () => {
+    return [
+        check('ten', 'Tên không được bỏ trống')
+        .not()
+        .isEmpty(),
+        check('ten', 'Tên không hợp lệ').matches(regex.ho_ten),
+        check('ho', 'Họ không được để trống')
+            .not()
+            .isEmpty(),
+        check('ho', 'Họ không hợp lệ').matches(regex.ho_ten),
+        check('ngay_sinh').custom((value, {req, loc, path}) => {
+            const date = new Date();
+            console.log(value < moment(date).format('YYYY-MM-DD'))
+            if ( value > moment(date).format('YYYY-MM-DD')) {
+                throw new Error('Ngày sinh không hợp lệ');
+            } else {return value; }
+        }),
+        check('ngay_sinh', 'Ngày sinh không hợp lệ').matches(regex.ngay_sinh),
+    ];
+};
 let validate = {
     validateCreateCategory: validateCreateCategory,
     validateLogin: validateLogin,
@@ -151,6 +182,7 @@ let validate = {
     validateSignUpStudent: validateSignUpStudent,
     validateCreateChoiceQuestion: validateCreateChoiceQuestion,
     validateCreateAssayQuestion: validateCreateAssayQuestion,
+    validateUpdateAdminProfile: validateUpdateAdminProfile,
 };
 module.exports = {
     validate

@@ -16,6 +16,7 @@ router.get(
 );
 router.post(
     '/profile/update',
+    validate.validateUpdateAdminProfile(),
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_update_profile
 );

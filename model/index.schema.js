@@ -7,6 +7,7 @@ const BaiThiSchema = require('./baithi.schema');
 const BaiTapSchema = require('./baitap.schema');
 const TracNghiemSchema = require('./cauhoi_tracnghiem.schema');
 const TuLuanSchema = require('./cauhoi_tuluan.schema')
+const SuaThongTin = require('./suathongtin.schema');
 
 module.exports = {
     NguoidungSchema,
@@ -18,4 +19,5 @@ module.exports = {
     BaiThiSchema,
     TracNghiemSchema,
     TuLuanSchema,
+    SuaThongTin
 };

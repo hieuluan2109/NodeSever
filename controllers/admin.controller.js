@@ -9,22 +9,16 @@ module.exports = {
             return resstatus(400).json({'success': false, 'errors': errors.array()})
         }
         const [{ _id, password, password1 }, option ] = [ req.body, { new: true, useFindAndModify: false }]
-        const check = await NguoidungSchema
+        await NguoidungSchema
             .findOne(_id)
-            .then(user => checkPassword(password, user.mat_khau))
-            .catch(err => false); // Focus on here
-        if (!check) {
-            return res.status(400).json({'success': false, 'errors': 'Mật khẩu cũ không đúng'})
-        } else {
-            const update = {
-                mat_khau: await hashPassWord(password1)
-            };
-            NguoidungSchema.findByIdAndUpdate(_id, {
-                $set: update
-            }, option, function (err, updated) { // need some attention
-                err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'})
+            .exec( (err, data) =>{
+                if( checkPassword(password, data.mat_khau)) { 
+                    res.status(400).json({'success': false, 'errors': 'Mật khẩu cũ không đúng'}) } 
+                const update = { mat_khau: await hashPassWord(password1) };
+                NguoidungSchema.findByIdAndUpdate(_id, { $set: update }, option, function (err, updated) { // need some attention
+                    err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'})
+                });
             })
-        }
     },
     admin_update_profile: async function (req, res) {
         const errors = await validationResult(req);

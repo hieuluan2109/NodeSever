@@ -11,7 +11,7 @@ module.exports = {
         const [{ _id, password, password1 }, option ] = [ req.body, { new: true, useFindAndModify: false }]
         await NguoidungSchema
             .findOne(_id)
-            .exec( (err, data) =>{
+            .exec( async (err, data) =>{
                 if( checkPassword(password, data.mat_khau)) { 
                     res.status(400).json({'success': false, 'errors': 'Mật khẩu cũ không đúng'}) } 
                 const update = { mat_khau: await hashPassWord(password1) };

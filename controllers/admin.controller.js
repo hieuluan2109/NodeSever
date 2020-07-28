@@ -12,12 +12,15 @@ module.exports = {
         await NguoidungSchema
             .findOne(_id)
             .exec( async (err, data) =>{
-                if( checkPassword(password, data.mat_khau)) { 
+                if( !checkPassword(password, data.mat_khau) ) { 
                     res.status(400).json({'success': false, 'errors': 'Mật khẩu cũ không đúng'}) } 
+                else {
                 const update = { mat_khau: await hashPassWord(password1) };
                 NguoidungSchema.findByIdAndUpdate(_id, { $set: update }, option, function (err, updated) { // need some attention
-                    err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'})
-                });
+                    (err || !updated)
+                        ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) 
+                        : res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công', 'data': updated})
+                });}
             })
     },
     admin_update_profile: async function (req, res) {

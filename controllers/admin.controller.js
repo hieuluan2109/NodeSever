@@ -7,8 +7,8 @@ module.exports = {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
             return resstatus(400).json({'success': false, 'errors': errors.array()})
-        }
-        const [{ _id, password, password1 }, option ] = [ req.body, { new: true, useFindAndModify: false }]
+        };
+        const [_id,{password, password1 }, option ] = [ req.user ,req.body, { new: true, useFindAndModify: false }]
         await NguoidungSchema
             .findOne(_id)
             .exec( async (err, data) =>{

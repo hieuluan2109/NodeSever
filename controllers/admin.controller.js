@@ -6,7 +6,7 @@ module.exports = {
     admin_change_password: async function (req, res) {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
-            return resstatus(400).json({'success': false, 'errors': errors.array()})
+            return res.status(400).json({'success': false, 'errors': errors.array()})
         };
         const [_id,{password, password1 }, option ] = [ req.user ,req.body, { new: true, useFindAndModify: false }]
         await NguoidungSchema

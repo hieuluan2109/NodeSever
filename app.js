@@ -34,6 +34,7 @@ app.use(passport.session());
 
 connectDB(mongoose, process.env.MONGODB_CONNECTION);
 
+//router
 app.use('/', loginRouter);
 app.use('/admin/', adminRouter);
 app.use('/admin/user', userRouter);

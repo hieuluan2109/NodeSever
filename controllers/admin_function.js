@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const Schema = require('../model/index.schema')
 const moment = require('moment');
+const Mail = require('../config/nodemailer');
+const nodemailer = require('nodemailer');
+const {resetPasswordContent} = require('../config/message');
 module.exports = {
     capitalizeFirstLetter: function (string) {
         return string
@@ -46,5 +48,23 @@ module.exports = {
     },
     customDatetime: function(date){
         return moment(date).format('YYYY-MM-DD');
+    },
+    sendForgotPasswordMail: async function(mail,code, hoten){
+        const transporter =  nodemailer.createTransport( Mail.createMailOption );
+        const mailOption = Mail.sendMailOption(mail, resetPasswordContent(code, hoten));
+        transporter.sendMail( mailOption, function (err, info){
+            if (err) console.log(err)
+            else 
+                console.log(info) 
+        })
+    },
+    makeCode: async function(){
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < 20; i++ ) {
+           result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
     },
 } 

@@ -10,7 +10,7 @@ setDateTime = (ms) => {
 
 const QuenMatKhauSchema = new Schema({
     code: String,
-    expire: {type: Number, default: setDateTime(3600*1000)},
+    expire: {type: Number, default: setDateTime(600*1000)},
     email: String,
-});
+},{timestamps: true});
 module.exports = mongoose.model('QuenMatKhau', QuenMatKhauSchema, 'quen_mat_khau')

@@ -177,15 +177,14 @@ module.exports = {
         })
     },
     admin_update_user: async function (req, res) {
-        const [{id}, data, option]= [req.query, req.body, { new: true, useFindAndModify: false }];
-        const update = data
-        console.log(update)
-        data.loai ? (
-            SinhvienSchema.findOneAndUpdate({'ma_sv': ma_sv}, { $set: update}, option, function (err, updated){
+        const [{id,loai}, data, option]= [req.query, req.body, { new: true, useFindAndModify: false }];
+        const update = data;
+        (loai == 'student') ? (
+            SinhvienSchema.findOneAndUpdate(id, { $set: update}, option, function (err, updated){
                 err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
             })
         ) : (
-            NguoidungSchema.findOneAndUpdate({ '_id':id }, { $set: update}, option, function (err, updated){
+            NguoidungSchema.findOneAndUpdate(id, { $set: update}, option, function (err, updated){
                 err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
             }))
     },

@@ -47,3 +47,9 @@ app.listen(port, (error) => {
         ? console.log('Error : ' + error)
         : console.log("Your app running on port " + port)
 });
+
+// const bcrypt = require('bcrypt');
+// const password = 'duykhoaito';
+// const password2 = '$2b$10$YTcEB34clW5iiTOchzQIJumUlLZYXERVIEsa/0eQzfAoDw7Js5tYO'
+// console.log(
+// bcrypt.compareSync(password, password2));

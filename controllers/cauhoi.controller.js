@@ -2,19 +2,20 @@ const {validationResult} = require('express-validator');
 const {TracNghiemSchema, TuLuanSchema} = require('../model/index.schema');
 module.exports = {
     admin_get_question_list: async function (req, res) {
-        let perPage = 10;
+        let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
-        const {loai, q} = req.query;
-        // const search = q ? {'noi_dung' : '/^'+q+'/'} : {};
+        const {loai} = req.query;
+        let {search} = req.query;
+        search = search ? {$or: [{"noi_dung": {$regex:'.*'+search+'.*' }}] } : {};
         (( loai ? loai : 'choice') == 'assay')
         ?   (await TuLuanSchema
-            .find()
+            .find(search)
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .populate('danh_muc',['tieu_de'])
-            .exec((err, data) => {
-                console.log(data[0].danh_muc.tieu_de)
-                TuLuanSchema.countDocuments(
+            .exec((err, data) => {  
+                if ( data > 0 && !err ) {
+                TuLuanSchema.countDocuments(search,
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
@@ -25,15 +26,16 @@ module.exports = {
                             pages: Math.ceil(count / perPage)
                         });
                 }
-            );
+            )} else res.status(400).json({success: false, errors: 'Không tìm thấy'})
             }))
         :  (await TracNghiemSchema
-            .find({},['trang_thai', 'noi_dung', 'danh_muc', 'diem'])
+            .find(search,['trang_thai', 'noi_dung', 'danh_muc', 'diem'])
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .populate('danh_muc',['tieu_de'])
             .exec((err, data) => {
-                TracNghiemSchema.countDocuments(
+                if ( !err && data) {
+                TracNghiemSchema.countDocuments(search,
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
@@ -44,7 +46,7 @@ module.exports = {
                             pages: Math.ceil(count / perPage)
                         });
                 }
-            );
+            );} else res.status(400).json({success: false, errors: 'Không tìm thấy'})
             }))
     },
     admin_get_question_detail: async function (req, res) {

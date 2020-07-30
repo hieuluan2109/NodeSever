@@ -60,14 +60,17 @@ module.exports = {
         }
     },
     admin_get_teacher_list: async function (req, res) {
-        let perPage = 10;
+        let {search} = req.query
+        search = search ? {$or: [{"ho": {$regex:'.*'+search+'.*' }}, { "ten": {$regex:'.*'+search+'.*' }}],  loai: false } : {loai: false};
+        let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         await NguoidungSchema
-            .find({loai: false})
+            .find(search)
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
-                let result = [];
+                if (!err && data){
+                    let result = [];
                 data.map((item) => {
                     result.push({
                         ho: item.ho,
@@ -76,28 +79,33 @@ module.exports = {
                         email: item.email,
                         ngay_sinh: moment(item.ngay_sinh).format('YYYY-MM-DD'),
                     })
-                })
-                NguoidungSchema.countDocuments(
-                (err, count) => {
+                });
+                NguoidungSchema
+                .countDocuments( search, (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
                             success: true,
                             count,
-                            data: result,
+                            data: result ? result : data,
                             current: page,
                             pages: Math.ceil(count / perPage)
                     });
                 });
+                } else res.status(400).json({success: false, errors: 'Không tìm thấy'})
+                
             });
     },
     admin_get_student_list: async function (req, res) {
-        let perPage = 10;
+        let {search} = req.query
+        search = search ? {$or: [{"ho": {$regex:'.*'+search+'.*' }}, { "ten": {$regex:'.*'+search+'.*' }}]} : {};
+        let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         await SinhvienSchema
-            .find({}, ['ho', 'ten', '_id', 'email', 'ngay_sinh'])
+            .find(search, ['ho', 'ten', '_id', 'email', 'ngay_sinh'])
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
+                if (!err && data){
                 let result = [];
                 data.map((item) => {
                     result.push({
@@ -108,17 +116,17 @@ module.exports = {
                         ngay_sinh: moment(item.ngay_sinh).format('YYYY-MM-DD'),
                     })
                 })
-                SinhvienSchema.countDocuments(
+                SinhvienSchema.countDocuments(search,
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
                             success: true,
                             count,
-                            data: result,
+                            data: result ? result : data,
                             current: page,
                             pages: Math.ceil(count / perPage)
                     });
-                });
+                });} else res.status(400).json({success: false, errors: 'Không tìm thấy'})
             });
     },
     admin_get_teacher_detail: async function (res, next, id) {
@@ -162,6 +170,8 @@ module.exports = {
                     ngay_sinh : customDatetime(data.ngay_sinh),
                     createdAt : customDatetime(data.createdAt),
                     updatedAt : customDatetime(data.updatedAt),
+                    gioi_tinh : data.gioi_tinh ? data.gioi_tinh : null,
+                    sdt: data.sdt? data.sdt : null,
                 };
                 if (err) 
                     next(err);

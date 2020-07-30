@@ -27,7 +27,6 @@ const NguoidungSchema = new Schema({
         type: String,
     },
     loai: {
-        required: true,
         type: Boolean,
         default: false
     },

@@ -16,11 +16,11 @@ module.exports = {
         });
     },
     admin_get_category_list: async function (req, res) {
-        let perPage = 10;
+        let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
-        let {q, sort} = req.query;
+        let {search, sort} = req.query;
         sort = sort ? sort : {};
-        const search = q ? {"mo_ta": {$regex:'.*'+q+'.*' }} : {};
+        search = search ? {"mo_ta": {$regex:'.*'+search+'.*' }} : {};
         await DanhMucSchema
             .find(search)
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
@@ -28,7 +28,8 @@ module.exports = {
             .limit(perPage)
             .sort(sort)
             .exec((err, data) => {
-                DanhMucSchema.countDocuments(
+                if ( !err && data) {
+                DanhMucSchema.countDocuments(search,
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
@@ -39,7 +40,7 @@ module.exports = {
                             pages: Math.ceil(count / perPage)
                         });
                 }
-            );
+            )} else res.status(400).json({success: false, errors: 'Không tìm thấy'}) 
             });
     },
     admin_get_detail_category: async function (req, res) {

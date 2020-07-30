@@ -2,10 +2,12 @@ const {validationResult} = require('express-validator');
 const {LopHocSchema} = require('../model/index.schema');
 module.exports = {
     admin_get_class_list: async function (req, res) {
-        let perPage = 10;
+        let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
+        let {search} = req.query;
+        search = search ? {"tieu_de": {$regex:'.*'+search+'.*' }} : {};
         await LopHocSchema
-            .find({})
+            .find(search)
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate({
                 path: 'ds_sinh_vien',
@@ -25,7 +27,8 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
-                LopHocSchema.countDocuments(
+                if ( !err && data) {
+                LopHocSchema.countDocuments(search,
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
@@ -36,7 +39,7 @@ module.exports = {
                             pages: Math.ceil(count / perPage)
                         });
                     }
-                );
+                )} else res.status(400).json({success: false, errors: 'Không tìm thấy'}) 
             });
     },
     admin_get_class_detail: async function (req, res) {

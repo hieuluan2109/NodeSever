@@ -64,8 +64,8 @@ module.exports = {
                     sendForgotPasswordMail(email, code, data.ho+' ' + data.ten)
                     const newRC = new QuenMatKhau({
                         code: code,
-                        mail: email
-                    })
+                        email: email
+                    });
                     newRC.save().then(s=> console.log(s)).catch(err => console.log(err));
                     res.status(200).json({'success': true})
                 };

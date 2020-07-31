@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,10 +12,12 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ListItem from "@material-ui/core/ListItem";
-import MenuItem from '@material-ui/core/MenuItem';
-import SearchButton from '../Search'
-import SelectSort from '../SelectSort'
-import DialogThem from '../DialogThem'
+import MenuItem from "@material-ui/core/MenuItem";
+import SearchButton from "../Search";
+import SelectSort from "../SelectSort";
+import DialogThem from "../DialogThem";
+import axios from "axios";
+import Cookies from "js-cookie";
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -31,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 30,
     fontSize: 20,
     paddingBottom: 30,
-    fontWeight:600
+    fontWeight: 600,
   },
   formControl: {
     paddingTop: "30px",
@@ -82,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
       color: "#fff",
       borderColor: "#5089de",
     },
-   
+
     // '&:focus':{
     //     backgroundColor:'red'
     // }
@@ -98,49 +100,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(name,description, createdby) {
-  return { name,description, createdby};
-}
-const rows = [
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-  createData("Toán Học","No description", "Luân mập địt "),
-];
+
+const topicTitle = ["Số thứ tự", "Tên chủ đề", "Mô tả", "Người tạo", ""];
+
 export default function Threadlist(props) {
   const classes = useStyles();
-  const {title,stt,name,description, createdby}=props
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
- 
-  
+  const { title, stt, name, description, createdby } = props;
+  const [selectedIndex, setSelectedIndex] = useState(1);
+
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+  const [getListTopic, setListTopic] = useState([]);
+  const token = Cookies.get("token");
+  useEffect(() => {
+    axios
+      .get("https://navilearn.herokuapp.com/admin/category/list", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setListTopic(data);
+        console.log(res.data)
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  }, []);
 
- 
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-      
         <div className={classes.titleformInfo}> {title} </div>
-        
+
         <form>
-        <SearchButton /> 
-       
-         {/* <SelectSort 
+          <SearchButton />
+
+          {/* <SelectSort 
           title='Phân loại'
           SV='Sinh viên'
           GV='Giáo viên'
         /> */}
-         
-        <DialogThem />
+
+          <DialogThem />
 
           <div className={classes.formInfo}>
             <TableContainer>
@@ -151,32 +154,24 @@ export default function Threadlist(props) {
               >
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {stt}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                       {name}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {description}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {createdby}
-                    </TableCell>
-                   
-                   
-                    
-                    <TableCell align="center">
-                    </TableCell>
+                    {topicTitle.map((valueTitle, index) => (
+                      <TableCell
+                        key={index}
+                        align="center"
+                        style={{ color: "#ffffff" }}
+                      >
+                        {valueTitle}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, index) => (
+                  {getListTopic.map((value, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">{row.name}</TableCell>
-                      <TableCell align="center">{row.description}</TableCell>
-                      <TableCell align="center">{row.createdby}</TableCell>
+                      <TableCell align="center">{value.tieu_de}</TableCell>
+                      <TableCell align="center">{value.mo_ta}</TableCell>
+                      <TableCell align="center">{value.nguoi_tao_id.ten}</TableCell>
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
                           <VisibilityIcon />
@@ -253,6 +248,5 @@ export default function Threadlist(props) {
         </form>
       </div>
     </div>
-
   );
 }

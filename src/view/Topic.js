@@ -1,11 +1,11 @@
 import React from 'react'
-import Thread from '../component/Thread/ThreadList'
+import Topic from '../component/Topic/Topic'
 import HomePage from './Home'
-    function Threadlist() {
+    function TopicList() {
         return (
             <div>
                 <HomePage />
-                <Thread
+                <Topic
                 title="Danh Sách Chủ Đề"
                 stt="Số thứ tự"
                 name="Tên chủ đề"
@@ -18,4 +18,4 @@ import HomePage from './Home'
         );
       }
       
-      export default Threadlist;
+      export default TopicList;

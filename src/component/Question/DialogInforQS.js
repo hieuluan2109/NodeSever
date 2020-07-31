@@ -9,7 +9,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Icon from "@material-ui/core/Icon";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import SelectSort from "./SelectSort";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
 import CreateIcon from "@material-ui/icons/Create";
@@ -84,16 +83,17 @@ class DialogInfo extends Component {
 
   handleClickOpen = () => {
     this.setState({ open: true });
-    this.props.onClickInfor(this.props.id, this.props.age);
+    this.props.getDataQuestionInfor(this.props.id)
   };
   handleClose = () => {
     this.setState({ open: false });
   };
-
+  
 
   render() {
-    const { classes, children } = this.props;
+    const { classes, dapan,noidung,diem,chude,luachona,luachonb,luachonc,luachond,nguoitao,mota } = this.props;
     const { open } = this.state;
+    console.log("Dât",this.props.Data)
     return (
       <div>
         <IconButton
@@ -112,73 +112,117 @@ class DialogInfo extends Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Thông Tin {this.props.title}</DialogTitle>
+          <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
             
           <DialogContent>
             <form>
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Họ</label>
+                <label className={classes.titleFormControl}>Nội dung</label>
                 <input
                   className={classes.contentFormControl}
-                  name="ho"
+                  name="noidung"
                   type="text"
-                  value={this.props.Data.ho}
+                  value={noidung}
                   disabled={this.props.status}
-                  onChange={this.props.handleChange}
                 />
               </div>
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Tên</label>
+                <label className={classes.titleFormControl}>Chủ đề</label>
                 <input
                   className={classes.contentFormControl}
-                  name="ten"
+                  name="chude"
                   type="text"
-                  value={this.props.Data.ten}
+                  value={chude}
                   disabled={this.props.status}
-                  onChange={this.props.handleChange}
                 />
               </div>
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Email</label>
+                <label className={classes.titleFormControl}>Mô tả</label>
                 <input
-                  name="email"
                   className={classes.contentFormControl}
+                  name="mota"
                   type="text"
-                  value={this.props.Data.email}
+                  value={mota}
                   disabled={this.props.status}
-                  onChange={this.props.handleChange}
                 />
               </div>
-              <span className={classes.ngaysinh}>Ngày sinh</span>
-              <TextField
-                name="ngay_sinh"
-                label="Birthday"
-                type="date"
-                value={this.props.Data.ngay_sinh}
-                className={classes.contentNgaysinh}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                disabled={this.props.status}
-                onChange={this.props.handleChange}
-              />
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Điểm</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="diem"
+                  type="text"
+                  value={diem}
+                  disabled={this.props.status}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Đáp án A</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="dap_an_a"
+                  type="text"
+                  value={luachona}
+                  disabled={this.props.status}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Đáp án B</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="dap_an_b"
+                  type="text"
+                  value={luachonb}
+                  disabled={this.props.status}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Đáp án C</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="dap_an_c"
+                  type="text"
+                  value={luachonc}
+                  disabled={this.props.status}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Đáp án D</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="dap_an_d"
+                  type="text"
+                  value={luachond}
+                  disabled={this.props.status}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Đáp án</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="dap_an"
+                  type="text"
+                  value={dapan}
+                  disabled={this.props.status}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Người Tạo</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="nguoitao"
+                  type="text"
+                  value={nguoitao}
+                  disabled={this.props.status}
+                />
+              </div>
 
-              <div className={classes.formControl}  style={{display:this.props.display}}>
-                <label className={classes.titleFormControl}>Người tạo</label>
-                <input
-                  name="nguoi_tao_id"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value={this.props.name}
-                  disabled={this.props.status}
-                 
-                />
-              </div>
+            
               <DialogActions>
             {/* <Button onClick={this.handleClose} color="primary">
               Hủy bỏ
             </Button> */}
-            <Button type={this.props.type} onClick={this.handleClose} color="primary">
+            <Button  onClick={this.handleClose} color="primary">
               Xác nhận
             </Button>
           </DialogActions>

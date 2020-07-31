@@ -3,7 +3,7 @@
     height: 100vh;
     /* #f5f6f8 */
 }
-.profile{
+.profile,.changepassword{
     background-color: #ececec;
     height: 110vh;
    position: relative;

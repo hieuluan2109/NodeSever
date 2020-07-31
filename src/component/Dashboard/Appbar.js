@@ -51,10 +51,6 @@ export default function Home() {
       <Typography className={classes.title} variant="h6">
         Testing Project
       </Typography>
-
-      {/* <div>
-          <Search />
-          </div> */}
       <IconButton className={classes.report} size="small">
         Report <BugReportIcon />
       </IconButton>

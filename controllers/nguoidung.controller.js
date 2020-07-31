@@ -131,12 +131,12 @@ module.exports = {
     },
     admin_get_teacher_detail: async function (res, next, id) {
         await NguoidungSchema
-            .findOne({ '_id': id, 'loai': false}, ['ho', 'ten', '_id', 'email', 'anh_dai_dien', 'nguoi_tao_id', 'ngay_sinh', 'createdAt', 'updatedAt'])
+            .findOne({ '_id':id, 'loai': false}, ['ho', 'ten', '_id', 'email', 'anh_dai_dien', 'nguoi_tao_id', 'ngay_sinh', 'createdAt', 'updatedAt'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {
                 let result = {
-                    _id: data._id,
                     ho : data.ho,
+                    _id: data._id,
                     ten: data.ten,
                     email: data.email,
                     anh_dai_dien: data.anh_dai_dien,
@@ -197,5 +197,40 @@ module.exports = {
             NguoidungSchema.findOneAndUpdate(id, { $set: update}, option, function (err, updated){
                 err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
             }))
+    },
+    admin_add_students_by_file: async function (req, res, next){
+        const {data} = req.body;
+        for ( let i = 0 ; i < data.length ; i++ ) {
+            const sv = new SinhvienSchema({
+                'ma_sv': data[i].ma_sv,
+                'ho': capitalizeFirstLetter(data[i].ho),
+                'ten': capitalizeFirstLetter(data[i].ten),
+                'email': data.email,
+                'ngay_sinh': customDatetime(data[i].ngay_sinh),
+                'mat_khau': await hashPassWord(data[i].ho + data[i].ten),
+                'nguoi_tao_id': req.user._id
+            });
+            sv.save( (err)=>{
+                if (err) next(err)
+            })
+        };
+        res.status(200).json({'success': true})
+    },
+    admin_add_teachers_by_file: async function (req, res, next){
+        const {data} = req.body;
+        for ( let i = 0 ; i < data.length ; i++ ) {
+            const gv = new NguoidungSchema({
+                'ho': capitalizeFirstLetter(data.ho),
+                'ten': capitalizeFirstLetter(data.ten),
+                'email': data.email,
+                'ngay_sinh': customDatetime(data.ngay_sinh),
+                'mat_khau': await hashPassWord(data.password),
+                'nguoi_tao_id': req.user._id
+            })
+            gv.save( (err)=>{
+                if (err) next(err)
+            })
+        };
+        res.status(200).json({'success': true})
     },
 };

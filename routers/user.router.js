@@ -45,4 +45,14 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     UserController.admin_get_edit_profile_user,
 );
+router.post(
+    '/add/student/file',
+    passport.authenticate('jwt', {session: false}),
+    UserController.admin_add_students_by_file
+);
+router.post(
+    '/add/teacher/file',
+    passport.authenticate('jwt', {session: false}),
+    UserController.admin_add_teachers_by_file
+);
 module.exports = router;

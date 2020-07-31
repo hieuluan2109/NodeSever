@@ -4,7 +4,8 @@ const QuestionController = require('./cauhoi.controller');
 const UserController = require('./nguoidung.controller');
 const CategoryController = require('./danhmuc.controller');
 const ClassController = require('./lop.controller');
-const DashBoard = require('./dashboard')
+const Stats = require('./stats.controller')
+const Test = require('./baithi.controller')
 module.exports = {
     LoginController,
     AdminController,
@@ -12,5 +13,6 @@ module.exports = {
     UserController,
     CategoryController,
     ClassController,
-    DashBoard,
+    Stats,
+    Test
 };

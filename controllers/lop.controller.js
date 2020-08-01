@@ -30,7 +30,7 @@ module.exports = {
                 if ( !err && data) {
                 LopHocSchema.countDocuments(search,
                 (err, count) => {
-                    err ? res.status(400).json({'success': false, 'errors': err})
+                    (err && !count ) ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
                             success: true,
                             count,
@@ -62,7 +62,7 @@ module.exports = {
                 select: ['_id', 'tieu_de', 'trang_thai']
             })
             .exec((err, result) => {
-                err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
+                (err && !result) ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
             })
     }
 }

@@ -134,6 +134,7 @@ module.exports = {
             .findOne({ '_id':id, 'loai': false}, ['ho', 'ten', '_id', 'email', 'anh_dai_dien', 'nguoi_tao_id', 'ngay_sinh', 'createdAt', 'updatedAt'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {
+                if( !err && data ){
                 let result = {
                     ho : data.ho,
                     _id: data._id,
@@ -145,11 +146,8 @@ module.exports = {
                     createdAt : customDatetime(data.createdAt),
                     updatedAt : customDatetime(data.updatedAt),
                 };
-                if (err) 
-                    next(err);
-                (!data || data.length < 1)
-                ? res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
-                : res.status(200).json({'success': true, 'data': result})
+                res.status(200).json({'success': true, 'data': result})
+            } else res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
             })
     },
     admin_get_student_detail: async function (res, next, id) {
@@ -158,6 +156,7 @@ module.exports = {
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate({path: 'ds_lop_hoc', model: 'LopHoc'})
             .exec((err, data) => {
+                if ( !err && data ){
                 let result = {
                     ma_sv: data.ma_sv,
                     ds_lop_hoc: data.ds_lop_hoc,
@@ -173,11 +172,8 @@ module.exports = {
                     gioi_tinh : data.gioi_tinh ? data.gioi_tinh : null,
                     sdt: data.sdt? data.sdt : null,
                 };
-                if (err) 
-                    next(err);
-                (!data || data.length < 1) 
-                    ? res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
-                    : res.status(200).json({'success': true, 'data': result})
+                res.status(200).json({'success': true, 'data': result})
+            } else res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
             })
     },
     admin_get_edit_profile_user: async function(req, res){

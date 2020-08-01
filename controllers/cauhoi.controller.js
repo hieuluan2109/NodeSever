@@ -14,7 +14,8 @@ module.exports = {
             .limit(perPage)
             .populate('danh_muc',['tieu_de'])
             .exec((err, data) => {  
-                if ( data > 0 && !err ) {
+                console.log(data)
+                if ( data && !err ) {
                 TuLuanSchema.countDocuments(search,
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})

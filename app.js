@@ -52,7 +52,7 @@ app.listen(port, (error) => {
 });
 
 // const bcrypt = require('bcrypt');
-// const password = 'duykhoaito';
-// const password2 = '$2b$10$YTcEB34clW5iiTOchzQIJumUlLZYXERVIEsa/0eQzfAoDw7Js5tYO'
+// const password = '123456';
+// const password2 = '$2b$10$biP2yGAtM0PfcMOSj6RBouiDxSVOamHTDNdnuZRiKMuqtRPR8sXSa'
 // console.log(
 // bcrypt.compareSync(password, password2));

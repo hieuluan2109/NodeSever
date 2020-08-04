@@ -1,5 +1,4 @@
 import React from 'react'
-import Questions from '../component/Question/QuestionList'
 import QuestionsAll from '../component/Question/QuestionAll'
 import HomePage from './Home'
     function ListCauHoi() {
@@ -7,19 +6,6 @@ import HomePage from './Home'
             <div>
                 <HomePage />
                 <QuestionsAll/>
-                {/* <Questions
-                TITLE="Danh Sách Câu Hỏi"
-                STT="Số thứ tự"
-                CAUHOI="Câu Hỏi"
-                DAPANA="Đáp Án A"
-                DAPANB="Đáp Án B"
-                DAPANC="Đáp Án C"
-                DAPAND="Đáp Án D"
-                DAPANDUNG="Đáp Án Đúng"
-                DIEM="Điểm"
-                NGUOITAO="Người Tạo"
-                NGAYTAO="Ngày Tạo"
-                /> */}
             </div>
       
         );

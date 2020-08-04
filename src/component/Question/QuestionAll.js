@@ -23,6 +23,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import GetQuestionTN from './QuestionTN'
 import GetQuestionTL from './QuestionTL'
+import AddQuestions from './AddQuestion'
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -176,7 +177,7 @@ export default function QuestionAllList(props) {
               <MenuItem value={false}>Tự luận</MenuItem>
             </Select>
           </FormControl>
-
+          <AddQuestions />
 
           <div className={classes.formInfo}>
             <TableContainer>

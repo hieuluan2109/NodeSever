@@ -10,10 +10,7 @@ import '../../css/login.scss'
 class LoginForm extends Component {
   constructor(props) {
     super(props);
-    // const token=localStorage.getItem('token');
-    // if(token!=null){
-    //     this.setState({loggedIn:true})
-    // }
+
     let loggedIn = false;
     this.state = {
       email: "",
@@ -21,7 +18,6 @@ class LoginForm extends Component {
       Error: "",
       loggedIn,
       cookie:null
-      // validEmail:"/^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$\/"
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

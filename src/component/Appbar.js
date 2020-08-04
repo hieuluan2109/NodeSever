@@ -51,11 +51,6 @@ class Appbarnav extends Component {
             open:false,
       };
     }
-    // toggleDrawer = () => {
-    //   this.state.open
-    //     ? this.setState({ open: false })
-    //     : this.setState({ open: true });
-    // };
 
   render() {
     const { classes } = this.props;

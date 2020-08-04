@@ -49,7 +49,7 @@ export default function Home() {
   return (
     <div >
       <Typography className={classes.title} variant="h6">
-        Testing Project
+      Navilearn
       </Typography>
       <IconButton className={classes.report} size="small">
         Report <BugReportIcon />

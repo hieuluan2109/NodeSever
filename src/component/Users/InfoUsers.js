@@ -9,12 +9,8 @@ import TableRow from "@material-ui/core/TableRow";
 import CreateIcon from "@material-ui/icons/Create";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import ListItem from "@material-ui/core/ListItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchButton from "../Search";
-import SelectSort from "../SelectSort";
 import DialogThem from "../DialogThem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -22,6 +18,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import DialogInfor from "../DialogInfo";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Pagination from "@material-ui/lab/Pagination";
+import Sear from './Search'
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -45,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
     maxwidth: "600px",
   },
   table: {
-    // marginLeft: 25,
     minWidth: 600,
     maxwidth: 1200,
     width: 1161,
@@ -55,58 +52,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 20,
     color: "bold",
   },
-  // tableRow:{
-  //     '&:nth-of-type(odd)': {
-  //         backgroundColor: theme.palette.action.focus,
-  //       },
-  // }
-  containerNext: {
-    position: "absolute",
-    left: "90%",
-    top: "93%",
-  },
-  containerBack: {
-    position: "absolute",
-    left: "79%",
-    top: "93%",
-  },
-  next: {
-    fontSize: "1rem",
-  },
-  back: {
-    fontSize: "1rem",
-  },
-  buttonPageNumber: {
-    display: "inline",
-    padding: ".2rem .41rem",
-    borderRadius: "30px!important",
-    backgroundColor: "#5089de",
-    // background:'red',
-    "&": {
-      color: "red",
-      margin: "0 3px",
-      color: "#fff",
-      borderColor: "#5089de",
-    },
-
-    // '&:focus':{
-    //     backgroundColor:'red'
-    // }
-    // },'&:hover':{
-    //     backgroundColor:'green'
-    // }
-  },
-
-  page: {
-    position: "absolute",
-    left: "80%",
-    top: "91%",
-  },
   formControl: {
     position: "absolute",
     right: "15%",
     minWidth: 120,
   },
+  pagination:{
+    marginRight:'70px'
+  }
 }));
 
 export default function InfoUsers(props) {
@@ -114,9 +67,13 @@ export default function InfoUsers(props) {
   const classes = useStyles();
   const [age, setAge] = useState(1);
   const [create, setCreate] = useState(true);
-  const [display,setDisplay]=useState('none')
+  const [display, setDisplay] = useState("none");
+
+  const [pageGV, setPageGV] = useState(1);
+  const [pageSV, setPageSV] = useState(1);
+
   const { title, stt, firstname, lastname, email, DoB } = props;
-  
+
   const [selectedIndex, setSelectedIndex] = React.useState(1);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -124,14 +81,15 @@ export default function InfoUsers(props) {
 
   const handleChangeFormCreateAccount = (event) => {
     setCreate(event.target.value);
-    (create==true)?setDisplay('block'):setDisplay('none');
+    create == true ? setDisplay("block") : setDisplay("none");
   };
 
   const handleChange = (event) => {
     setAge(event.target.value);
   };
-  const [dataUser, setDataUser] = useState([]);
-  const [name, setName] = useState('');
+  const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "" });
+  const [name, setName] = useState("");
+  const [getSuccess, setSuccess] = useState(false);
   const onclickInfor = (id, age) => {
     if (age === 1) {
       axios
@@ -142,18 +100,20 @@ export default function InfoUsers(props) {
           }
         )
         .then((res) => {
-         const {data}=res.data
-         setDataUser(data)
-         setName(res.data.data.nguoi_tao_id.ten)
-         console.log("GV",res.data)
-        //  console.log(data[0].ho)
-        }).catch((error)=>{
-          console.log("Lỗi", error)
+          const { data } = res.data;
+          setDataUser(data);
+          setName(res.data.data.nguoi_tao_id.ten);
+          console.log("GV", res.data);
+          //  console.log(data[0].ho)
         })
+        .catch((error) => {
+          console.log("Lỗi", error);
+        });
     }
 
     if (age === 0) {
-      axios.get(
+      axios
+        .get(
           `https://navilearn.herokuapp.com/admin/user/detail/student&${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -162,77 +122,126 @@ export default function InfoUsers(props) {
         .then((res) => {
           const { data } = res.data;
           setDataUser(data);
-          if (typeof res.data.data.nguoi_tao_id.ten == null)
-          setName('')
-          else
-          setName(res.data.data.nguoi_tao_id.ten)
-          console.log("SV",res.data)
-        }).catch((error)=>{
-          console.log("Lỗi", error)
+          console.log("SV", res.data);
         })
+        .catch((error) => {
+          console.log("Lỗi", error);
+        });
     }
-  
   };
-  // Chỉnh sửa thông tin user
-  // const onSubmitInforUser = (event) => {
-  //     event.preventDefault();
-  //     const {_id, ho, ten, email, ngay_sinh } = dataUser;
-  //     console.log(age)
-  //   if (age ==true) {
-  //     axios
-  //       .post(
-  //         `https://navilearn.herokuapp.com/admin/user/detail/teacher&${_id}`,
-  //         {ho,ten,email,ngay_sinh},
-  //         {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //         }
-  //       )
-  //       .then((res) => {
-  //       console.log(res)
-  //       }).catch((error) => {
-  //         console.log("Lỗi", error.response.data);
-  //       });
-  //   }  
-  // };
+  const setDFres = () => {
+    setSuccess("");
+  };
 
-  const handleChangeInfoUser = (event) => {
+  // const HandleFilter=(newFilter)=>{
+  //   console.log('AAAAAAAA',newFilter)
+  // }
+
+  // Chỉnh sửa thông tin user
+  const onSubmitInforUser = (event) => {
+    event.preventDefault();
+    const { _id, ho, ten, email, ngay_sinh } = dataUser;
+
+    console.log(age);
+    if (age == true) {
+      axios
+        .post(
+          `https://navilearn.herokuapp.com/admin/user/update?loai=teacher&id=${_id}`,
+          { ho, ten, ngay_sinh },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          setSuccess(res.data.msg);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error.response.data);
+        });
+    }
+  };
+
+  const handleChangeInfoUser = (event, status) => {
     setDataUser({
-      [event.target.name]:[event.target.value]
+      ...dataUser,
+      [event.target.name]: event.target.value,
     });
-    console.log(dataUser.ho)
-    console.log(dataUser.ten)
-    console.log(dataUser.email)
-  }
+  };
 
   // console.log("Get",dataUser)
-  const [getListSV,setListSV]=useState([]);
+  const [getListSV, setListSV] = useState([]);
   const [getList, setGetList] = useState([]);
+
+  const [pageNumbberGV, setPageNumberGV] = useState(1);
+  const [pageNumbberSV, setPageNumberSV] = useState(1);
 
   useEffect(() => {
     axios
-      .get("https://navilearn.herokuapp.com/admin/user/list/teacher", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         const { data } = res.data;
         setGetList(data);
-      }).catch((error) =>{
-        console.log("Lỗi",error);
+        setPageNumberGV(res.data.pages);
       })
-
-      axios
-        .get("https://navilearn.herokuapp.com/admin/user/list/student", {
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  }, [pageGV]);
+  useEffect(() => {
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}`,
+        {
           headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          const { data } = res.data;
-          setListSV(data);
-        }).catch((error)=>{
-          console.log("Lỗi", error)
-        })
-  }, []);
-  console.log(age)
+        }
+      )
+      .then((res) => {
+        const { data } = res.data;
+        setListSV(data);
+        setPageNumberSV(res.data.pages);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  }, [pageSV]);
+
+  const handleChangePage1 = (event, value) => {
+    setPageGV(value);
+  };
+  const handleChangePage2 = (event, value) => {
+    setPageSV(value);
+  };
+
+  const [param, setParam] = useState("");
+
+  const handleSearch = (e) => {
+    setParam(e.target.value);
+    console.log(param);
+  };
+  const SearchUser = (event) => {
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/user/list/teacher?search=${param}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        const { data } = res.data;
+        setGetList(data);
+        setPageNumberGV(res.data.pages);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error.response.data);
+      });
+  };
+
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -240,18 +249,12 @@ export default function InfoUsers(props) {
         <div className={classes.titleformInfo}> {title} </div>
 
         <form>
-          <SearchButton />
-          {/* <SelectSort 
-          title='Phân loại'
-          GV='Giáo viên'
-          SV='Sinh viên'
-        /> */}
+      
+          <SearchButton onChange={handleSearch} onSubmit={SearchUser} />
+
           <FormControl className={classes.formControl}>
-            <InputLabel >Loại</InputLabel>
-            <Select
-              value={age}
-              onChange={handleChange}
-            >
+            <InputLabel>Loại</InputLabel>
+            <Select value={age} onChange={handleChange}>
               <MenuItem value={1}>Giáo viên</MenuItem>
               <MenuItem value={0}>Sinh viên</MenuItem>
             </Select>
@@ -281,9 +284,9 @@ export default function InfoUsers(props) {
               >
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
+                    {/* <TableCell align="center" style={{ color: "#ffffff" }}>
                       {stt}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell align="center" style={{ color: "#ffffff" }}>
                       {firstname}
                     </TableCell>
@@ -302,9 +305,9 @@ export default function InfoUsers(props) {
                 </TableHead>
 
                 <TableBody>
-                {(age==1?getList:getListSV).map((row, index) => (
+                  {(age == 1 ? getList : getListSV).map((row, index) => (
                     <TableRow key={index + 1} hover>
-                      <TableCell align="center">{index + 1}</TableCell>
+                      {/* <TableCell align="center">{index + 1}</TableCell> */}
                       <TableCell align="center">{row.ho}</TableCell>
                       <TableCell align="center">{row.ten}</TableCell>
                       <TableCell align="center">{row.email}</TableCell>
@@ -312,19 +315,20 @@ export default function InfoUsers(props) {
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
                           <DialogInfor
-                          title="Giáo Viên"
+                            title="Giáo Viên"
                             id={row._id}
                             onClickInfor={onclickInfor}
                             Data={dataUser}
                             icon={<VisibilityIcon />}
                             age={age}
                             status={true}
-                           name={name}
+                            name={name}
+                            setError={setDFres}
                           />
                         </IconButton>
-                        
+
                         <IconButton size="small" className={classes.eyes}>
-                            <DialogInfor
+                          <DialogInfor
                             title="Giáo viên"
                             id={row._id}
                             onClickInfor={onclickInfor}
@@ -332,9 +336,12 @@ export default function InfoUsers(props) {
                             age={age}
                             icon={<CreateIcon />}
                             status={false}
-                            display={'none'}
+                            display={"none"}
+                            onSubmit={onSubmitInforUser}
                             handleChange={handleChangeInfoUser}
-                            type='submit'
+                            type="submit"
+                            success={getSuccess}
+                            setError={setDFres}
                             // submitForm={onSubmitInforUser}
                           />
                         </IconButton>
@@ -344,68 +351,30 @@ export default function InfoUsers(props) {
                 </TableBody>
               </Table>
 
-              <IconButton size="small" className={classes.containerNext}>
-                <ArrowForwardIosIcon className={classes.next} />
-              </IconButton>
-              <ul className={classes.page}>
-                <ListItem
-                  className={classes.buttonPageNumber}
-                  button
-                  selected={selectedIndex === 1}
-                  onClick={(event) => handleListItemClick(event, 1)}
-                >
-                  1
-                </ListItem>
-                <ListItem
-                  className={classes.buttonPageNumber}
-                  button
-                  selected={selectedIndex === 2}
-                  onClick={(event) => handleListItemClick(event, 2)}
-                >
-                  2
-                </ListItem>
-                <ListItem
-                  className={classes.buttonPageNumber}
-                  button
-                  selected={selectedIndex === 3}
-                  onClick={(event) => handleListItemClick(event, 3)}
-                >
-                  3
-                </ListItem>
-                <ListItem
-                  className={classes.buttonPageNumber}
-                  button
-                  selected={selectedIndex === 4}
-                  onClick={(event) => handleListItemClick(event, 4)}
-                >
-                  4
-                </ListItem>
-                <ListItem
-                  className={classes.buttonPageNumber}
-                  button
-                  selected={selectedIndex === 5}
-                  onClick={(event) => handleListItemClick(event, 5)}
-                >
-                  5
-                </ListItem>
-
-                {/* <li className={classes.buttonPageNumber}  button
-                        selected={selectedIndex === 1}
-                        onClick={(event) => handleListItemClick(event, 1)}>1</li>
-                            <li className={classes.buttonPageNumber}  button
-                        selected={selectedIndex === 2}
-                        onClick={(event) => handleListItemClick(event, 2)}>2</li>
-                            <li className={classes.buttonPageNumber}>3</li>
-                            <li className={classes.buttonPageNumber}>4</li>
-                            <li className={classes.buttonPageNumber}>5</li> */}
-              </ul>
-              <IconButton size="small" className={classes.containerBack}>
-                <ArrowBackIosIcon className={classes.back} />
-              </IconButton>
+              {/* <Pagination count={age==true?pageNumbberGV:pageNumbberSV} defaultPage={1} color="primary" onChange={handleChangePage} /> */}
             </TableContainer>
           </div>
         </form>
+
+        <Pagination
+          className={classes.pagination}
+          count={pageNumbberGV}
+          defaultPage={1}
+          color="primary"
+          onChange={handleChangePage1}
+          style={{ display: age == true ? "block" : "none", float: "right" }}
+        />
+        <Pagination
+          className={classes.pagination}
+          count={pageNumbberSV}
+          defaultPage={1}
+          color="primary"
+          onChange={handleChangePage2}
+          style={{ display: age == true ? "none" : "block", float: "right" }}
+        />
       </div>
+      {/* <Sear onsubmit={HandleFilter}/> */}
+    
     </div>
   );
 }

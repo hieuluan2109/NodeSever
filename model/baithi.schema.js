@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const cauHoi = {
+    cau_hoi_id: {type: Schema.Types.ObjectId, refPath:'ds_cau_hoi.loai'},
+    loai: {type: String, enum:['TracNghiem', 'TuLuan']},
+}
+
 const BaiThiSchema = new Schema({
     tieu_de: {
         type: String,
@@ -28,9 +33,6 @@ const BaiThiSchema = new Schema({
         type: Boolean,
         default: true,
     },
-    cau_hoi_id: [{
-        type: Schema.Types.ObjectId,
-        ref: 'CauHoi',
-    }],
+    ds_cau_hoi: [cauHoi],
 }, {timestamps: true});
 module.exports = mongoose.model('BaiThi', BaiThiSchema, 'bai_thi');

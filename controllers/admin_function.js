@@ -20,9 +20,9 @@ module.exports = {
         };
         return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
     },
-    hashPassWord: function (password) {
-        return bcrypt.hash(password, 10)
-    },
+        hashPassWord: function (password) {
+            return bcrypt.hash(password, 10)
+        },
     regex: function(){
         return {
             'ngay_sinh_1': /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/,

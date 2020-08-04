@@ -9,8 +9,10 @@ module.exports = {
             .find()
             .skip((perPage * page) - perPage)
             .limit(perPage)
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .populate('ds_cau_hoi.cau_hoi_id', )
             .exec( (err, data) => {
-                if ( data > 0 && !err ) {
+                if ( data && !err ) {
                     BaiThiSchema.countDocuments(
                     (err, count) => {
                         err ? res.status(400).json({'success': false, 'errors': err})

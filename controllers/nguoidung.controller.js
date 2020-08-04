@@ -10,7 +10,7 @@ module.exports = {
         }
         const data = req.body;
         const check = await NguoidungSchema
-            .findOne({email: data.email})
+            .findOne({email: data.email, loai: false})
             .countDocuments((count) => count)
             .catch(err => 0);
         if (check) 

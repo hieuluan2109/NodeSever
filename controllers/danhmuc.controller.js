@@ -6,14 +6,25 @@ module.exports = {
         if (!errors.isEmpty()) {
             return res.status(400).json({'success': false, 'errors': errors.array()})
         }
-        const data = req.body;
-        const newRC = new DanhMucSchema;
-        newRC.tieu_de = data.tieu_de;
-        newRC.mo_ta = data.mo_ta;
-        newRC.nguoi_tao_id = req.user._id;
-        newRC.save( (err)=> {
-            err ? res.status(400).json({ success: false, errors: err }) : res.status(200).json({success: true, msg: 'Tạo danh mục thành công'})
-        });
+        const [_id,{tieu_de, mo_ta}, option] = [req.user, req.body,{ new: true, useFindAndModify: false }];
+        const update= {tieu_de: tieu_de, mo_ta: mo_ta, nguoi_tao_id: _id};
+        DanhMucSchema.findOne({tieu_de: tieu_de})
+        .then(result => {
+            if ( result)
+                res.status(400).json({ success: false, errors: 'Chủ đề đã tồn tại' })
+            else {
+                const newRC = new DanhMucSchema(update)
+                newRC.save( function (err, doc){
+                    if (err)
+                        res.status(400).json({ success: false, errors: err }) 
+                    else
+                        res.status(400).json({ success: true, msg: 'Tạo thành công' })
+                })
+            }
+        })
+        .catch(function (err) {
+            res.status(400).json({ success: false, errors: err }) 
+        })
     },
     admin_get_category_list: async function (req, res) {
         let perPage = req.query.limit || 10;

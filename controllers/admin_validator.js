@@ -117,7 +117,7 @@ let validateCreateChoiceQuestion = () => {
         check('dap_an')
             .not()
             .isEmpty()
-            .withMessage('Đáp án không được để trống'),
+            .withMessage('Đáp án không được bỏ trống'),
         check('lua_chon')
             .not()
             .isEmpty()
@@ -125,7 +125,7 @@ let validateCreateChoiceQuestion = () => {
         check('danh_muc')
             .not()
             .isEmpty()
-            .withMessage('Lựa chọn không được để trống'),
+            .withMessage('Danh mục không được để trống'),
     ];
 };
 let validateCreateAssayQuestion = () => {

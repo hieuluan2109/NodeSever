@@ -78,8 +78,8 @@ module.exports = {
         const {id} = req.params;
         const [{tieu_de, mo_ta}, option] = [req.body, { new: true, useFindAndModify: false }];
         const update = {'tieu_de': tieu_de, 'mo_ta': mo_ta};
-        await DanhMucSchema.findByIdAndUpdate({id},{ $set: update}, option, function (err, updated){
-            (err || !updated) ? res.status(400).json({'success': err, 'errors': err}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
+        await DanhMucSchema.findOneAndUpdate({_id: id},{ $set: update}, option, function (err, updated){
+            (err || !updated) ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
         })
     },
 }

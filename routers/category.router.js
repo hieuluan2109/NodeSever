@@ -20,7 +20,7 @@ router.post(
     CategoryController.admin_create_category
 );
 router.post(
-    '/update',
+    '/update/:id',
     passport.authenticate('jwt', {session: false}),
     validate.validateCreateCategory,
     CategoryController.admin_update_category

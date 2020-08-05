@@ -18,7 +18,7 @@ module.exports = {
                     if (err)
                         res.status(400).json({ success: false, errors: err }) 
                     else
-                        res.status(400).json({ success: true, msg: 'Tạo thành công' })
+                        res.status(200).json({ success: true, msg: 'Tạo thành công' })
                 })
             }
         })

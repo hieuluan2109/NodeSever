@@ -23,11 +23,9 @@ import LoginV from "./view/Login";
 import HomePage from './view/HomePage'
 import "./css/appbar.css";
 import "./css/login.scss";
-<<<<<<< HEAD
 import Logout from "./component/Login/Logout";
 import ClassRoom from './view/ClassRoom'
 import Routers from "./route";
-
 
 class App extends Component {
   constructor(props) {
@@ -36,13 +34,6 @@ class App extends Component {
       cookie: this.props.cookie,
     };
   }
-=======
-import Routers from './route'
-
->>>>>>> 66526cf2a918d8f8799ff773a7ba5f3f31f6ba78
-
-class App extends Component {
- 
   render() {
     const token = Cookies.get("token");
 

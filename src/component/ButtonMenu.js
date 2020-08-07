@@ -6,6 +6,8 @@ import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import { Redirect } from "react-router";
+import App from './../App'
 import {
   // BrowserRouter as Router,
   // Switch,
@@ -42,11 +44,15 @@ export default function MenuAppbar(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
- const logout=()=>{
-  Cookies.remove('token');
- }
+//   const [token,setToken]=React.useState('')
+//    const logout=()=>{
+//     // const token=Cookies.remove('token')
+//     return <App status={false} />
+ 
+//  }
   return (
     <div className={classes.menus}>
+         
 
         <IconButton
           size="small"
@@ -70,8 +76,8 @@ export default function MenuAppbar(props) {
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
          </Link>
           
-          <Link to='/' onClick={logout}  style={{textDecoration:'none',color:'black'}}>
-          <MenuItem onClick={handleMenuClose}>Sign out</MenuItem>
+          <Link to='/logout'  style={{textDecoration:'none',color:'black'}}>
+          <MenuItem> Sign out </MenuItem>
           </Link>
           <Link to="/changepassword"  style={{textDecoration:'none',color:'black'}}>
           <MenuItem onClick={handleMenuClose}>Change password</MenuItem>

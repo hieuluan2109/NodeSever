@@ -6,6 +6,7 @@ import ForgotPassword from "./ForgotPassword";
 import { Redirect } from "react-router";
 import Cookies from "js-cookie";
 import '../../css/login.scss' 
+import App from './../../App'
 
 class LoginForm extends Component {
   constructor(props) {
@@ -76,15 +77,15 @@ class LoginForm extends Component {
   };
 
   render() {
-    // const {loggedIn}=this.state;
-    // if(localStorage.getItem('token')!=null){
-    //     return <Redirect to='/admin' />
-    // }
+  
 
-    const token = Cookies.get("token");
-    console.log(token);
-    if (token != null) {
-      return <Redirect to="/admin" />;
+    if (this.state.cookie != null) {
+      return (
+      <div>
+        {/* <Redirect to="/admin" /> */}
+        <App cookie={this.state.cookie} />
+      </div>
+      )
     }
    
 

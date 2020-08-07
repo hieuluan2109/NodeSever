@@ -10,7 +10,7 @@
    position: relative;
    min-height: 100vh;
 }
-.users,.students,.threads{
+.users,.students,.topic,.classroom{
     background-color: #ececec;
     /* height: 140vh; */
    position: relative;

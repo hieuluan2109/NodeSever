@@ -98,9 +98,6 @@ export default function InfoUsers(props) {
   const [name, setName] = useState("");
   const [getSuccess, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const HandleLoading =()=>{
-    setLoading(!loading)
-  }
   const onclickInfor = (id, age) => {
     if (age === 1) {
       axios
@@ -181,6 +178,7 @@ export default function InfoUsers(props) {
   const [pageNumbberSV, setPageNumberSV] = useState(1);
 
   useEffect(() => {
+    setLoading(false)
     axios
       .get(
         `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}`,
@@ -189,7 +187,7 @@ export default function InfoUsers(props) {
         }
       )
       .then((res) => {
-        HandleLoading()
+        setLoading(true)
         console.log(res.data);
         const { data } = res.data;
         setGetList(data);
@@ -200,6 +198,7 @@ export default function InfoUsers(props) {
       });
   }, [pageGV]);
   useEffect(() => {
+    setLoading(false)
     axios
       .get(
         `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}`,
@@ -208,7 +207,7 @@ export default function InfoUsers(props) {
         }
       )
       .then((res) => {
-        HandleLoading()
+        setLoading(true)
         const { data } = res.data;
         setListSV(data);
         setPageNumberSV(res.data.pages);

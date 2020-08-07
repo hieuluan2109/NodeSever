@@ -92,14 +92,13 @@ class AddQuestions extends Component {
     this.state = {
       open: false,
       noi_dung: "",
-
       chu_de: "",
       mo_ta: "",
       diem: "",
-     dap_an_a:'',
-     dap_an_b:'',
-     dap_an_c:'',
-     dap_an_d:'',
+      dap_an_a: "",
+      dap_an_b: "",
+      dap_an_c: "",
+      dap_an_d: "",
       lua_chon: [
         { id: 1, label: "Đáp Án A", value: "" },
         { id: 2, label: "Đáp Án B", value: "" },
@@ -111,7 +110,9 @@ class AddQuestions extends Component {
       lc: "Đáp Án A",
       tieu_de: [],
       tieude0: "",
+      dsLuachon: [],
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleClickOpen = () => {
@@ -140,61 +141,53 @@ class AddQuestions extends Component {
       [event.target.name]: event.target.value,
       status: true,
     });
-    this.setState({
-        lua_chon:[
-            {
-                id: 1,
-                label: "Đáp Án A",
-                value:this.state.dap_an_a
-              },
-            {
-                id: 2,
-                label: "Đáp Án B",
-                value:this.state.dap_an_b
-              },
-              {
-                id: 3,
-                label: "Đáp Án C",
-                value:this.state.dap_an_c
-              },
-              {
-                id: 4,
-                label: "Đáp Án D",
-                value:this.state.dap_an_d
-              },
-          ]
-    })
-   
+    // this.setState({
+    //   lua_chon: [
+    //     {
+    //       id: 1,
+    //       label: "Đáp Án A",
+    //       value: this.state.dap_an_a,
+    //     },
+    //     {
+    //       id: 2,
+    //       label: "Đáp Án B",
+    //       value: this.state.dap_an_b,
+    //     },
+    //     {
+    //       id: 3,
+    //       label: "Đáp Án C",
+    //       value: this.state.dap_an_c,
+    //     },
+    //     {
+    //       id: 4,
+    //       label: "Đáp Án D",
+    //       value: this.state.dap_an_d
+    //     },
+    //   ]
+    // })
   };
-
 
   handleChangeValue = (event) => {
     this.setState({
-        [event.target.name]: event.target.value,
-        status: true,
-      });
-  
+      [event.target.name]: event.target.value,
+      status: true,
+    });
   };
- 
-
   handleChangeSelection = (event) => {
     this.setState({
       lc: (event.target.name = event.target.value),
       tieude0: (event.target.name = event.target.value),
-      danh_muc:this.state.tieude0
+      danh_muc: this.state.tieude0,
     });
-    console.log(event.target.value);
   };
-  componentWillReceiveProps() {
-    this.setState({});
-  }
+  // componentWillReceiveProps() {
+  //   this.setState({});
+  // }
   handleSubmit = (event) => {
     event.preventDefault();
-    
-
     const { noi_dung, danh_muc, dap_an, lua_chon } = this.state;
     var url = "https://navilearn.herokuapp.com/admin/question/create/choice";
-    var params = { noi_dung, danh_muc, dap_an, lua_chon };
+    var params = { noi_dung, danh_muc, lua_chon };
     axios
       .post(url, params, {
         headers: { Authorization: `Bearer ${this.props.token}` },
@@ -213,13 +206,9 @@ class AddQuestions extends Component {
   render() {
     const { classes, children } = this.props;
     const { open } = this.state;
+
     // console.log("luachon", this.state.lua_chon[0].value);
-    console.log("luachon0", this.state.dap_an_a);
-    console.log("luachon1", this.state.dap_an_b);
-    console.log("luachon2", this.state.dap_an_c);
-    console.log("luachon3", this.state.dap_an_d);
-    console.log('ccccccc',this.state.tieude0)
-    console.log('ccccccc',this.state.danh_muc)
+
     return (
       <div>
         <Button
@@ -373,7 +362,7 @@ class AddQuestions extends Component {
                 <Button
                   type="submit"
                   color="primary"
-                  onSubmit={this.handleSubmit}
+                  // onSubmit={this.handleSubmit}
                 >
                   Xác nhận
                 </Button>

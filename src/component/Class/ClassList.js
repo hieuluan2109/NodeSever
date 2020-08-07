@@ -9,14 +9,13 @@ import {
   TableRow,
   IconButton,
 } from "@material-ui/core";
-import CreateIcon from "@material-ui/icons/Create";
+// import CreateIcon from "@material-ui/icons/Create";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import SearchButton from "../Search";
 import axios from "axios";
 import Cookies from "js-cookie";
-import AddTopic from "./AddTopic";
 import Pagination from "@material-ui/lab/Pagination";
-import TopicInfor from "./TopicInfor";
+// import TopicInfor from "./TopicInfor";
 
 const useStyles = makeStyles((theme) => ({
   containerForm: {
@@ -45,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 70,
   },
   eyes: {
-    marginRight: 20,
+    
     color: "bold",
   },
   containerNext: {
@@ -87,9 +86,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const topicTitle = ["Tên chủ đề", "Mô tả", "Người tạo", ""];
+ const ClassTitle = ["Tên Lớp", "Người tạo",'Chi tiết','Danh sách SV trong lớp',"Bài tập"];
 
-export default function Threadlist(props) {
+export default function ClassList(props) {
   const classes = useStyles();
   const { title } = props;
   const [selectedIndex, setSelectedIndex] = useState(1);
@@ -97,22 +96,23 @@ export default function Threadlist(props) {
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
-  const [getListTopic, setListTopic] = useState([]);
+  const [getClassList, setClassList] = useState([]);
   const [page, setPage] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
 
   useEffect(() => {
     axios
       .get(
-        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}`,
+        `https://navilearn.herokuapp.com/admin/class/list?page=${pageIndex}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
       .then((res) => {
+          console.log(res.data)
         setPage(res.data.pages);
         const { data } = res.data;
-        setListTopic(data);
+        setClassList(data);
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -134,14 +134,14 @@ export default function Threadlist(props) {
       const params = {
         param: value,
       };
-      const url = `https://navilearn.herokuapp.com/admin/category/list?search=${params.param}`;
+      const url = `https://navilearn.herokuapp.com/admin/class/list?search=${params.param}`;
       axios
         .get(url, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
           const { data } = res.data;
-          setListTopic(data);
+          setClassList(data);
 
           setPage(res.data.pages);
         })
@@ -159,70 +159,70 @@ export default function Threadlist(props) {
     ngay_tao: "",
   });
   const [getSuccess, setSuccess] = useState("");
-  const getTopicInfor = (id) => {
-    axios
-      .get(`https://navilearn.herokuapp.com/admin/category/detail/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const { data } = res.data;
-        console.log(data);
-        setDataTopicInfor({
-          tieu_de: data.tieu_de,
-          mo_ta: data.mo_ta,
-          nguoi_tao: data.nguoi_tao_id.ten,
-          ngay_tao: data.createdAt,
-          _id: data._id,
-        });
-        console.log("GV", dataTopicInfor);
-      })
-      .catch((error) => {
-        console.log("Lỗi", error);
-      });
-  };
-  const handleChangeTopic = (event, status) => {
-    setDataTopicInfor({
-      ...dataTopicInfor,
-      [event.target.name]: event.target.value,
-    });
-    console.log(dataTopicInfor._id);
-  };
+//   const getTopicInfor = (id) => {
+//     axios
+//       .get(`https://navilearn.herokuapp.com/admin/category/detail/${id}`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       })
+//       .then((res) => {
+//         const { data } = res.data;
+//         console.log(data);
+//         setDataTopicInfor({
+//           tieu_de: data.tieu_de,
+//           mo_ta: data.mo_ta,
+//           nguoi_tao: data.nguoi_tao_id.ten,
+//           ngay_tao: data.createdAt,
+//           _id: data._id,
+//         });
+//         console.log("GV", dataTopicInfor);
+//       })
+//       .catch((error) => {
+//         console.log("Lỗi", error);
+//       });
+//   };
+//   const handleChangeTopic = (event, status) => {
+//     setDataTopicInfor({
+//       ...dataTopicInfor,
+//       [event.target.name]: event.target.value,
+//     });
+//     console.log(dataTopicInfor._id);
+//   };
 
-  const onSubmitChangeTopic = (event) => {
-    event.preventDefault();
-    const { _id, tieu_de, mo_ta } = dataTopicInfor;
-    axios
-      .post(
-        `https://navilearn.herokuapp.com/admin/category/update/${_id}`,
-        { tieu_de, mo_ta },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((res) => {
-        setSuccess(res.data.msg);
-        console.log(res.data);
-        // setSuccess(res.data.msg);
-      })
-      .catch((error) => {
-        console.log("Lỗi", error.response);
-      });
-  };
-const clearSuccess=()=>{
-  setSuccess('')
-}
+//   const onSubmitChangeTopic = (event) => {
+//     event.preventDefault();
+//     const { _id, tieu_de, mo_ta } = dataTopicInfor;
+//     axios
+//       .post(
+//         `https://navilearn.herokuapp.com/admin/category/update/${_id}`,
+//         { tieu_de, mo_ta },
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         }
+//       )
+//       .then((res) => {
+//         setSuccess(res.data.msg);
+//         console.log(res.data);
+//         // setSuccess(res.data.msg);
+//       })
+//       .catch((error) => {
+//         console.log("Lỗi", error.response);
+//       });
+//   };
+// const clearSuccess=()=>{
+//   setSuccess('')
+// }
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> {title} </div>
+        <div className={classes.titleformInfo}> Danh sách lớp học </div>
 
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
 
-          <AddTopic token={token} />
+          {/* <AddTopic token={token} /> */}
 
-          <div className={classes.formInfo}>
+          <div>
             <TableContainer>
               <Table
                 className={classes.table}
@@ -231,7 +231,7 @@ const clearSuccess=()=>{
               >
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
-                    {topicTitle.map((valueTitle, index) => (
+                    {ClassTitle.map((valueTitle, index) => (
                       <TableCell
                         key={index}
                         align="center"
@@ -243,23 +243,23 @@ const clearSuccess=()=>{
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {getListTopic.map((value, index) => (
+                  {getClassList.map((value, index) => (
                     <TableRow key={index + 1} hover>
-                      <TableCell align="center">{value.tieu_de}</TableCell>
-                      <TableCell align="center">{value.mo_ta}</TableCell>
+                      <TableCell align="left">{value.tieu_de}</TableCell>
+                      {/* <TableCell align="center">{value.mo_ta}</TableCell> */}
                       <TableCell align="center">
                         {value.nguoi_tao_id.ten}
                       </TableCell>
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
-                          <TopicInfor
+                        <VisibilityIcon />
+                          {/* <TopicInfor
                             id={value._id}
                             getInfor={getTopicInfor}
                             data={dataTopicInfor}
                             icon={<VisibilityIcon />}
                             disable={true}
-                            status={true} 
-                            clearForm={clearSuccess}
+                            status={true}
                           />
                         </IconButton>
                         <IconButton size="small" className={classes.eyes}>
@@ -276,9 +276,19 @@ const clearSuccess=()=>{
                             status={false}
                             success={getSuccess}
                             clearForm={clearSuccess}
-                          />
+                          /> */}
                         </IconButton>
                       </TableCell>
+                      <TableCell align="center">
+                        <IconButton size="small" className={classes.eyes}>
+                        <VisibilityIcon />
+                        </IconButton>
+                        </TableCell>
+                        <TableCell align="center">
+                        <IconButton size="small" className={classes.eyes}>
+                        <VisibilityIcon />
+                        </IconButton>
+                        </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

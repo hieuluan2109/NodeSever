@@ -93,7 +93,7 @@ class DialogInfo extends Component {
   render() {
     const { classes, dapan,noidung,diem,chude,luachona,luachonb,luachonc,luachond,nguoitao,mota } = this.props;
     const { open } = this.state;
-    console.log("Dât",this.props.Data)
+
     return (
       <div>
         <IconButton

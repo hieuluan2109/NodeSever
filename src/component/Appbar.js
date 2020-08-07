@@ -7,6 +7,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import LayersIcon from "@material-ui/icons/Layers";
 import ImportContactsIcon from "@material-ui/icons/ImportContacts";
+import ClassIcon from '@material-ui/icons/Class';
 import {Link} from "react-router-dom";
 
 const drawerWidth = 240;
@@ -108,6 +109,16 @@ class Appbarnav extends Component {
             {" "}
             <ImportContactsIcon className={classes.iconMenu} />
             BÀI KIỂM TRA
+          </li>
+          <li className={classes.Menu}>
+          <Link
+              to="/classroom"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+            {" "}
+            <ClassIcon className={classes.iconMenu} />
+            LỚP HỌC
+            </Link>
           </li>
         </ul>
      

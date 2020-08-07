@@ -1,21 +1,24 @@
 .admin{
     background-color: #ececec;
     height: 100vh;
+    min-height: 100vh;
     /* #f5f6f8 */
 }
 .profile,.changepassword{
     background-color: #ececec;
     height: 110vh;
    position: relative;
+   min-height: 100vh;
 }
 .users,.students,.threads{
     background-color: #ececec;
-    height: 140vh;
+    /* height: 140vh; */
    position: relative;
+   min-height: 100vh;
 }
 .questions{
-    background-color: #ececec;
-    height: 200vh;
-    max-height: 300vh;
+    background-color:  #ececec;
+    min-height: 100vh;
+   
    position: relative;
 }

@@ -1,9 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import Cookies from "js-cookie";
-import Profile from './MenuProfile'
+import ButtonMenu from './../ButtonMenu'
+import Skeleton from '@material-ui/lab/Skeleton';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Avatar from "@material-ui/core/Avatar";
+
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import PersonIcon from "@material-ui/icons/Person";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import LockIcon from "@material-ui/icons/Lock";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { Link } from "react-router-dom";
+import AccountInfo from "./Infomation";
+import ChangePassword from "./ChangePassword";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -12,178 +26,134 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "5%",
     background: "#f5f6f8",
   },
+  root2: {
+    width: "100%",
+    maxWidth: 300,
+    height: "100%",
+    marginTop: "40%",
+    marginLeft: "5%",
+    background: "#FFFF",
+  },
   titleformInfo: {
     position: "absolute",
-    marginTop: "-35px",
-    marginLeft: 60,
+    marginTop: "50px",
+    marginLeft: "60px",
     fontSize: 17,
   },
-
-  formInfo: {
-    marginTop: "105px",
-    marginRight: "6%",
-    marginLeft: "6%",
-    height: "70vh",
-    background: "white",
+  avatar: {
+    position: "absolute",
+    width: 50,
+    height: 50,
   },
-
-  formControl: {
-    paddingTop: "30px",
-    paddingLeft: "30px",
-    maxwidth: "600px",
+  info: {
+    position: "absolute",
+    marginLeft: "5%",
   },
-  titleFormControl: {
+  NameSkeleton: {
+    marginTop: "1.5%",
+    marginLeft: "5%",
+    position: "absolute",
     width: "150px",
-    float: "left",
-    marginTop: "10px",
+    height: "30px"
   },
-  contentFormControl: {
-    width: "450px",
-    borderRadius: "5px",
-    height: "30px",
-    paddingLeft: "20px",
-    outline: "none",
-    "&:focus": {
-      borderColor: "#3f51b5",
-    },
+  name: {
+    paddingTop: "1.5%",
+    marginLeft: "5%",
+    position: "absolute",
+    width: "150px",
+    height: "30px"
+  }, 
+  left: {
+    marginTop: "2%",
   },
-  selectDate: {
-    margin: theme.spacing(0.5),
-    minWidth: 120,
-    marginTop: "-10px",
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(1),
-  },
-  btnXacnhan: {
-    borderRadius: "5px",
-    background: "rgb(253, 216, 53)",
-    width: "120px",
-    height: "40px",
-    marginLeft: "150px",
-    cursor: "pointer",
-  },
-  time: {
-    marginBottom: "50px",
-  },
-  textField: {
-    marginTop: "-15px",
-    width: 150,
-  },
+  leftInfo: {
+    marginLeft: "8%",
+    marginTop: "10%",
+  }
+
 }));
 
-export default function Inforprofile(props) {
+export default function Inforprofile() {
   const classes = useStyles();
-
-  const [getDataProfile, setDataProfile] = useState({ho:'',ten:'',ngay_sinh:''});
-  const [getTen,setGetTen]=useState('')
+  let data;
+  const [getTen,setGetTen]=useState('');
+  const [item, setItem] = useState(false);
   const token = Cookies.get("token");
+  const [titleRight, setTitleRight] = useState('1');
+  const TitleValue =(title)=>{
+    switch(title){
+      case 1: return "Thông tin tài khoản";
+      case 2: return "Đổi mật khẩu";
+      default: return "Thông tin tài khoản"
+    }
+  }
+  const HandleTitle =(title)=> {
+    setTitleRight(title);
+  }
+  const [getDataProfile, setDataProfile] = useState({ho:'',ten:'',ngay_sinh:''});
+  const handleItem =()=> setItem(!item);
   useEffect(() => {
     axios
       .get("https://navilearn.herokuapp.com/admin/profile", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        const { data } = res.data;
-        setGetTen(data.ten)
-        setDataProfile(data); //State để lấy dữ liệu profile admin từ api
+        handleItem()
+        data = res.data.data;
+        setGetTen(data.ten);
+        setDataProfile(data);
       });
   }, []);
-
-  const handleChange = (event) => {
-    setDataProfile({
-      ...getDataProfile,[event.target.name]: event.target.value,
-    })
-  };
-
-  const onSubmitInfo = (event) => {
-    event.preventDefault();
-    const {ho,ten,ngay_sinh}=getDataProfile
-    axios
-      .post(
-        "https://navilearn.herokuapp.com/admin/profile/update",
-        { ho, ten, ngay_sinh },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log("Lỗi", error.response);
-      });
-  };
-  const { title, firstname, lastname, birthday, email } = props;
-  console.log(getTen)
   return (
     <div>
-  <div className="row">
-    <div className="col span-1-of-4">
-       <Profile ten={getTen}/>
-      </div>
-      <div className="col span-3-of-4">
-      <div className={classes.titleformInfo}>{title}</div>
-      <form onSubmit={onSubmitInfo}>
-        <div className={classes.formInfo}>
-          <div className={classes.formControl}>
-            <label className={classes.titleFormControl}>{firstname}</label>
-            <input
-              className={classes.contentFormControl}
-              name="ho"
-              type="text"
-              value={getDataProfile.ho}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={classes.formControl}>
-            <label className={classes.titleFormControl}>{lastname}</label>
-            <input
-              className={classes.contentFormControl}
-              name="ten"
-              type="text"
-              value={getDataProfile.ten}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className={classes.formControl}>
-            <label className={classes.titleFormControl}>{email}</label>
-            <input
-              name="email"
-              className={classes.contentFormControl}
-              type="text"
-              value={getDataProfile.email}
-              disabled={true}
-            />
-          </div>
-          <div className={classes.formControl}>
-            <label className={classes.titleFormControl}>{birthday}</label>
-
-            <TextField
-              id="date"
-              label="Birthday"
-              type="date"
-              name="ngay_sinh"
-              value={getDataProfile.ngay_sinh}
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={classes.formControl}>
-            <input
-              className={classes.btnXacnhan}
-              type="submit"
-              value="Cập Nhật"
-            />
-          </div>
-        </div>
-      </form>
-      </div>
-    </div>
+      <Grid container
+          direction="row"
+          justify="center" xs={12} >
+        <Grid xs={12} sm={2} className={classes.left} >
+          <div className={classes.leftInfo} >
+            <Avatar className={classes.avatar} />
+            <div className={classes.info}>Tài khoản của</div>
+            { getTen
+              ? <div className={classes.name}>{getTen}</div>
+              : ( <Skeleton animation="wave" className={classes.NameSkeleton} variant="text" /> ) }
+          </div> 
+          <Paper elevation={3}>
+            <div className={classes.root2}>
+              <ListItem button onClick={e=> HandleTitle(1)} >
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText primary="Thông tin tài khoản" />
+              </ListItem>
+              <ListItem button >
+                <ListItemIcon>
+                  <NotificationsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Thông báo của tôi" />
+              </ListItem>
+              <ListItem button onClick={e=> HandleTitle(2) }> 
+                <ListItemIcon>
+                  <LockIcon />
+                </ListItemIcon>
+                <ListItemText primary="Đổi mật khẩu" />
+              </ListItem>
+              <ListItem button >
+                <ListItemIcon>
+                  <DeleteIcon />
+                </ListItemIcon>
+                <ListItemText primary="......" />
+              </ListItem>
+            </div>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={8}>
+          <div className={classes.titleformInfo}>{TitleValue(titleRight)}</div>
+          { titleRight == 1
+            ? <AccountInfo data={getDataProfile} />
+            : <ChangePassword />
+          }
+        </Grid>
+      </Grid>
     </div>
   );
 }

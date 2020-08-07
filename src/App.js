@@ -11,7 +11,7 @@ import {
   // useParams
 } from "react-router-dom";
 import LoginForm from "./component/Login/Login_Form";
-import HomePage from "./view/Home";
+import Header from "./view/Home";
 import Profile from "./view/Profile";
 import Users from "./view/Users";
 import StudentList from "./view/Students";
@@ -20,6 +20,7 @@ import Topic from "./view/Topic";
 import Cookies from "js-cookie";
 import ChangePassword from './view/ChangPasswordAdmin'
 import LoginV from "./view/Login";
+import HomePage from './view/HomePage'
 import "./css/appbar.css";
 import "./css/login.scss";
 import Routers from './route'
@@ -35,11 +36,7 @@ class App extends Component {
         <BrowserRouter>
      
           <Route exact path="/" render={() => <Redirect to="/admin" />} />
-          <Route exact path="/admin">
-            <div className="admin">
-              <HomePage />
-            </div>
-          </Route>
+          
           <Switch>
           <Route exact path="/admin">
             <div className="admin">

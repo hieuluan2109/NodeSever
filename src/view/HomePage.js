@@ -1,12 +1,13 @@
 import React from 'react'
 import Appbar from '../component/Dashboard/Appbar'
-import UserStats from '../component/Dashboard/UserStats'
+import DashBoard from '../component/Dashboard/index'
 
     function HomePage() {
        
         return (
             <div>
             <Appbar/>
+            <DashBoard />
             </div>
       
         );

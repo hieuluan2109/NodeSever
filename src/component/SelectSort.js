@@ -7,15 +7,11 @@ import Select from '@material-ui/core/Select';
 import View from '../view/Profile'
 import View1 from '../view/Question'
 const styles = theme => ({
-    
-   
       formControl: {
         position:'absolute',
         right:"15%",
         minWidth: 120,
-      },
-    
-     
+      },  
 } );
 
 class SelectSort extends Component {
@@ -50,12 +46,10 @@ class SelectSort extends Component {
             onClose={this.handleClose}
             value={role}
             onChange={this.handleChange}
-            
           >
             <MenuItem value={GV}>{GV}</MenuItem>
             <MenuItem value={SV}>{SV}</MenuItem>
             {children}
-            {/* <MenuItem value={30}>Thirty</MenuItem> */}
           </Select>
         </FormControl>
       

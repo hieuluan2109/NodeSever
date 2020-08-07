@@ -1,4 +1,8 @@
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import {
+  withStyles,
+  makeStyles,
+  responsiveFontSizes,
+} from "@material-ui/core/styles";
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -9,6 +13,10 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Icon from "@material-ui/core/Icon";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -69,173 +77,149 @@ const styles = (theme) => ({
     marginTop: "5px",
     marginLeft: "100px",
   },
+  formControl: {
+    minWidth: "200px",
+  },
+  formControlCD: {
+    paddingTop: "5px",
+    paddingBottom: "5px",
+  },
 });
 
-class DialogThem extends Component {
+class AddQuestions extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      ho: "",
-      ten: "",
-      email: "",
-      ngay_sinh: "",
-      password: "",
-      confirmpassword: "",
-      errors: "",
-      ma_sv: "",
-      isInputValid: false,
-      success: "",
-      status: true,
+      noi_dung: "",
+
+      chu_de: "",
+      mo_ta: "",
+      diem: "",
+     dap_an_a:'',
+     dap_an_b:'',
+     dap_an_c:'',
+     dap_an_d:'',
+      lua_chon: [
+        { id: 1, label: "Đáp Án A", value: "" },
+        { id: 2, label: "Đáp Án B", value: "" },
+        { id: 3, label: "Đáp Án C", value: "" },
+        { id: 4, label: "Đáp Án D", value: "" },
+      ],
+      dap_an: { id: "", value: "" },
+      danh_muc: "",
+      lc: "Đáp Án A",
+      tieu_de: [],
+      tieude0: "",
     };
   }
 
   handleClickOpen = () => {
     this.setState({ open: true });
+    axios
+      .get("https://navilearn.herokuapp.com/admin/category/list", {
+        headers: { Authorization: `Bearer ${this.props.token}` },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        this.setState({ tieu_de: res.data.data });
+        this.setState({ tieude0: data[0]._id });
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
   };
   handleClose = () => {
     this.setState({
       open: false,
-      ho: "",
-      ten: "",
-      email: "",
-      ngay_sinh: "",
-      password: "",
-      confirmpassword: "",
-      errors: "",
-      ma_sv: "",
-      isInputValid: false,
-      success: "",
     });
   };
+
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
-      status: true
+      status: true,
     });
+    this.setState({
+        lua_chon:[
+            {
+                id: 1,
+                label: "Đáp Án A",
+                value:this.state.dap_an_a
+              },
+            {
+                id: 2,
+                label: "Đáp Án B",
+                value:this.state.dap_an_b
+              },
+              {
+                id: 3,
+                label: "Đáp Án C",
+                value:this.state.dap_an_c
+              },
+              {
+                id: 4,
+                label: "Đáp Án D",
+                value:this.state.dap_an_d
+              },
+          ]
+    })
+   
   };
-  checkvalid = () => {
-    const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
-    const regexE = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
-    const regMSSV=/^\d{10}$/
-    let today = new Date();
-    let getdate = today.getDate();
-    let getmonth = today.getMonth() + 1;
-    let getyear = today.getFullYear();
-    if (getdate < 10) {
-      getdate = "0" + getdate;
-    }
-    if (getmonth < 10) {
-      getmonth = "0" + getmonth;
-    }
-    // today=today()
-    const getToday = getyear + "-" + getmonth + "-" + getdate;
 
-    if (this.state.ho == "") {
-      this.setState({ errors: "Vui lòng nhập họ" });
-    } else if (!regexp.test(this.state.ho)) {
-      this.setState({ errors: "Họ không hợp lệ" });
-    } else if (this.state.ten == "") {
-      this.setState({ errors: "Vui lòng nhập tên" });
-    } else if (!regexp.test(this.state.ten)) {
-      this.setState({ errors: "Tên không hợp lệ" });
-    } else if (this.props.value == false && this.state.ma_sv == "") {
-      this.setState({ errors: "Vui lòng nhập MSSV" });
-    } else if (this.props.value == false && !regMSSV.test(this.state.ma_sv)) {
-      this.setState({ errors: "Mã số SV phải = 10 kí tự số" });
-    } else if (this.state.email == "") {
-      this.setState({ errors: "Vui lòng nhập Email" });
-    } else if (!regexE.test(this.state.email)) {
-      this.setState({ errors: "Email không hợp lệ" });
-    } else if (this.state.ngay_sinh == "") {
-      this.setState({ errors: "Vui lòng chọn ngày sinh" });
-    } else if (this.state.ngay_sinh >= getToday) {
-      this.setState({ errors: "Ngày sinh không hợp lệ" });
-    } else if (this.state.password == "") {
-      this.setState({ errors: "Vui lòng nhập mật khẩu" });
-    } else if (
-      this.state.password.length < 6 ||
-      this.state.password.length > 24
-    ) {
-      this.setState({ errors: "Password không hợp lệ" });
-    } else if (this.state.confirmpassword == "") {
-      this.setState({ errors: "Vui lòng xác nhận mật khẩu" });
-    } else if (this.state.password != this.state.confirmpassword) {
-      this.setState({ errors: "Password không khớp" });
-    } else {
-      this.setState({
-        errors: "",
-        isInputValid: true,
-        status: false,
+
+  handleChangeValue = (event) => {
+    this.setState({
+        [event.target.name]: event.target.value,
+        status: true,
       });
-      return true
-    }
-    return false
-  };
-
-  componentWillReceiveProps (){
   
-      this.setState({
-      ho: "",
-      ten: "",
-      email: "",
-      ngay_sinh: "",
-      password: "",
-      confirmpassword: "",
-      errors: "",
-      ma_sv: "",
-      })
-    
+  };
+ 
+
+  handleChangeSelection = (event) => {
+    this.setState({
+      lc: (event.target.name = event.target.value),
+      tieude0: (event.target.name = event.target.value),
+      danh_muc:this.state.tieude0
+    });
+    console.log(event.target.value);
+  };
+  componentWillReceiveProps() {
+    this.setState({});
   }
   handleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.isInputValid) {
-      const { ho, ten, email, ma_sv, password, ngay_sinh } = this.state;
-      console.log(this.props.token);
-      var url = "";
-      this.props.value == true
-        ? (url = "https://navilearn.herokuapp.com/admin/user/add/teacher")
-        : (url = "https://navilearn.herokuapp.com/admin/user/add/student");
-      var params;
-      this.props.value == true
-        ? (params = { ho, ten, email, ngay_sinh, password })
-        : (params = { ho, ten, email, ma_sv, ngay_sinh, password });
-      console.log(params);
-      axios
-        .post(url, params, {
-          headers: { Authorization: `Bearer ${this.props.token}` },
-        })
-        .then((res) => {
-          console.log("AAA", res.data.errors);
-          if (res.data.success == true) {
-            this.setState({
-              ho: "",
-              ten: "",
-              email: "",
-              ngay_sinh: "",
-              password: "",
-              confirmpassword: "",
-              // errors: "",
-              ma_sv: "",
-              isInputValid: false,
-              errors: "Thêm thành công",
-            });
-          }
-        })
-        .catch((error) => {
-          console.log("Lỗi", error.response.data);
-          this.setState({
-            errors: error.response.data.errors,
-          });
+    
+
+    const { noi_dung, danh_muc, dap_an, lua_chon } = this.state;
+    var url = "https://navilearn.herokuapp.com/admin/question/create/choice";
+    var params = { noi_dung, danh_muc, dap_an, lua_chon };
+    axios
+      .post(url, params, {
+        headers: { Authorization: `Bearer ${this.props.token}` },
+      })
+      .then((res) => {
+        console.log("errors", res.data);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error.response.data);
+        this.setState({
+          errors: error.response.data.errors,
         });
-      return true;
-    } else return false;
+      });
   };
 
   render() {
     const { classes, children } = this.props;
-    const { open, errors, success, status } = this.state;
-    // const { ho, ten, email, password,ngaysinh } = this.state;
+    const { open } = this.state;
+    // console.log("luachon", this.state.lua_chon[0].value);
+    console.log("luachon0", this.state.dap_an_a);
+    console.log("luachon1", this.state.dap_an_b);
+    console.log("luachon2", this.state.dap_an_c);
+    console.log("luachon3", this.state.dap_an_d);
+    console.log('ccccccc',this.state.tieude0)
+    console.log('ccccccc',this.state.danh_muc)
     return (
       <div>
         <Button
@@ -253,113 +237,144 @@ class DialogThem extends Component {
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">
-            Thêm mới tài khoản
+            Thêm mới câu hỏi
             <div className={classes.selectsort}>{children}</div>
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Để tạo tài khoản, vui lòng điền đầy đủ các thông tin
+              Để tạo câu hỏi, vui lòng điền đầy đủ các thông tin
             </DialogContentText>
             <div
               style={{ textAlign: "center", color: "red", fontWeight: "bold" }}
             >
-              {" "}
-              {errors}
               {/* {success} */}
             </div>
 
             <form onSubmit={this.handleSubmit}>
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Họ</label>
+                <label className={classes.titleFormControl}>Nội dung</label>
                 <input
                   className={classes.contentFormControl}
-                  name="ho"
+                  name="noi_dung"
                   type="text"
-                  value={this.state.ho}
                   onChange={this.handleChange}
-                  onBlur={this.checkvalid}
                 />
               </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Tên</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="ten"
-                  type="text"
-                  value={this.state.ten}
-                  onChange={this.handleChange}
-                  onBlur={this.checkvalid}
-                />
+              <div className={classes.formControlCD}>
+                <label className={classes.titleFormControl}>Chủ đề</label>
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">Chủ đề</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={this.state.tieude0}
+                    onChange={this.handleChangeSelection}
+                  >
+                    {this.state.tieu_de.map((value, index) => (
+                      <MenuItem key={index} value={value._id}>
+                        {value.tieu_de}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </div>
               <div
                 className={classes.formControl}
                 style={{ display: this.props.display }}
               >
-                <label className={classes.titleFormControl}>MSSV</label>
+                <label className={classes.titleFormControl}>Mô tả</label>
                 <input
                   className={classes.contentFormControl}
-                  name="ma_sv"
+                  name="mo_ta"
                   type="text"
-                  value={this.state.ma_sv}
                   onChange={this.handleChange}
-                  onBlur={this.checkvalid}
                 />
               </div>
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Email</label>
+                <label className={classes.titleFormControl}>Điểm</label>
                 <input
-                  name="email"
+                  name="diem"
                   className={classes.contentFormControl}
                   type="text"
-                  value={this.state.email}
                   onChange={this.handleChange}
-                  onBlur={this.checkvalid}
                 />
               </div>
 
-              <span className={classes.ngaysinh}>Ngày sinh</span>
-              <TextField
-                name="ngay_sinh"
-                label="Birthday"
-                type="date"
-                value={this.state.ngay_sinh}
-                className={classes.contentNgaysinh}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={this.handleChange}
-                onBlur={this.checkvalid}
-              />
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Đáp Án A</label>
+                <input
+                  name="dap_an_a"
+                  className={classes.contentFormControl}
+                  type="text"
+                  value={this.state.dap_an_a}
+                  onChange={this.handleChange}
+                />
+              </div>
 
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Mật khẩu</label>
+                <label className={classes.titleFormControl}>Đáp Án B</label>
                 <input
-                  name="password"
+                  name="dap_an_b"
                   className={classes.contentFormControl}
-                  type="password"
-                  value={this.state.password}
+                  type="text"
+                  value={this.state.dap_an_b}
                   onChange={this.handleChange}
-                  onBlur={this.checkvalid}
                 />
               </div>
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>
-                  Xác nhận mật khẩu
-                </label>
+                <label className={classes.titleFormControl}>Đáp Án C</label>
                 <input
-                  name="confirmpassword"
+                  name="dap_an_c"
                   className={classes.contentFormControl}
-                  type="password"
-                  value={this.state.confirmpassword}
+                  type="text"
+                  value={this.state.dap_an_c}
                   onChange={this.handleChange}
-                  onBlur={this.checkvalid}
                 />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Đáp Án D</label>
+                <input
+                  name="dap_an_d"
+                  className={classes.contentFormControl}
+                  type="text"
+                  value={this.state.dap_an_d}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Đáp Án</label>
+                {/* <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">Loại</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={this.state.lc}
+                    onChange={this.handleChangeSelection}
+                  >
+                    <MenuItem value={this.state.lua_chon[0].label}>
+                      Đáp án A
+                    </MenuItem>
+                    <MenuItem value={this.state.lua_chon[1].label}>
+                      Đáp án B
+                    </MenuItem>
+                    <MenuItem value={this.state.lua_chon[2].label}>
+                      Đáp án C
+                    </MenuItem>
+                    <MenuItem value={this.state.lua_chon[3].label}>
+                      Đáp án D
+                    </MenuItem>
+                  </Select>
+                </FormControl> */}
               </div>
               <DialogActions>
                 <Button onClick={this.handleClose} color="primary">
                   Hủy bỏ
                 </Button>
-                <Button type="submit" color="primary" disabled={status}>
+                <Button
+                  type="submit"
+                  color="primary"
+                  onSubmit={this.handleSubmit}
+                >
                   Xác nhận
                 </Button>
               </DialogActions>
@@ -371,4 +386,4 @@ class DialogThem extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(DialogThem);
+export default withStyles(styles, { withTheme: true })(AddQuestions);

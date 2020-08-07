@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -19,8 +19,14 @@ import DialogInfor from "../DialogInfo";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
-import Sear from './Search'
+import Sear from "./Search";
+import Loading from './Loading';
 const useStyles = makeStyles((theme) => ({
+  loading: {
+    position: "fixed",
+    top: "50%",
+    left: "50%"
+  },
   formInfo: {
     marginTop: "50px",
     marginRight: "6%",
@@ -57,8 +63,14 @@ const useStyles = makeStyles((theme) => ({
     right: "15%",
     minWidth: 120,
   },
-  pagination:{
-    marginRight:'70px'
+  pagination: {
+    marginRight: "70px",
+  },
+  containerForm:{
+    marginTop: "50px",
+    marginRight: "6%",
+    background: "white",
+    borderRadius: 10,
   }
 }));
 
@@ -68,13 +80,8 @@ export default function InfoUsers(props) {
   const [age, setAge] = useState(1);
   const [create, setCreate] = useState(true);
   const [display, setDisplay] = useState("none");
-
-  const [pageGV, setPageGV] = useState(1);
-  const [pageSV, setPageSV] = useState(1);
-
   const { title, stt, firstname, lastname, email, DoB } = props;
-
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(1);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
@@ -90,6 +97,10 @@ export default function InfoUsers(props) {
   const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "" });
   const [name, setName] = useState("");
   const [getSuccess, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const HandleLoading =()=>{
+    setLoading(!loading)
+  }
   const onclickInfor = (id, age) => {
     if (age === 1) {
       axios
@@ -104,7 +115,6 @@ export default function InfoUsers(props) {
           setDataUser(data);
           setName(res.data.data.nguoi_tao_id.ten);
           console.log("GV", res.data);
-          //  console.log(data[0].ho)
         })
         .catch((error) => {
           console.log("Lỗi", error);
@@ -133,16 +143,10 @@ export default function InfoUsers(props) {
     setSuccess("");
   };
 
-  // const HandleFilter=(newFilter)=>{
-  //   console.log('AAAAAAAA',newFilter)
-  // }
-
   // Chỉnh sửa thông tin user
   const onSubmitInforUser = (event) => {
     event.preventDefault();
     const { _id, ho, ten, email, ngay_sinh } = dataUser;
-
-    console.log(age);
     if (age == true) {
       axios
         .post(
@@ -171,7 +175,8 @@ export default function InfoUsers(props) {
   // console.log("Get",dataUser)
   const [getListSV, setListSV] = useState([]);
   const [getList, setGetList] = useState([]);
-
+  const [pageGV, setPageGV] = useState(1);
+  const [pageSV, setPageSV] = useState(1);
   const [pageNumbberGV, setPageNumberGV] = useState(1);
   const [pageNumbberSV, setPageNumberSV] = useState(1);
 
@@ -184,6 +189,7 @@ export default function InfoUsers(props) {
         }
       )
       .then((res) => {
+        HandleLoading()
         console.log(res.data);
         const { data } = res.data;
         setGetList(data);
@@ -202,6 +208,7 @@ export default function InfoUsers(props) {
         }
       )
       .then((res) => {
+        HandleLoading()
         const { data } = res.data;
         setListSV(data);
         setPageNumberSV(res.data.pages);
@@ -219,27 +226,35 @@ export default function InfoUsers(props) {
   };
 
   const [param, setParam] = useState("");
-
+  const typingTimeoutRef = useRef(null);
   const handleSearch = (e) => {
-    setParam(e.target.value);
-    console.log(param);
-  };
-  const SearchUser = (event) => {
-    axios
-      .get(
-        `https://navilearn.herokuapp.com/admin/user/list/teacher?search=${param}`,
-        {
+    const value = e.target.value;
+    setParam(value);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    typingTimeoutRef.current = setTimeout(() => {
+      const params = {
+        param: value,
+      };
+      const url = age
+        ? `https://navilearn.herokuapp.com/admin/user/list/teacher?search=${params.param}`
+        : `https://navilearn.herokuapp.com/admin/user/list/student?search=${params.param}`;
+      axios
+        .get(url, {
           headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((res) => {
-        const { data } = res.data;
-        setGetList(data);
-        setPageNumberGV(res.data.pages);
-      })
-      .catch((error) => {
-        console.log("Lỗi", error.response.data);
-      });
+        })
+        .then((res) => {
+          const { data } = res.data;
+          age ? setGetList(data) : setListSV(data);
+          age
+            ? setPageNumberGV(res.data.pages)
+            : setPageNumberSV(res.data.pages);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error.response.data);
+        });
+    }, 300);
   };
 
   return (
@@ -247,11 +262,9 @@ export default function InfoUsers(props) {
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> {title} </div>
-
+        <div hidden={loading} className={classes.loading}><Loading /></div>
         <form>
-      
-          <SearchButton onChange={handleSearch} onSubmit={SearchUser} />
-
+          <SearchButton onChange={handleSearch} />
           <FormControl className={classes.formControl}>
             <InputLabel>Loại</InputLabel>
             <Select value={age} onChange={handleChange}>
@@ -284,9 +297,6 @@ export default function InfoUsers(props) {
               >
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
-                    {/* <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {stt}
-                    </TableCell> */}
                     <TableCell align="center" style={{ color: "#ffffff" }}>
                       {firstname}
                     </TableCell>
@@ -304,7 +314,7 @@ export default function InfoUsers(props) {
                   </TableRow>
                 </TableHead>
 
-                <TableBody>
+                <TableBody hidden={!loading}>
                   {(age == 1 ? getList : getListSV).map((row, index) => (
                     <TableRow key={index + 1} hover>
                       {/* <TableCell align="center">{index + 1}</TableCell> */}
@@ -374,7 +384,6 @@ export default function InfoUsers(props) {
         />
       </div>
       {/* <Sear onsubmit={HandleFilter}/> */}
-    
     </div>
   );
 }

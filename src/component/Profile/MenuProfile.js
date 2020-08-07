@@ -10,21 +10,17 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Avatar from "@material-ui/core/Avatar";
 import Profile from './Profile'
 import { Link } from "react-router-dom";
+import Skeleton from '@material-ui/lab/Skeleton';
+import Paper from '@material-ui/core/Paper';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     maxWidth: 300,
-
-    marginTop: "33%",
+    height: "100%",
+    marginTop: "40%",
     marginLeft: "5%",
-    background: "#f5f6f8",
-  },
-  avatar: {
-    position: "absolute",
-    marginTop: "-62px",
-    marginLeft: "2%",
-    width: 50,
-    height: 50,
+    background: "#FFFF",
   },
   info: {
     position: "absolute",
@@ -35,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     marginTop: "-35px",
     marginLeft: "7%",
+    width: "150px",
+    height: "30px"
   }
 
 }));
@@ -46,60 +44,40 @@ export default function MenuProfile(props) {
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+  const [item, setItem] = useState(false);
+  const handleItem =()=> setItem(!item);
 
   return (
-    <div>
-        <Avatar className={classes.avatar} />
-        <div className={classes.info}>Tài khoản của</div>
-        <div className={classes.name}>{props.ten}</div>
+    <Paper elevation={3}>
         <div className={classes.root}>
         <Link to="/profile"  style={{textDecoration:'none',color:'black'}}>
-          <ListItem
-            button
-            selected={selectedIndex === 1}
-            onClick={(event) => handleListItemClick(event, 1)}
-          >
+          <ListItem button >
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="Thông tin tài khoản" />
           </ListItem>
           </Link>
-          <ListItem
-            button
-            selected={selectedIndex === 2}
-            onClick={(event) => handleListItemClick(event, 2)}
-          >
+          <ListItem button >
             <ListItemIcon>
               <NotificationsIcon />
             </ListItemIcon>
             <ListItemText primary="Thông báo của tôi" />
           </ListItem>
       
-          <Link to="/changepassword"  style={{textDecoration:'none',color:'black'}}>
-          <ListItem
-            button
-            selected={selectedIndex === 3}
-            onClick={(event) => handleListItemClick(event, 3) }
-          > 
+          <ListItem button > 
             <ListItemIcon>
               <LockIcon />
             </ListItemIcon>
             <ListItemText primary="Đổi mật khẩu" />
           </ListItem>
-          </Link>
-          <ListItem
-            button
-            selected={selectedIndex === 4}
-            onClick={(event) => handleListItemClick(event, 4)}
-          >
+          <ListItem button >
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>
             <ListItemText primary="......" />
           </ListItem>
-
       </div>
-    </div>
+    </Paper>
   );
 }

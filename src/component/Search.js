@@ -77,8 +77,7 @@ class SearchButton extends Component {
     return (
       
         // <div  className={classes.search}  onSubmit={this.props.onSubmit}>
-        <div>
-        <form className={classes.search} onKeyDown={this.props.onSubmit}>
+        <div className={classes.search}>
         <InputBase 
           placeholder="Tìm kiếm"
           classes={{
@@ -92,7 +91,7 @@ class SearchButton extends Component {
         <IconButton className={classes.searchIcon} size="small">
             <SearchIcon />
       </IconButton>
-    </form>
+
       </div>
     );
   }

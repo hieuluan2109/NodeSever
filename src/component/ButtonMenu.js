@@ -16,7 +16,7 @@ import {
   // useParams
 } from "react-router-dom";
 import Cookies from 'js-cookie'
-export default function MenuAppbar() {
+export default function MenuAppbar(props) {
   const useStyles = makeStyles((theme) => ({
     root: {
       display: 'flex',
@@ -34,7 +34,6 @@ export default function MenuAppbar() {
     setAnchorEl(event.currentTarget);
   };
  
-
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const handleClose = () => {
     setAnchorEl(null);

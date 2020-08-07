@@ -31,7 +31,7 @@ export default function GetQuestionList(props) {
   const { getList } = props;
   const classes = useStyles();
   const token = Cookies.get("token");
-  const title = ["STT", "Nội dung", "Điểm", "Mô tả"];
+  const title = [ "Nội dung", "Điểm", "Mô tả"];
   const [dataQuestion, setDataQuestion] = useState({
     noidung: "",
     dapan: "",
@@ -90,9 +90,8 @@ export default function GetQuestionList(props) {
       <TableBody>
         {getList.map((row, index) => (
           <TableRow key={index + 1} hover>
-            <TableCell align="center">{index + 1}</TableCell>
-            <TableCell align="left">{row.noi_dung}</TableCell>
-            <TableCell align="center">{row.diem}</TableCell>
+            <TableCell align="left" width='700px'>{row.noi_dung}</TableCell>
+            <TableCell align="center" >{row.diem}</TableCell>
             <TableCell align="left">{row.danh_muc.tieu_de}</TableCell>
 
             <TableCell align="left">

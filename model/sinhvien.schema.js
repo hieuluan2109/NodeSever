@@ -25,7 +25,7 @@ const SinhVienSchema = new Schema({
     },
     anh_dai_dien: {
         type: String,
-        default: 'concac.jpg'
+        default: 'default.jpg'
     },
     ngay_sinh: {
         required: true,

@@ -6,7 +6,7 @@ module.exports = {
         Promise.all([
             Schema.NguoidungSchema.countDocuments({'loai': false, createdAt: choseTime}),
             Schema.SinhvienSchema.countDocuments({ createdAt: choseTime }),
-            Schema.LopHocSchema.countDocuments({createdAt: choseTime}),
+            Schema.LopHocSchema.countDocuments(),
             Schema.TracNghiemSchema.countDocuments({createdAt: choseTime}),
             Schema.TuLuanSchema.countDocuments({createdAt: choseTime}),
             Schema.DanhMucSchema.countDocuments({createdAt: choseTime}),

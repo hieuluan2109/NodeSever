@@ -23,7 +23,10 @@ const SinhVienSchema = new Schema({
         unique: true,
         type: String
     },
-    anh_dai_dien: String,
+    anh_dai_dien: {
+        type: String,
+        default: 'concac.jpg'
+    },
     ngay_sinh: {
         required: true,
         type: Date,

@@ -1,5 +1,6 @@
 const {validationResult} = require('express-validator');
 const {LopHocSchema} = require('../model/index.schema');
+const {customDatetime} = require('./admin_function');
 module.exports = {
     admin_get_class_list: async function (req, res) {
         let perPage = req.query.limit || 10;
@@ -61,8 +62,24 @@ module.exports = {
                 model: 'BaiTap',
                 select: ['_id', 'tieu_de', 'trang_thai']
             })
-            .exec((err, result) => {
-                (err && !result) ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
+            .exec((err, data) => {
+                if ( err && !result ) {
+                    res.status(400).json({'success': false, 'errors': err}) }
+                else {
+                    let result = {
+                        ds_sinh_vien: data.ds_sinh_vien,
+                        ds_bai_tap: data.ds_bai_tap,
+                        ds_bai_thi: data.ds_bai_thi,
+                        _id: data._id,
+                        tieu_de: data.tieu_de,
+                        nguoi_tao_id: data.nguoi_tao_id,
+                        _v: data._v,
+                        createdAt: customDatetime(data.createdAt),
+                        updatedAt: customDatetime(data.updatsdAt)
+                    };
+                    console.log(data);
+                    res.status(200).json({'success': true, 'data': result})
+                 }
             })
     }
 }

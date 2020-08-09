@@ -16,7 +16,7 @@ const NguoidungSchema = new Schema({
     },
     anh_dai_dien: {
         type: String,
-        default: ''
+        default: 'concac.jpg'
     },
     ngay_sinh: {
         required: true,

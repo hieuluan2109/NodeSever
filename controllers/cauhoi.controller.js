@@ -76,11 +76,23 @@ module.exports = {
                 .json({'success': false, 'errors': errors.array()})
         }
         const data = req.body;
+        const dapAn =()=>{ switch(data.lua_chon){
+            case '1': return data.dap_an_a;
+            case '2': return data.dap_an_b;
+            case '3': return data.dap_an_c;
+            case '4': return data.dap_an_d;
+            default: return data.dap_an_a;
+        }}
         let question = new TracNghiemSchema({
                 'noi_dung': data.noi_dung,
-                'dap_an': data.dap_an,
+                'dap_an':{id: data.lua_chon, value: dapAn()},
                 'nguoi_tao_id': req.user._id,
-                'lua_chon': data.lua_chon,
+                'lua_chon': [ 
+                    { id: 1, label: 'đáp án A', value: data.dap_an_a }, 
+                    { id: 2, label: 'đáp án B', value: data.dap_an_b }, 
+                    { id: 3, label: 'đáp án C', value: data.dap_an_c }, 
+                    { id: 4, label: 'đáp án D', value: data.dap_an_d }, 
+                ],
                 'danh_muc': data.danh_muc,
                 'diem': data.diem ? data.diem : 10, })
         question.save(function (err, doc) {

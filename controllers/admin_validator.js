@@ -41,7 +41,10 @@ let validateSignUpTecher = () => {
         check('password', 'password không được bỏ trống')
             .not()
             .isEmpty(),
-        check('password', 'password phải từ 6-24 kí tự').isLength({min: 6, max: 24})
+        check('password', 'password phải từ 6-24 kí tự').isLength({min: 6, max: 24}),
+        check('sdt', 'Số điện thoại không được để trống').not().isEmpty(),
+        check('sdt', 'Số điện thoại không hợp lệ').matches(regex().sdt),
+        check('gioi_tinh', 'Giới tính được để trống').not().isEmpty()
     ];
 };
 let validateSignUpStudent = () => {
@@ -76,7 +79,10 @@ let validateSignUpStudent = () => {
         check('password', 'password không được bỏ trống')
             .not()
             .isEmpty(),
-        check('password', ' password phải từ 6-24 kí tự').isLength({min: 6, max: 24})
+        check('password', ' password phải từ 6-24 kí tự').isLength({min: 6, max: 24}),
+        check('sdt', 'Số điện thoại không được để trống').not().isEmpty(),
+        check('sdt', 'Số điện thoại không hợp lệ').matches(regex().sdt),
+        check('gioi_tinh', 'Giới tính được để trống').not().isEmpty()
     ];
 };
 let validateChangePassword = (req, res, next) => {
@@ -114,10 +120,6 @@ let validateCreateChoiceQuestion = () => {
             .withMessage('Nội dung không được để trống')
             .isLength({min: 4})
             .withMessage('Nội dung câu hỏi quá ngắn'),
-        check('dap_an')
-            .not()
-            .isEmpty()
-            .withMessage('Đáp án không được bỏ trống'),
         check('lua_chon')
             .not()
             .isEmpty()

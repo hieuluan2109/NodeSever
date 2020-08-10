@@ -34,6 +34,15 @@ const NguoidungSchema = new Schema({
         required: true,
         type: Schema.Types.ObjectId,
         ref: 'NguoiDung'
-    }
+    },
+    gioi_tinh: {
+        required: true,
+        type: Boolean,
+        default: true,
+    },
+    sdt: {
+        required: true,
+        type: String
+    },
 }, {timestamps: true});
 module.exports = mongoose.model('NguoiDung', NguoidungSchema, 'nguoi_dung');

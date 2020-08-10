@@ -3,6 +3,8 @@ const router = express.Router();
 const passport = require('passport');
 const {validate} = require('../controllers/admin_validator');
 const {AdminController} = require('../controllers/index.controller');
+router.get('/notification',
+    AdminController.admin_get_notification)
 router.post(
     '/reset-password',
     AdminController.admin_change_password_with_code

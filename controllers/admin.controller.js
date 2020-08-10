@@ -1,5 +1,5 @@
 const {hashPassWord, checkPassword, customDatetime, sendForgotPasswordMail, makeCode} = require('./admin_function');
-const {NguoidungSchema, QuenMatKhau} = require('../model/index.schema');
+const {NguoidungSchema, QuenMatKhau, SuaThongTin} = require('../model/index.schema');
 const {validationResult} = require('express-validator');
 const moment = require('moment');
 module.exports = {
@@ -30,8 +30,10 @@ module.exports = {
                 .status(400)
                 .json({'success': false, 'errors': errors.array()})
         };
-        const [{ ho, ten, ngay_sinh, anh_dai_dien }, option] = [ req.body, { new: true, useFindAndModify: false }];
-        const update = !anh_dai_dien ? { 'ho': ho, 'ten': ten, 'ngay_sinh': ngay_sinh } : {'anh_dai_dien': anh_dai_dien};
+        const [{ ho, ten, ngay_sinh, anh_dai_dien, gioi_tinh, sdt}, option] = [ req.body, { new: true, useFindAndModify: false }];
+        const update = !anh_dai_dien 
+                        ? { 'ho': ho, 'ten': ten, 'ngay_sinh': ngay_sinh, 'gioi_tinh': gioi_tinh, 'sdt': sdt }
+                        : {'anh_dai_dien': anh_dai_dien};
         NguoidungSchema.findByIdAndUpdate(req.user._id, {
             $set: update
         }, option, function (err, updated) {
@@ -40,13 +42,14 @@ module.exports = {
     },
     admin_get_profile: async function (req, res) {
         await NguoidungSchema
-            .findOne({_id: req.user._id},['_id', 'ho', 'ten', 'anh_dai_dien', 'email', 'ngay_sinh', 'loai'])
+            .findOne({_id: req.user._id},['-mat_khau'])
             .exec((err, user) => {
                 if (err) 
                     return res.status(200).json({'success': false, 'errors': err})
                 else {
                     let data = user.toObject();
-                    delete data.ngay_sinh;
+                    data.createdAt = customDatetime(user.createdAt);
+                    data.updatedAt = customDatetime(user.updatedAt);
                     data.ngay_sinh = customDatetime(user.ngay_sinh);
                     return res.status(200).json({'success': true, 'data': data})
                 }
@@ -86,4 +89,14 @@ module.exports = {
         )
         .catch(err => res.status(400).json({success: false, msg: 'Mã code đã hết hạn'}))
     },
+    admin_get_notification: async function(req, res) {
+        await SuaThongTin.find()
+        .populate('nguoi_dung_id', ['ho', 'ten', 'anh_dai_dien', 'email'])
+        .then(data=>{
+            res.status(200).json({success: true,data})
+        })
+        .catch(err=>{
+            res.status(400).json({success: false, errors: err})
+        })
+    }
 };

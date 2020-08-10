@@ -8,6 +8,7 @@ const SuaThongTinSchema = new Schema({
     nguoi_dung_id: {
         type: Schema.Types.ObjectId,
         required: true,
+        refPath: 'loai'
     },
     thong_tin_sua: {
         type: Object,
@@ -17,9 +18,10 @@ const SuaThongTinSchema = new Schema({
         type: String,
         required: true,
     },
-    la_sinhvien: {
-        type: Boolean,
-        default: true,
+    loai: {
+        type: String,
+        default: 'SinhVien',
+        enum: ['SinhVien', 'GiaoVien']
     },
 }, {timestamps: true});
 module.exports = mongoose.model('SuaThongTin', SuaThongTinSchema, 'sua_thong_tin');

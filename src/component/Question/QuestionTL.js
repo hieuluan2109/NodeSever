@@ -53,9 +53,6 @@ export default function GetQuestionList(props) {
               <IconButton size="small" className={classes.eyes}>
                 <VisibilityIcon />
               </IconButton>
-              <IconButton size="small" className={classes.eyes}>
-                <CreateIcon />
-              </IconButton>
             </TableCell>
           </TableRow>
         ))}

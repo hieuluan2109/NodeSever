@@ -15,6 +15,7 @@ import SearchButton from "../Search";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
+import ClassDetail from "./ClassroomDetail";
 // import TopicInfor from "./TopicInfor";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 70,
   },
   eyes: {
-    
     color: "bold",
   },
   containerNext: {
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
- const ClassTitle = ["Tên Lớp", "Người tạo",'Chi tiết','Danh sách SV trong lớp',"Bài tập"];
+const ClassTitle = ["Tên Lớp", "Người tạo", "Chi tiết"];
 
 export default function ClassList(props) {
   const classes = useStyles();
@@ -109,7 +109,7 @@ export default function ClassList(props) {
         }
       )
       .then((res) => {
-          console.log(res.data)
+        console.log(res.data);
         setPage(res.data.pages);
         const { data } = res.data;
         setClassList(data);
@@ -142,7 +142,7 @@ export default function ClassList(props) {
         .then((res) => {
           const { data } = res.data;
           setClassList(data);
-
+          console.log(res.data);
           setPage(res.data.pages);
         })
         .catch((error) => {
@@ -151,66 +151,45 @@ export default function ClassList(props) {
     }, 300);
   };
 
-  const [dataTopicInfor, setDataTopicInfor] = useState({
-    _id: "",
+  const [dataClassRoomInfor, setDataClassRoomInfor] = useState({
+    ds_bai_tap: [],
+    ds_bai_thi: [],
+    ds_sinh_vien: [],
+    nguoi_tao_id: { _id: "", ho: "", ten: "" },
     tieu_de: "",
-    mo_ta: "",
-    nguoi_tao: "",
-    ngay_tao: "",
+    updatedAt: "",
   });
-  const [getSuccess, setSuccess] = useState("");
-//   const getTopicInfor = (id) => {
-//     axios
-//       .get(`https://navilearn.herokuapp.com/admin/category/detail/${id}`, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       })
-//       .then((res) => {
-//         const { data } = res.data;
-//         console.log(data);
-//         setDataTopicInfor({
-//           tieu_de: data.tieu_de,
-//           mo_ta: data.mo_ta,
-//           nguoi_tao: data.nguoi_tao_id.ten,
-//           ngay_tao: data.createdAt,
-//           _id: data._id,
-//         });
-//         console.log("GV", dataTopicInfor);
-//       })
-//       .catch((error) => {
-//         console.log("Lỗi", error);
-//       });
-//   };
-//   const handleChangeTopic = (event, status) => {
-//     setDataTopicInfor({
-//       ...dataTopicInfor,
-//       [event.target.name]: event.target.value,
-//     });
-//     console.log(dataTopicInfor._id);
-//   };
 
-//   const onSubmitChangeTopic = (event) => {
-//     event.preventDefault();
-//     const { _id, tieu_de, mo_ta } = dataTopicInfor;
-//     axios
-//       .post(
-//         `https://navilearn.herokuapp.com/admin/category/update/${_id}`,
-//         { tieu_de, mo_ta },
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       )
-//       .then((res) => {
-//         setSuccess(res.data.msg);
-//         console.log(res.data);
-//         // setSuccess(res.data.msg);
-//       })
-//       .catch((error) => {
-//         console.log("Lỗi", error.response);
-//       });
-//   };
-// const clearSuccess=()=>{
-//   setSuccess('')
-// }
+  // const [dataClassRoomInfor,setDataClassRoomInfor] = useState([])
+  const [getSuccess, setSuccess] = useState("");
+
+  const getClassRoomInfor = (id) => {
+    axios
+      .get(`https://navilearn.herokuapp.com/admin/class/detail/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        console.log(data);
+        // setDataClassRoomInfor(data)
+        setDataClassRoomInfor({
+          ds_bai_tap: data.ds_bai_tap,
+          ds_bai_thi: data.ds_bai_thi,
+          ds_sinh_vien: data.ds_sinh_vien,
+          nguoi_tao_id: {
+            _id: data.nguoi_tao_id._id,
+            ho: data.nguoi_tao_id.ho,
+            ten: data.nguoi_tao_id.ten,
+          },
+          tieu_de: data.tieu_de,
+          updatedAt: data.updatedAt,
+        });
+        console.log("information classroom detail", dataClassRoomInfor);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  };
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -219,9 +198,6 @@ export default function ClassList(props) {
 
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
-
-          {/* <AddTopic token={token} /> */}
-
           <div>
             <TableContainer>
               <Table
@@ -246,49 +222,19 @@ export default function ClassList(props) {
                   {getClassList.map((value, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="left">{value.tieu_de}</TableCell>
-                      {/* <TableCell align="center">{value.mo_ta}</TableCell> */}
                       <TableCell align="center">
                         {value.nguoi_tao_id.ten}
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton size="small" className={classes.eyes}>
-                        <VisibilityIcon />
-                          {/* <TopicInfor
-                            id={value._id}
-                            getInfor={getTopicInfor}
-                            data={dataTopicInfor}
+                        <IconButton size="small">
+                          <ClassDetail
                             icon={<VisibilityIcon />}
-                            disable={true}
-                            status={true}
+                            id={value._id}
+                            dataClassDetail={getClassRoomInfor}
+                            getData={dataClassRoomInfor}
                           />
                         </IconButton>
-                        <IconButton size="small" className={classes.eyes}>
-                          <TopicInfor
-                            id={value._id}
-                            getInfor={getTopicInfor}
-                            data={dataTopicInfor}
-                            icon={<CreateIcon />}
-                            disable={false}
-                            type={"submit"}
-                            change={handleChangeTopic}
-                            onsubmit={onSubmitChangeTopic}
-                            display={"none"}
-                            status={false}
-                            success={getSuccess}
-                            clearForm={clearSuccess}
-                          /> */}
-                        </IconButton>
                       </TableCell>
-                      <TableCell align="center">
-                        <IconButton size="small" className={classes.eyes}>
-                        <VisibilityIcon />
-                        </IconButton>
-                        </TableCell>
-                        <TableCell align="center">
-                        <IconButton size="small" className={classes.eyes}>
-                        <VisibilityIcon />
-                        </IconButton>
-                        </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -17,6 +17,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -85,6 +86,7 @@ const styles = (theme) => ({
     paddingBottom: "5px",
   },
 });
+const LUA_CHON = ["Đáp án A", "Đáp án B", "Đáp Án C", "Đáp Án D"];
 
 class AddQuestions extends Component {
   constructor(props) {
@@ -92,29 +94,21 @@ class AddQuestions extends Component {
     this.state = {
       open: false,
       noi_dung: "",
-      chu_de: "",
+      danh_muc: "",
       mo_ta: "",
       diem: "",
       dap_an_a: "",
       dap_an_b: "",
       dap_an_c: "",
       dap_an_d: "",
-      lua_chon: [
-        { id: 1, label: "Đáp Án A", value: "" },
-        { id: 2, label: "Đáp Án B", value: "" },
-        { id: 3, label: "Đáp Án C", value: "" },
-        { id: 4, label: "Đáp Án D", value: "" },
-      ],
-      dap_an: { id: "", value: "" },
-      danh_muc: "",
-      lc: "Đáp Án A",
+      lua_chon: "",
+      lua_chon_value: "",
+      inputValue: "",
       tieu_de: [],
       tieude0: "",
-      dsLuachon: [],
     };
     this.handleChange = this.handleChange.bind(this);
   }
-
   handleClickOpen = () => {
     this.setState({ open: true });
     axios
@@ -141,30 +135,6 @@ class AddQuestions extends Component {
       [event.target.name]: event.target.value,
       status: true,
     });
-    // this.setState({
-    //   lua_chon: [
-    //     {
-    //       id: 1,
-    //       label: "Đáp Án A",
-    //       value: this.state.dap_an_a,
-    //     },
-    //     {
-    //       id: 2,
-    //       label: "Đáp Án B",
-    //       value: this.state.dap_an_b,
-    //     },
-    //     {
-    //       id: 3,
-    //       label: "Đáp Án C",
-    //       value: this.state.dap_an_c,
-    //     },
-    //     {
-    //       id: 4,
-    //       label: "Đáp Án D",
-    //       value: this.state.dap_an_d
-    //     },
-    //   ]
-    // })
   };
 
   handleChangeValue = (event) => {
@@ -180,14 +150,31 @@ class AddQuestions extends Component {
       danh_muc: this.state.tieude0,
     });
   };
-  // componentWillReceiveProps() {
-  //   this.setState({});
-  // }
   handleSubmit = (event) => {
     event.preventDefault();
-    const { noi_dung, danh_muc, dap_an, lua_chon } = this.state;
+    const {
+      noi_dung,
+      danh_muc,
+      mo_ta,
+      dap_an_a,
+      dap_an_b,
+      dap_an_c,
+      dap_an_d,
+      lua_chon,
+      dap_an,
+    } = this.state;
     var url = "https://navilearn.herokuapp.com/admin/question/create/choice";
-    var params = { noi_dung, danh_muc, lua_chon };
+    var params = {
+      noi_dung,
+      danh_muc,
+      mo_ta,
+      dap_an_a,
+      dap_an_b,
+      dap_an_c,
+      dap_an_d,
+      lua_chon,
+      dap_an,
+    };
     axios
       .post(url, params, {
         headers: { Authorization: `Bearer ${this.props.token}` },
@@ -206,9 +193,6 @@ class AddQuestions extends Component {
   render() {
     const { classes, children } = this.props;
     const { open } = this.state;
-
-    // console.log("luachon", this.state.lua_chon[0].value);
-
     return (
       <div>
         <Button
@@ -219,7 +203,6 @@ class AddQuestions extends Component {
           <AddCircleIcon className={classes.iconbtnThem} />
           Thêm
         </Button>
-
         <Dialog
           open={open}
           onClose={this.handleClose}
@@ -235,9 +218,7 @@ class AddQuestions extends Component {
             </DialogContentText>
             <div
               style={{ textAlign: "center", color: "red", fontWeight: "bold" }}
-            >
-              {/* {success} */}
-            </div>
+            ></div>
 
             <form onSubmit={this.handleSubmit}>
               <div className={classes.formControl}>
@@ -254,9 +235,8 @@ class AddQuestions extends Component {
                 <FormControl className={classes.formControl}>
                   <InputLabel id="demo-simple-select-label">Chủ đề</InputLabel>
                   <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={this.state.tieude0}
+                    name="danh_muc"
+                    value={this.state.danh_muc}
                     onChange={this.handleChangeSelection}
                   >
                     {this.state.tieu_de.map((value, index) => (
@@ -332,38 +312,32 @@ class AddQuestions extends Component {
               </div>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Đáp Án</label>
-                {/* <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">Loại</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={this.state.lc}
-                    onChange={this.handleChangeSelection}
-                  >
-                    <MenuItem value={this.state.lua_chon[0].label}>
-                      Đáp án A
-                    </MenuItem>
-                    <MenuItem value={this.state.lua_chon[1].label}>
-                      Đáp án B
-                    </MenuItem>
-                    <MenuItem value={this.state.lua_chon[2].label}>
-                      Đáp án C
-                    </MenuItem>
-                    <MenuItem value={this.state.lua_chon[3].label}>
-                      Đáp án D
-                    </MenuItem>
-                  </Select>
-                </FormControl> */}
+
+                <Autocomplete
+                  value={this.state.lua_chon_value}
+                  onChange={(event, newValue) => {
+                    this.setState({
+                      lua_chon: LUA_CHON.indexOf(newValue) + 1,
+                      lua_chon_value: newValue,
+                    });
+                  }}
+                  id="controllable-states-demo"
+                  options={LUA_CHON}
+                  style={{ width: 300 }}
+                  inputValue={this.state.inputValue}
+                  onInputChange={(event, newInputValue) => {
+                    this.setState({ inputValue: newInputValue });
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Đáp Án" variant="outlined" />
+                  )}
+                />
               </div>
               <DialogActions>
                 <Button onClick={this.handleClose} color="primary">
                   Hủy bỏ
                 </Button>
-                <Button
-                  type="submit"
-                  color="primary"
-                  // onSubmit={this.handleSubmit}
-                >
+                <Button type="submit" color="primary">
                   Xác nhận
                 </Button>
               </DialogActions>
@@ -374,5 +348,4 @@ class AddQuestions extends Component {
     );
   }
 }
-
 export default withStyles(styles, { withTheme: true })(AddQuestions);

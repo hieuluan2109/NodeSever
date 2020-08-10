@@ -13,8 +13,13 @@ import GetQuestionTN from "./QuestionTN";
 import GetQuestionTL from "./QuestionTL";
 import AddQuestions from "./AddQuestion";
 import Pagination from "@material-ui/lab/Pagination";
-
+import Loading from '../Loading'
 const useStyles = makeStyles((theme) => ({
+  loading: {
+    position: "fixed",
+    top: "50%",
+    left: "50%"
+  },
   containerForm:{
     marginTop: "50px",
     marginRight: "6%",
@@ -72,7 +77,7 @@ export default function QuestionAllList(props) {
   const handleChange = (event) => {
     setValueQuestion((event.target.name = event.target.value));
   };
-
+  const [loading, setLoading] = useState(false);
   const [getListTN, setGetListTN] = useState([]);
   const [getListTL, setGetListTL] = useState([]);
   const [pageTN, setPageTN] = useState(1);
@@ -85,9 +90,11 @@ export default function QuestionAllList(props) {
   ];
   // const token=Cookies.get('token')
   useEffect(() => {
+    setLoading(false)
     axios
       .get(url[0], { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
+        setLoading(true)
         // const {data}=res.data
         setGetListTN(res.data.data);
         setPageTN(res.data.pages);
@@ -170,7 +177,7 @@ export default function QuestionAllList(props) {
             </Select>
           </FormControl>
           <AddQuestions token={token} />
-
+          <div hidden={loading} className={classes.loading}><Loading /></div>
           <div className={classes.formInfo}>
             <TableContainer>
               {valueQuestion == true ? (

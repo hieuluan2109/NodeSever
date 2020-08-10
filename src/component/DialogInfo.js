@@ -13,7 +13,7 @@ import SelectSort from "./SelectSort";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
 import CreateIcon from "@material-ui/icons/Create";
-
+import {Card} from "@material-ui/core";
 const styles = (theme) => ({
   btnThem: {
     position: "absolute",
@@ -35,7 +35,7 @@ const styles = (theme) => ({
     marginTop: "107px",
     marginRight: "6%",
     marginLeft: "6%",
-    height: "70vh",
+    height: "100%",
     background: "white",
   },
   titleformInfo: {
@@ -153,9 +153,12 @@ class DialogInfo extends Component {
              <div style={{textAlign:'center',color:'red'}}> {errors}{this.props.success}</div>
           <DialogContent>
             <form onSubmit={this.props.onSubmit}>
+            <Card elevation={3}>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Họ</label>
-                <input
+                <TextField
+                  variant="standard"
+                  size="small"
                   className={classes.contentFormControl}
                   name="ho"
                   type="text"
@@ -214,6 +217,7 @@ class DialogInfo extends Component {
                  
                 />
               </div>
+
               <DialogActions>
             {/* <Button onClick={this.handleClose} color="primary">
               Hủy bỏ
@@ -222,6 +226,7 @@ class DialogInfo extends Component {
               Xác nhận
             </Button>
           </DialogActions>
+          </Card>
             </form>
           </DialogContent>
 

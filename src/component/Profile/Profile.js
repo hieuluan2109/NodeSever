@@ -18,6 +18,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { Link } from "react-router-dom";
 import AccountInfo from "./Infomation";
 import ChangePassword from "./ChangePassword";
+import AlignItemsList from "./Notification";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -73,22 +74,32 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function Inforprofile() {
+export default function Inforprofile(props) {
   const classes = useStyles();
   let data;
   const [getTen,setGetTen]=useState('');
   const [item, setItem] = useState(false);
   const token = Cookies.get("token");
-  const [titleRight, setTitleRight] = useState('1');
+  const [titleRight, setTitleRight] = useState(1);
   const TitleValue =(title)=>{
+    console.log(props)
     switch(title){
       case 1: return "Thông tin tài khoản";
       case 2: return "Đổi mật khẩu";
+      case 3: return "Thông báo";
       default: return "Thông tin tài khoản"
     }
   }
   const HandleTitle =(title)=> {
     setTitleRight(title);
+  }
+  const HandleContent =()=>{
+    switch(titleRight) {
+      case 1: return <AccountInfo data={getDataProfile} />
+      case 2: return <ChangePassword />
+      case 3: return <AlignItemsList />
+      default: return <AccountInfo data={getDataProfile} />
+    }
   }
   const [getDataProfile, setDataProfile] = useState({ho:'',ten:'',ngay_sinh:''});
   const handleItem =()=> setItem(!item);
@@ -125,7 +136,7 @@ export default function Inforprofile() {
                 </ListItemIcon>
                 <ListItemText primary="Thông tin tài khoản" />
               </ListItem>
-              <ListItem button >
+              <ListItem button onClick={e=> HandleTitle(3) }>
                 <ListItemIcon>
                   <NotificationsIcon />
                 </ListItemIcon>
@@ -148,10 +159,7 @@ export default function Inforprofile() {
         </Grid>
         <Grid item xs={12} sm={8}>
           <div className={classes.titleformInfo}>{TitleValue(titleRight)}</div>
-          { titleRight == 1
-            ? <AccountInfo data={getDataProfile} />
-            : <ChangePassword />
-          }
+          { HandleContent() }
         </Grid>
       </Grid>
     </div>

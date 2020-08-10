@@ -14,10 +14,10 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ListItem from "@material-ui/core/ListItem";
 import MenuItem from '@material-ui/core/MenuItem';
 import SearchButton from '../Search'
-import SelectSort from '../SelectSort'
 import DialogThem from '../DialogThem'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Loading from '../Loading'
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -85,7 +85,6 @@ const useStyles = makeStyles((theme) => ({
       color: "#fff",
       borderColor: "#5089de",
     },
-   
     // '&:focus':{
     //     backgroundColor:'red'
     // }
@@ -106,17 +105,18 @@ export default function QuestionList(props) {
   const classes = useStyles();
   const {TITLE,STT,CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO}=props
   const [selectedIndex, setSelectedIndex] = React.useState(1);
- 
-  
+  const [loading, setLoading] = useState(false);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
   const [getList,setGetList]=useState([])
   const token=Cookies.get('token')
   useEffect(() => {
+    setLoading(false)
         axios.get('https://navilearn.herokuapp.com/admin/question/list',
         {headers:{"Authorization":`Bearer ${token}`}
       }).then(res=>{
+        setLoading(true)
         const {data}=res.data
         console.log(data)
          setGetList(data)
@@ -135,19 +135,7 @@ export default function QuestionList(props) {
         
         <form>
         <SearchButton /> 
-{/*        
-         <SelectSort 
-          title='Phân loại'
-          GV='Trắc nghiệm'
-          SV='Tự Luận'
-        /> */}
-        
         <DialogThem >
-            {/* <SelectSort 
-            title='Phân loại'
-            GV='Trắc nghiệm'
-            SV='Tự Luận'
-            /> */}
         </DialogThem>
 
           <div className={classes.formInfo}>
@@ -212,74 +200,11 @@ export default function QuestionList(props) {
                         <IconButton size="small" className={classes.eyes}>
                             <VisibilityIcon />
                         </IconButton>
-                        <IconButton size="small" className={classes.eyes}>
-                          <CreateIcon />
-                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
-         
-
-            <IconButton size="small" className={classes.containerNext}>
-              <ArrowForwardIosIcon className={classes.next} />
-            </IconButton>
-            <ul className={classes.page}>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 1}
-                onClick={(event) => handleListItemClick(event, 1)}
-              >
-                1
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 2}
-                onClick={(event) => handleListItemClick(event, 2)}
-              >
-                2
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 3}
-                onClick={(event) => handleListItemClick(event, 3)}
-              >
-                3
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 4}
-                onClick={(event) => handleListItemClick(event, 4)}
-              >
-                4
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 5}
-                onClick={(event) => handleListItemClick(event, 5)}
-              >
-                5
-              </ListItem>
-
-              {/* <li className={classes.buttonPageNumber}  button
-                        selected={selectedIndex === 1}
-                        onClick={(event) => handleListItemClick(event, 1)}>1</li>
-                            <li className={classes.buttonPageNumber}  button
-                        selected={selectedIndex === 2}
-                        onClick={(event) => handleListItemClick(event, 2)}>2</li>
-                            <li className={classes.buttonPageNumber}>3</li>
-                            <li className={classes.buttonPageNumber}>4</li>
-                            <li className={classes.buttonPageNumber}>5</li> */}
-            </ul>
-            <IconButton size="small" className={classes.containerBack}>
-              <ArrowBackIosIcon className={classes.back} />
-            </IconButton>
             </TableContainer>
           </div>
         </form>

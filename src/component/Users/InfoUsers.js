@@ -20,7 +20,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
 import Sear from "./Search";
-import Loading from './Loading';
+import Loading from '../Loading';
 const useStyles = makeStyles((theme) => ({
   loading: {
     position: "fixed",

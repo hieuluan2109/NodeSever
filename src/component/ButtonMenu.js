@@ -8,6 +8,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { Redirect } from "react-router";
 import App from './../App'
+import Profile from './Profile/Profile';
 import {
   // BrowserRouter as Router,
   // Switch,
@@ -52,8 +53,6 @@ export default function MenuAppbar(props) {
 //  }
   return (
     <div className={classes.menus}>
-         
-
         <IconButton
           size="small"
           onClick={handleMenu}
@@ -80,7 +79,7 @@ export default function MenuAppbar(props) {
           <MenuItem> Sign out </MenuItem>
           </Link>
           <Link to="/changepassword"  style={{textDecoration:'none',color:'black'}}>
-          <MenuItem onClick={handleMenuClose}>Change password</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Change password</MenuItem>
           </Link>
           </div>
           

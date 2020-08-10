@@ -141,7 +141,7 @@ let validateCreateAssayQuestion = () => {
         check('danh_muc')
             .not()
             .isEmpty()
-            .withMessage('Lựa chọn không được để trống'),
+            .withMessage('Danh mục không được để trống'),
     ]
 };
 let validateCreateCategory = () => {

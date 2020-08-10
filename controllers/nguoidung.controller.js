@@ -190,12 +190,41 @@ module.exports = {
             err ? res.status(400).json({ success: false, 'err': err }) : res.status(200).json({'success': true, data})
         })
     },
+    admin_handle_edit_profile_request_accept: async function (req, res){
+        const [{loai, _id,thong_tin_sua, nguoi_dung_id}, option] = [req.body, { new: true, useFindAndModify: false }];
+        const update ={$set: thong_tin_sua};
+        (loai == 'SinhVien') ? (
+            SinhvienSchema.findOneAndUpdate({_id:nguoi_dung_id},update, option, function (err, updated){
+                if (err)
+                 res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
+                else {
+                    SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
+                        res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
+                    })} 
+            })
+        ) : (
+            NguoidungSchema.findOneAndUpdate({_id: nguoi_dung_id}, update, option, function (err, updated){
+                if (err)
+                 res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
+                 else {
+                    SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
+                        res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
+                    })} 
+            }))
+    },
+    admin_handle_edit_profile_request_denied: async function(req, res){
+        const [{_id}, option] = [req.body, { new: true, useFindAndModify: false }];
+        SuaThongTin.findOneAndUpdate(_id,{$set: {trang_thai: true}}, option, function(err, updated){
+            err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) 
+                : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
+        })
+    },
     admin_update_user: async function (req, res) {
         const [{id,loai}, data, option]= [req.query, req.body, { new: true, useFindAndModify: false }];
         const update = data;
         (loai == 'student') ? (
             SinhvienSchema.findOneAndUpdate({_id:id}, { $set: update}, option, function (err, updated){
-                err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
+                err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
             })
         ) : (
             NguoidungSchema.findOneAndUpdate(id, { $set: update}, option, function (err, updated){

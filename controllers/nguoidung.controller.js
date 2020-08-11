@@ -238,7 +238,7 @@ module.exports = {
                 err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
             })
         ) : (
-            NguoidungSchema.findOneAndUpdate(id, { $set: update}, option, function (err, updated){
+            NguoidungSchema.findOneAndUpdate({_id:id}, { $set: update}, option, function (err, updated){
                 err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
             }))
     },

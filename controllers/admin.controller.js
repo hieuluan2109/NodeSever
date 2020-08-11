@@ -34,7 +34,7 @@ module.exports = {
         const update = !anh_dai_dien 
                         ? { 'ho': ho, 'ten': ten, 'ngay_sinh': ngay_sinh, 'gioi_tinh': gioi_tinh, 'sdt': sdt }
                         : {'anh_dai_dien': anh_dai_dien};
-        NguoidungSchema.findByIdAndUpdate(req.user._id, {
+        await NguoidungSchema.findByIdAndUpdate(req.user._id, {
             $set: update
         }, option, function (err, updated) {
             err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
@@ -79,7 +79,7 @@ module.exports = {
     admin_change_password_with_code: async function (req, res) {
         const [{code}, {password, password1}, option ] = [ req.query ,req.body, { new: true, useFindAndModify: false }] ;
         const update = {mat_khau: await hashPassWord(password)}
-        QuenMatKhau.findOneAndUpdate({'code': code, 'expire' : {$gt : Date.now()}},{ $set: {expire: -expire} },option)
+        await QuenMatKhau.findOneAndUpdate({'code': code, 'expire' : {$gt : Date.now()}},{ $set: {expire: -expire} },option)
         .then(user => {
             NguoidungSchema.findOneAndUpdate({email: user.email}, { $set: update }, option, function (err, updated) { // need some attention
                 if(err || !updated)

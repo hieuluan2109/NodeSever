@@ -191,7 +191,7 @@ module.exports = {
     },
     admin_get_edit_profile_user: async function(req, res){
         const {id} = req.query; 
-        SuaThongTin.findById(id).exec((err, data)=>{
+        await SuaThongTin.findById(id).exec((err, data)=>{
             if (err) 
                 res.status(400).json({ success: false, 'err': err }) 
             else{
@@ -209,7 +209,7 @@ module.exports = {
                 if (err)
                  res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                 else {
-                    SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
+                    await SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
                         res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
                     })} 
             })
@@ -218,14 +218,14 @@ module.exports = {
                 if (err)
                  res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                  else {
-                    SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
+                   await SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
                         res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
                     })} 
             }))
     },
     admin_handle_edit_profile_request_denied: async function(req, res){
         const [{_id}, option] = [req.body, { new: true, useFindAndModify: false }];
-        SuaThongTin.findOneAndUpdate(_id,{$set: {trang_thai: true}}, option, function(err, updated){
+        await SuaThongTin.findOneAndUpdate(_id,{$set: {trang_thai: true}}, option, function(err, updated){
             err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) 
                 : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
         })

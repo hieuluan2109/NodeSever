@@ -10,12 +10,15 @@ module.exports = {
         }
         const data = req.body;
         const check = await NguoidungSchema
-            .findOne({email: data.email, loai: false})
+            .findOne({email: data.email})
             .countDocuments((count) => count)
             .catch(err => 0);
-        if (check) 
+        if ( check ) {
             return res.status(400).json({'success': false, 'errors': 'Email đã tồn tại'})
+            console.log("hello"+check)
+        }
         else {
+            console.log("hello 2"+check)
             const gv = new NguoidungSchema({
                 'ho': capitalizeFirstLetter(data.ho),
                 'ten': capitalizeFirstLetter(data.ten),

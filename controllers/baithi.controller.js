@@ -17,6 +17,7 @@ module.exports = {
                     let result= [];
                     data.map((item) => {
                         result.push({
+                            nguoi_tao_id: item.nguoi_tao_id,
                             tieu_de: item.tieu_de,
                             lop_hoc_id: item.lop_hoc_id,
                             ngay_thi: item.ngay_thi,

@@ -15,10 +15,8 @@ module.exports = {
             .catch(err => 0);
         if ( check ) {
             return res.status(400).json({'success': false, 'errors': 'Email đã tồn tại'})
-            console.log("hello"+check)
         }
         else {
-            console.log("hello 2"+check)
             const gv = new NguoidungSchema({
                 'ho': capitalizeFirstLetter(data.ho),
                 'ten': capitalizeFirstLetter(data.ten),
@@ -151,6 +149,8 @@ module.exports = {
                     _id: data._id,
                     ten: data.ten,
                     email: data.email,
+                    sdt: data.sdt,
+                    gioi_tinh: data.gioi_tinh,
                     anh_dai_dien: data.anh_dai_dien,
                     nguoi_tao_id: data.nguoi_tao_id,
                     ngay_sinh : customDatetime(data.ngay_sinh),
@@ -163,7 +163,7 @@ module.exports = {
     },
     admin_get_student_detail: async function (res, next, id) {
         await SinhvienSchema
-            .findOne({ '_id': id }, ['ma_sv', 'ds_lop_hoc', 'ho', 'ten', '_id', 'email', 'ngay_sinh', 'anh_dai_dien', 'nguoi_tao_id', 'createdAt', 'updatedAt'])
+            .findOne({ '_id': id }, ['-mat_khau'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate({path: 'ds_lop_hoc', model: 'LopHoc'})
             .exec((err, data) => {
@@ -177,6 +177,8 @@ module.exports = {
                     email: data.email,
                     anh_dai_dien: data.anh_dai_dien,
                     nguoi_tao_id: data.nguoi_tao_id,
+                    sdt: data.sdt,
+                    gioi_tinh: data.gioi_tinh,
                     ngay_sinh : customDatetime(data.ngay_sinh),
                     createdAt : customDatetime(data.createdAt),
                     updatedAt : customDatetime(data.updatedAt),

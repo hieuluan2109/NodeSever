@@ -48,43 +48,38 @@ const styles = (theme) => ({
   titleformInfo: {
     position: "absolute",
     marginTop: "65px",
-    marginLeft: 60,
+   
     fontSize: 17,
   },
   formControl: {
-    maxwidth: "700px",
+    maxwidth: "900px",
+    minWidth: "200px",
   },
   titleFormControl: {
     width: "100px",
     float: "left",
-    paddingTop: "32px",
+    // paddingTop: "32px",
   },
   contentFormControl: {
     width: "400px",
     borderRadius: "5px",
     height: "30px",
     paddingLeft: "10px",
-    marginTop: "25px",
+    // marginTop: "25px",
     outline: "none",
     "&:focus": {
       borderColor: "#3f51b5",
     },
   },
-  ngaysinh: {
-    position: "absolute",
-    marginTop: "30px",
-  },
-  contentNgaysinh: {
-    marginTop: "5px",
-    marginLeft: "100px",
-  },
-  formControl: {
-    minWidth: "200px",
-  },
   formControlCD: {
     paddingTop: "5px",
     paddingBottom: "5px",
+   
   },
+  DapAn:{
+    marginLeft:'110px'
+  },
+  formControlDA:{marginTop:'25px'}
 });
 const LUA_CHON = ["Đáp án A", "Đáp án B", "Đáp Án C", "Đáp Án D"];
 
@@ -221,15 +216,18 @@ class AddQuestions extends Component {
             ></div>
 
             <form onSubmit={this.handleSubmit}>
+             
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Nội dung</label>
-                <input
+                  <label className={classes.titleFormControl}>Nội dung</label>
+                  <TextField
+                  size="small"
+                  variant="outlined"
                   className={classes.contentFormControl}
-                  name="noi_dung"
-                  type="text"
+                   name="noi_dung"
+                   type="text"
                   onChange={this.handleChange}
-                />
-              </div>
+                 />
+                </div>
               <div className={classes.formControlCD}>
                 <label className={classes.titleFormControl}>Chủ đề</label>
                 <FormControl className={classes.formControl}>
@@ -247,73 +245,80 @@ class AddQuestions extends Component {
                   </Select>
                 </FormControl>
               </div>
-              <div
-                className={classes.formControl}
-                style={{ display: this.props.display }}
-              >
-                <label className={classes.titleFormControl}>Mô tả</label>
-                <input
+            
+              <div className={classes.formControl} style={{ display: this.props.display }}>
+                  <label className={classes.titleFormControl}>Mô tả</label>
+                  <TextField
+                  size="small"
+                  variant="outlined"
                   className={classes.contentFormControl}
-                  name="mo_ta"
-                  type="text"
+                   name="mo_ta"
+                   type="text"
                   onChange={this.handleChange}
-                />
-              </div>
+                 />
+                </div>
+             
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Điểm</label>
-                <input
-                  name="diem"
+                  <label className={classes.titleFormControl}>Điểm</label>
+                  <TextField
+                  size="small"
+                  variant="outlined"
                   className={classes.contentFormControl}
-                  type="text"
+                   name="diem"
+                   type="text"
                   onChange={this.handleChange}
-                />
-              </div>
+                 />
+                </div>
+                <div className={classes.formControl}>
+                  <label className={classes.titleFormControl}>Đáp Án A</label>
+                  <TextField
+                  size="small"
+                  variant="outlined"
+                  className={classes.contentFormControl}
+                   name="dap_an_a"
+                   type="text"
+                  onChange={this.handleChange}
+                 />
+                </div>
+                <div className={classes.formControl}>
+                  <label className={classes.titleFormControl}>Đáp Án B</label>
+                  <TextField
+                  size="small"
+                  variant="outlined"
+                  className={classes.contentFormControl}
+                   name="dap_an_B"
+                   type="text"
+                  onChange={this.handleChange}
+                 />
+                </div>
+                <div className={classes.formControl}>
+                  <label className={classes.titleFormControl}>Đáp Án C</label>
+                  <TextField
+                  size="small"
+                  variant="outlined"
+                  className={classes.contentFormControl}
+                   name="dap_an_c"
+                   type="text"
+                  onChange={this.handleChange}
+                 />
+                </div>
+                <div className={classes.formControl}>
+                  <label className={classes.titleFormControl}>Đáp Án D</label>
+                  <TextField
+                  size="small"
+                  variant="outlined"
+                  className={classes.contentFormControl}
+                   name="dap_an_d"
+                   type="text"
+                  onChange={this.handleChange}
+                 />
+                </div>
 
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp Án A</label>
-                <input
-                  name="dap_an_a"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value={this.state.dap_an_a}
-                  onChange={this.handleChange}
-                />
-              </div>
-
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp Án B</label>
-                <input
-                  name="dap_an_b"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value={this.state.dap_an_b}
-                  onChange={this.handleChange}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp Án C</label>
-                <input
-                  name="dap_an_c"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value={this.state.dap_an_c}
-                  onChange={this.handleChange}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp Án D</label>
-                <input
-                  name="dap_an_d"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value={this.state.dap_an_d}
-                  onChange={this.handleChange}
-                />
-              </div>
-              <div className={classes.formControl}>
+              <div className={classes.formControlDA}>
                 <label className={classes.titleFormControl}>Đáp Án</label>
 
                 <Autocomplete
+                className={classes.DapAn}
                   value={this.state.lua_chon_value}
                   onChange={(event, newValue) => {
                     this.setState({

@@ -106,9 +106,14 @@ class Appbarnav extends Component {
             </Link>
           </li>
           <li className={classes.Menu}>
+          <Link
+              to="/testlist"
+              style={{ textDecoration: "none", color: "white" }}
+              >
             {" "}
             <ImportContactsIcon className={classes.iconMenu} />
             BÀI KIỂM TRA
+            </Link>
           </li>
           <li className={classes.Menu}>
           <Link

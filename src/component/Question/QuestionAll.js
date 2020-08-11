@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TableContainer from "@material-ui/core/TableContainer";
-
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchButton from "../Search";
 import axios from "axios";
@@ -14,6 +13,7 @@ import GetQuestionTL from "./QuestionTL";
 import AddQuestions from "./AddQuestion";
 import Pagination from "@material-ui/lab/Pagination";
 import Loading from '../Loading'
+import AddQuestionsTL from './AddQuestionTL'
 const useStyles = makeStyles((theme) => ({
   loading: {
     position: "fixed",
@@ -68,7 +68,6 @@ export default function QuestionAllList(props) {
   ];
   const token = Cookies.get("token");
   //   const {TITLE,STT,CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO}=props
-
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [valueQuestion, setValueQuestion] = useState(true);
   const handleListItemClick = (event, index) => {
@@ -176,7 +175,8 @@ export default function QuestionAllList(props) {
               <MenuItem value={false}>Tự luận</MenuItem>
             </Select>
           </FormControl>
-          <AddQuestions token={token} />
+          {valueQuestion?<AddQuestions token={token} valueQuestion={true}/>:<AddQuestionsTL token={token} valueQuestion={false}/>}
+     
           <div hidden={loading} className={classes.loading}><Loading /></div>
           <div className={classes.formInfo}>
             <TableContainer>

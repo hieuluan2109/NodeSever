@@ -78,9 +78,9 @@ export default function MenuAppbar(props) {
           <Link to='/logout'  style={{textDecoration:'none',color:'black'}}>
           <MenuItem> Sign out </MenuItem>
           </Link>
-          <Link to="/changepassword"  style={{textDecoration:'none',color:'black'}}>
+          {/* <Link to="/changepassword"  style={{textDecoration:'none',color:'black'}}>
             <MenuItem onClick={handleMenuClose}>Change password</MenuItem>
-          </Link>
+          </Link> */}
           </div>
           
         </Menu>

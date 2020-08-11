@@ -26,7 +26,7 @@ import "./css/login.scss";
 import Logout from "./component/Login/Logout";
 import ClassRoom from './view/ClassRoom'
 import Routers from "./route";
-
+import TestList from './view/Test'
 
 class App extends Component {
   constructor(props) {
@@ -77,11 +77,11 @@ class App extends Component {
                 <Topic />
               </div>
             </Route>
-            <Route exact path="/changepassword">
+            {/* <Route exact path="/changepassword">
               <div className="changepassword">
                 <ChangePassword />
               </div>
-            </Route>
+            </Route> */}
             <Route exact path="/logout">
               <div className="logout">
                 <Logout />
@@ -90,6 +90,11 @@ class App extends Component {
             <Route exact path="/classroom">
               <div className="classroom">
                 <ClassRoom />
+              </div>
+            </Route>
+            <Route exact path="/testlist">
+              <div className="classroom">
+                <TestList />
               </div>
             </Route>
           </Switch>

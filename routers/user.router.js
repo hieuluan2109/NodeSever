@@ -5,17 +5,14 @@ const {validate} = require('../controllers/admin_validator');
 const {UserController} = require('../controllers/index.controller');
 router.get(
     '/update-request',
-    validate.validateSignUpTecher(),
     UserController.admin_get_edit_profile_user
 );
 router.get(
     '/update-request/accept',
-    validate.validateSignUpTecher(),
     UserController.admin_handle_edit_profile_request_accept
 );
 router.get(
     '/update-request/denied',
-    validate.validateSignUpTecher(),
     UserController.admin_handle_edit_profile_request_denied
 );
 router.post(

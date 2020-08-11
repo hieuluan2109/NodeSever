@@ -209,7 +209,7 @@ module.exports = {
                 if (err)
                  res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                 else {
-                    await SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
+                    SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
                         res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
                     })} 
             })
@@ -218,7 +218,7 @@ module.exports = {
                 if (err)
                  res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                  else {
-                   await SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
+                   SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
                         res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
                     })} 
             }))

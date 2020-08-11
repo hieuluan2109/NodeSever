@@ -18,7 +18,7 @@ module.exports = {
             ho: user.ho,
             ten: user.ten
         };
-        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
+        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET || 'Monkey D Naruto');
     },
         hashPassWord: function (password) {
             return bcrypt.hash(password, 10)

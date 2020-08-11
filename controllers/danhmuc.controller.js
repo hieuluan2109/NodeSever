@@ -80,9 +80,9 @@ module.exports = {
                 if (err)
                     res.status(400).json({'success': false, 'errors': err}) 
                 else {
-                    let result = data.toObject();
+                    let data = result.toObject();
                     result.createdAt = customDatetime(data.createdAt);
-                    res.status(200).json({'success': true, 'data': result})
+                    res.status(200).json({'success': true, 'data': data})
                 }
             })
     },

@@ -10,7 +10,7 @@ module.exports = function (passport) {
         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken() 
         // || ExtractJWT.fromHeader() || ExtractJWT.fromBodyFiel
          ,
-        secretOrKey: process.env.ACCESS_TOKEN_SECRET
+        secretOrKey: process.env.ACCESS_TOKEN_SECRET || 'Monkey D Naruto'
     }, function (token, done) {
         // find the user in db if needed. This functionality may be omitted if you store
         // everything you'll need in JWT payload.

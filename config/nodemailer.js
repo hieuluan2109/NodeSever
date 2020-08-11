@@ -7,14 +7,14 @@ const URL = 'http://navilearn.herokuapp.com/';
 //  `;
 
 const createMailOption = { // config mail server
-    service: SERVICE_MAIL,
-    host: HOST_MAIL,
-    port: PORT_MAIL,
-    secure: SECURE_MAIL,
-    requireTLS: TLS_MAIL,
+    service: SERVICE_MAIL || 'gmail',
+    host: HOST_MAIL || 'smtp.googlemail.com',
+    port: PORT_MAIL || 587,
+    secure: SECURE_MAIL || true,
+    requireTLS: TLS_MAIL || false,
     auth: {
-        user: A_MAIL,
-        pass: P_MAIL
+        user: A_MAIL || 'hieuluan.2109@gmail.com',
+        pass: P_MAIL || 'Cookcie00999'
     },
 };
 const sendMailOption = (mail, content) => {

@@ -23,9 +23,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'Administrator',
     cookie: {
-        maxage: process.env.COOKIE_MAXAGE
+        maxage: process.env.COOKIE_MAXAGE || 1000 * 60 * 60 * 24 * 3
     },
     resave: true,
     saveUninitialized: true

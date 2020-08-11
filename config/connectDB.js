@@ -1,4 +1,5 @@
 module.exports = function ( mongoose , connect_string ) {
+    connect_string = connect_string || 'mongodb+srv://luanmap:iSgGWwsnHwH8lKpd@cluster0-kazzw.mongodb.net/testingproject?retryWrites=true&w=majority'
     mongoose.connect(connect_string, {
         useNewUrlParser: true,
         useUnifiedTopology: true

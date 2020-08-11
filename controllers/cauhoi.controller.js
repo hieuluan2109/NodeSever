@@ -13,6 +13,7 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .populate('danh_muc',['tieu_de'])
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {  
                 console.log(data)
                 if ( data && !err ) {
@@ -34,6 +35,7 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .populate('danh_muc',['tieu_de'])
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {
                 if ( !err && data) {
                 TracNghiemSchema.countDocuments(search,

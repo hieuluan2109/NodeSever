@@ -5,11 +5,8 @@ const dapAn = new Schema({id: String, value: String}, {_id: false});
 const CauHoiTNSchema = new Schema({
     noi_dung: {
         type: String,
-        require: [true, 'Nội dung phải được nhập']
-    },
-    diem: {
-        type: Number,
-        default: 10
+        require: [true, 'Nội dung phải được nhập'],
+        unique: true,
     },
     lua_chon: [luachon],
     dap_an: dapAn,

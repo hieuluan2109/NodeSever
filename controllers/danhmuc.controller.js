@@ -1,5 +1,6 @@
 const {validationResult} = require('express-validator');
 const {DanhMucSchema} = require('../model/index.schema');
+const {customDatetime} = require('./admin_function');
 module.exports = {
     admin_create_category: async function (req, res) {
         const errors = await validationResult(req);
@@ -31,7 +32,7 @@ module.exports = {
         let page = req.query.page || 1;
         let {search, sort} = req.query;
         sort = sort ? sort : {};
-        search = search ? {"mo_ta": {$regex:'.*'+search+'.*' }} : {};
+        search = search ? {"mo_ta": {$regex:'.*'+search+'.*' }, "tieu_de": {$regex:'.*'+search+'.*' }} : {};
         await DanhMucSchema
             .find(search)
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
@@ -40,13 +41,24 @@ module.exports = {
             .sort(sort)
             .exec((err, data) => {
                 if ( !err && data) {
+                    let result= [];
+                    data.map((item) => {
+                        result.push({
+                            _id: item._id,
+                            tieu_de: item.tieu_de,
+                            mo_ta: item.mo_ta,
+                            nguoi_tao_id: item.nguoi_tao_id,
+                            createdAt: customDatetime(item.createdAt),
+                            updatedAt : customDatetime(item.updated),
+                        })
+                    })
                 DanhMucSchema.countDocuments(search,
                 (err, count) => {
                     err ? res.status(400).json({'success': false, 'errors': err})
                         : res.status(200).json({
                             success: true,
                             count,
-                            data,
+                            data: result,
                             current: page,
                             pages: Math.ceil(count / perPage)
                         });

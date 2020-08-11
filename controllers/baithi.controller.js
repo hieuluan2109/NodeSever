@@ -1,25 +1,42 @@
 const {BaiThiSchema} = require('../model/index.schema');
+const {customDatetime} = require('./admin_function');
 module.exports = {
     admin_get_test_list: async function (req, res) {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         let {search} = req.query;
-        // searh = search ? search : {}
+        search = search ? {"tieu_de": {$regex:'.*'+search+'.*' }} : {}
         await BaiThiSchema
-            .find()
+            .find(search)
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate('ds_cau_hoi.cau_hoi_id', )
             .exec( (err, data) => {
                 if ( data && !err ) {
-                    BaiThiSchema.countDocuments(
+                    let result= [];
+                    data.map((item) => {
+                        result.push({
+                            tieu_de: item.tieu_de,
+                            lop_hoc_id: item.lop_hoc_id,
+                            ngay_thi: item.ngay_thi,
+                            thoi_gian_thi: item.thoi_gian_thi,
+                            trang_thai: item.trang_thai,
+                            ds_cau_hoi: item.ds_cau_hoi,
+                            ds_sinh_vien: item.ds_sinh_vien,
+                            ds_binh_luan: item.ds_binh_luan,
+                            ds_sinh_vien_da_thi: item.ds_sinh_vien_da_thi,
+                            createdAt: customDatetime(item.createdAt),
+                            updatedAt: customDatetime(item.updatedAt),
+                        })
+                    })
+                    BaiThiSchema.countDocuments(search,
                     (err, count) => {
                         err ? res.status(400).json({'success': false, 'errors': err})
                             : res.status(200).json({
                                 success: true,
                                 count,
-                                data,
+                                data: result,
                                 current: page,
                                 pages: Math.ceil(count / perPage)
                             });

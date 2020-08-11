@@ -6,7 +6,7 @@ const {UserController} = require('../controllers/index.controller');
 router.get(
     '/update-request',
     validate.validateSignUpTecher(),
-    UserController.admin_add_teacher
+    UserController.admin_get_edit_profile_user
 );
 router.get(
     '/update-request/accept',

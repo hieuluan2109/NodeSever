@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 const TuLuanSchema = new Schema({
     noi_dung: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
     },
     diem: {
         type: Number,

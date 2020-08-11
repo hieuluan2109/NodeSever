@@ -77,7 +77,13 @@ module.exports = {
             .findOne({'_id': req.params.id})
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
-                err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
+                if (err)
+                    res.status(400).json({'success': false, 'errors': err}) 
+                else {
+                    let result = data.toObject();
+                    result.createdAt = customDatetime(data.createdAt);
+                    res.status(200).json({'success': true, 'data': result})
+                }
             })
     },
     admin_update_category: async function (req, res) {

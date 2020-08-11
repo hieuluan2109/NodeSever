@@ -192,7 +192,13 @@ module.exports = {
     admin_get_edit_profile_user: async function(req, res){
         const {id} = req.query; 
         SuaThongTin.findById(id).exec((err, data)=>{
-            err ? res.status(400).json({ success: false, 'err': err }) : res.status(200).json({'success': true, data})
+            if (err) 
+                res.status(400).json({ success: false, 'err': err }) 
+            else{
+                let result = data.toObject()
+                if (result.ngay_sinh) result.ngay_sinh = customDatetime(data.ngay_sinh);
+                res.status(200).json({'success': true, 'data': result})
+            }
         })
     },
     admin_handle_edit_profile_request_accept: async function (req, res){

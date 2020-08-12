@@ -10,7 +10,7 @@ module.exports = {
         };
         const [_id,{password, password1 }, option ] = [ req.user ,req.body, { new: true, useFindAndModify: false }]
         await NguoidungSchema
-            .findOne(_id)
+            .findOne({_id: _id})
             .exec( async (err, data) =>{
                 if( !checkPassword(password, data.mat_khau) ) { 
                     res.status(400).json({'success': false, 'errors': 'Mật khẩu cũ không đúng'}) } 
@@ -32,7 +32,7 @@ module.exports = {
         };
         const [{ ho, ten, ngay_sinh, anh_dai_dien, gioi_tinh, sdt}, option] = [ req.body, { new: true, useFindAndModify: false }];
         const update = !anh_dai_dien 
-                        ? { 'ho': ho, 'ten': ten, 'ngay_sinh': ngay_sinh, 'gioi_tinh': gioi_tinh, 'sdt': sdt }
+                        ? { 'ho': ho, 'ten': ten, 'ngay_sinh': ngay_sinh, 'gioi_tinh': !(Boolean(gioi_tinh)), 'sdt': sdt }
                         : {'anh_dai_dien': anh_dai_dien};
         await NguoidungSchema.findByIdAndUpdate(req.user._id, {
             $set: update

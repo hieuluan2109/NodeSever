@@ -76,7 +76,7 @@ class Appbarnav extends Component {
           <li className={classes.Menu}>
             {" "}
             <Link
-              to="/users"
+              to="/users" name='user'
               style={{ textDecoration: "none", color: "white" }}
             >
               {" "}
@@ -87,7 +87,7 @@ class Appbarnav extends Component {
           
           <li className={classes.Menu}>
           <Link
-              to="/questions"
+              to="/questions" name='question'
               style={{ textDecoration: "none", color: "white" }}
             >
             {" "}
@@ -97,7 +97,7 @@ class Appbarnav extends Component {
           </li>
           <li className={classes.Menu}>
           <Link
-              to="/topic"
+              to="/topic" name='topic'
               style={{ textDecoration: "none", color: "white" }}
             >
             {" "}
@@ -107,7 +107,7 @@ class Appbarnav extends Component {
           </li>
           <li className={classes.Menu}>
           <Link
-              to="/testlist"
+              to="/testlist" name='testlist'
               style={{ textDecoration: "none", color: "white" }}
               >
             {" "}
@@ -117,7 +117,7 @@ class Appbarnav extends Component {
           </li>
           <li className={classes.Menu}>
           <Link
-              to="/classroom"
+              to="/classroom" name='classroom'
               style={{ textDecoration: "none", color: "white" }}
             >
             {" "}

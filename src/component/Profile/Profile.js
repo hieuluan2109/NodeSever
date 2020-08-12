@@ -77,8 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Inforprofile(props) {
   const classes = useStyles();
-  let data;
-  const [getTen,setGetTen]=useState('');
+  const ten = Cookies.get("ten");
   const [item, setItem] = useState(false);
   const token = Cookies.get("token");
   const [titleRight, setTitleRight] = useState(1);
@@ -96,7 +95,7 @@ export default function Inforprofile(props) {
   }
   const HandleContent =()=>{
     switch(titleRight) {
-      case 1: return <AccountInfo data={getDataProfile} />
+      case 1: return <AccountInfo />
       case 2: return <ChangePassword />
       case 3: return <Notification />
       default: return <AccountInfo data={getDataProfile} />
@@ -104,18 +103,6 @@ export default function Inforprofile(props) {
   }
   const [getDataProfile, setDataProfile] = useState({ho:'',ten:'',ngay_sinh:''});
   const handleItem =()=> setItem(!item);
-  useEffect(() => {
-    axios
-      .get("https://navilearn.herokuapp.com/admin/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        handleItem()
-        data = res.data.data;
-        setGetTen(data.ten);
-        setDataProfile(data);
-      });
-  }, []);
   return (
     <div>
       <Grid container
@@ -125,8 +112,8 @@ export default function Inforprofile(props) {
           <div className={classes.leftInfo} >
             <Avatar className={classes.avatar} />
             <div className={classes.info}>Tài khoản của</div>
-            { getTen
-              ? <div className={classes.name}>{getTen}</div>
+            {ten
+              ? <div className={classes.name}>{ten}</div>
               : ( <Skeleton animation="wave" className={classes.NameSkeleton} variant="text" /> ) }
           </div> 
           <Paper elevation={3}>

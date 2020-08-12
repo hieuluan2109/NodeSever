@@ -35,11 +35,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     marginLeft: "10%",
     background: "#FFFF",
-    overflow: 'auto',
-    position: 'relative',
-    height: '70vh',
-    behavior: 'smooth',
-    overflow: 'auto'
+
   },
   inline: {
     display: 'inline',
@@ -50,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "6%",
     height: "70vh",
     background: "white",
+    overflow: 'auto',
+    position: 'relative',
+    behavior: 'smooth',
   },
   content: {
     marginLeft: "20px",
@@ -83,7 +82,7 @@ export default function Notification() {
   };
   useEffect(() => {
     axios
-      .get("https://navilearn.herokuapp.com/admin/notification")
+      .get("https://navilearn.herokuapp.com/admin/notification?alert=true")
       .then((res) => {
         setData(res.data.data)
         let tamp = [];

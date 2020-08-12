@@ -19,7 +19,8 @@ module.exports = {
                     return next(err);
                 }
                 const token = sign_token(user);
-                return res.status(200).json({'success': true, 'msg': 'Login successful', 'token': token});
+                const data = [ user.anh_dai_dien, user.ten ];
+                return res.status(200).json({'success': true, 'msg': 'Login successful', 'token': token, data});
             });
         })(req, res, next);
     },

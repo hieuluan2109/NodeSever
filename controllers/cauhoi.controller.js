@@ -1,5 +1,6 @@
 const {validationResult} = require('express-validator');
 const {TracNghiemSchema, TuLuanSchema} = require('../model/index.schema');
+cons {customDatetime} = require('./admin_function');
 module.exports = {
     admin_get_question_list: async function (req, res) {
         let perPage = req.query.limit || 10;
@@ -57,17 +58,31 @@ module.exports = {
         (loai == 'choice')
         ? (await TracNghiemSchema
             .findOne({_id: q_id})
-            .populate('danh_muc', ['_id', 'tieu_de', 'mo_ta'])
+            .populate('danh_muc', ['_id',  'tieu_de', 'mo_ta'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
-                err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
+                if (err)
+                    res.status(400).json({'success': false, 'errors': err})
+                else {
+                    let data = result;
+                    data.createAt =  customDatetime(result.createAt);
+                    data.updatedAt = customDatetime(result.updatedAt);
+                    res.status(200).json({'success': true, data})
+                }
             }))
         : (await TuLuanSchema
             .findOne({_id: q_id})
             .populate('danh_muc', ['_id', 'tieu_de', 'mo_ta'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
-                err ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'data': result})
+                if (err)
+                    res.status(400).json({'success': false, 'errors': err})
+                else {
+                    let data = result;
+                    data.createAt =  customDatetime(result.createAt);
+                    data.updatedAt = customDatetime(result.updatedAt);
+                    res.status(200).json({'success': true, data})
+                }
             }))
     },
     admin_create_question_choice: async function (req, res, next) {

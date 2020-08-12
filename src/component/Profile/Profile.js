@@ -18,7 +18,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { Link } from "react-router-dom";
 import AccountInfo from "./Infomation";
 import ChangePassword from "./ChangePassword";
-import AlignItemsList from "./Notification";
+import Notification from "./Notification";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,7 +98,7 @@ export default function Inforprofile(props) {
     switch(titleRight) {
       case 1: return <AccountInfo data={getDataProfile} />
       case 2: return <ChangePassword />
-      case 3: return <AlignItemsList />
+      case 3: return <Notification />
       default: return <AccountInfo data={getDataProfile} />
     }
   }

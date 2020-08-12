@@ -97,7 +97,7 @@ export default function Notification() {
   }, []);
   const handleAccept =(index)=>{
     axios
-    .post("https://navilearn.herokuapp.com/admin/user/update-request/accept", data[index])
+    .post("http://localhost:8000/admin/user/update-request/accept", data[index])
     .then((res) => {
       handleAcceptSucces(index)
       setSuccess(true)
@@ -108,7 +108,7 @@ export default function Notification() {
   }
   const handleDenined =(index)=>{
     axios
-    .post("https://navilearn.herokuapp.com/admin/user/update-request/denined", data[index])
+    .post("http://localhost:8000/admin/user/update-request/denined", data[index])
     .then((res) => {
       handleAcceptSucces(index)
       setSuccess(true)

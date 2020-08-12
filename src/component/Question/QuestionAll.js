@@ -94,7 +94,7 @@ export default function QuestionAllList(props) {
       .catch((error) => {
         console.log("Lỗi", error);
       });
-  }, [pageNumberTN]);
+  }, [pageNumberTN]||[getListTN]);
   useEffect(() => {
     axios
       .get(url[1], { headers: { Authorization: `Bearer ${token}` } })

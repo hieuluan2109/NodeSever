@@ -1,68 +1,36 @@
-import { withStyles} from "@material-ui/core/styles";
-import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import TestList from './TestList'
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Divider from "@material-ui/core/Divider";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import Typography from "@material-ui/core/Typography";
 
-const styles = (theme) => ({
-  dialogPaper: {
-    minHeight: "80vh",
-    maxHeight: "80vh",
-    minWidth: "100vh",
-    maxWidth: "100vh",
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    maxWidth: "36ch",
+    backgroundColor: theme.palette.background.paper,
   },
-  btnTest: {
-    marginTop: "30px ",
-    float:'left'
+  inline: {
+    display: "inline",
   },
-});
+}));
 
-class TestBtn extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          open: false,
-        };
-      }
+export default function StudentList(props) {
+  const classes = useStyles();
+  const { data } = props;
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  render() {
-    const { classes, data } = this.props;
-    const { open } = this.state;
-    return (
-      <div>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-          className={classes.btnTest}
-        >
-          Danh sách bài thi trong lớp
-        </Button>
-        <Dialog
-          classes={{ paper: classes.dialogPaper }}
-          open={open}
-          onClose={this.handleClose}
-
-        >
-          <DialogTitle>
-            Danh sách bài thi
-          </DialogTitle>
-          <DialogContent >
-            <TestList data={data.ds_bai_thi} />
-          </DialogContent>
-        </Dialog>
-      </div>
-    );
-  }
+  return (
+    <div>
+      {data.map((row, index) => (
+        <List className={classes.root}>
+          <ListItemText primary={""} />
+          <Divider variant="inset" component="li" />
+        </List>
+      ))}
+    </div>
+  );
 }
-
-export default withStyles(styles, { withTheme: true })(TestBtn);

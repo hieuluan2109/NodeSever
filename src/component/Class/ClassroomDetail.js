@@ -7,38 +7,38 @@ import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
-import StudentBtn from "./StudentBtn";
-import HomeWorkBtn from "./HomeWorkBtn";
-import Test from "./TestBtn";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-
+import TabPanel from './Tab'
 const styles = (theme) => ({
   dialogPaper: {
     minHeight: "90vh",
     maxHeight: "90vh",
-    minWidth: "160vh",
+    minWidth: "140vh",
     // maxWidth: "170vh",
   },
-  heightgrd: { height: "90vh", width: "160vh" },
-  root: {
+  heightgrd: { height: "90vh", width: "140vh" },
+  info: {
     flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+    width:'190px'
   },
+ 
 });
 
 class ClassRoomDetail extends Component {
   constructor(props) {
     super(props);
+  
     this.state = {
       open: false,
       errors: "",
       status: true,
-      value:0
+      value: 0,
+      
     };
   }
 
   handleChange = (event, newValue) => {
-    this.setState({value:newValue})
+    this.setState({ value: newValue });
   };
 
   handleClickOpen = () => {
@@ -51,6 +51,8 @@ class ClassRoomDetail extends Component {
   handleOpen = () => {
     this.setState({ open: true });
   };
+
+
 
   render() {
     const { classes, disable, getData } = this.props;
@@ -90,34 +92,25 @@ class ClassRoomDetail extends Component {
             </Grid> */}
             <Grid container>
               <Grid item xs={3}>
-                <Paper variant="outlined">
+                <Paper
+                  square
+             
+                  className={classes.info}
+                  elevation={3}
+                  style={{ marginRight: "50px", padding: "5px" }}
+                >
                   Người tạo: {getData.nguoi_tao_id.ho}{" "}
                   {getData.nguoi_tao_id.ten}
                   <br />
-                  Lần cập nhật cuối: {getData.updatedAt}
+                  Cập nhật: {getData.updatedAt}
                 </Paper>
               </Grid>
               <Grid item xs={9}>
-                <Paper square  className={classes.root} elevation={3}>
-                  <Tabs
-                    value={this.state.value}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    onChange={this.handleChange}
-                    aria-label="disabled tabs example"
-                    centered
-                  >
-                    <Tab label="Danh sách sinh viên" />
-                    <Tab label="Danh sách bài tập" />
-                    <Tab label="Danh sách bài thi" />
-                  </Tabs> 
-                      <StudentBtn data={getData.ds_sinh_vien}/>
-                </Paper>
-                
+                <TabPanel data1={getData.ds_sinh_vien}
+                          data2={getData.ds_bai_tap}
+                          data3={getData.ds_bai_thi}   />
               </Grid>
-              
             </Grid>
-            
           </DialogContent>
         </Dialog>
       </div>

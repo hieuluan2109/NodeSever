@@ -9,7 +9,7 @@ import LayersIcon from "@material-ui/icons/Layers";
 import ImportContactsIcon from "@material-ui/icons/ImportContacts";
 import ClassIcon from '@material-ui/icons/Class';
 import {Link} from "react-router-dom";
-
+import axios from "axios";
 const drawerWidth = 240;
 const styles = theme => ({
     
@@ -52,7 +52,6 @@ class Appbarnav extends Component {
             open:false,
       };
     }
-
   render() {
     const { classes } = this.props;
     const {open} = this.state
@@ -70,7 +69,7 @@ class Appbarnav extends Component {
               style={{ textDecoration: "none", color: "white" }}
             >
               <HomeIcon className={classes.iconMenu} />
-              TRANG CHỦ
+              DASHBOARD
             </Link>
           </li>
           <li className={classes.Menu}>

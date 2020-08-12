@@ -167,7 +167,7 @@ class DialogThem extends Component {
       this.setState({ errors: "Vui lòng nhập mật khẩu" });
     }
     else if (regpassword.test(this.state.password)==false){
-      this.setState({ errors: "Password phải từ 6-24 kí tự, có ít nhất 1 chữ in hoa" });
+      this.setState({ errors: "Password phải từ 6-24 kí tự và có ít nhất 1 chữ in hoa" });
     } else if (this.state.confirmpassword == "") {
       this.setState({ errors: "Vui lòng xác nhận mật khẩu" });
     } else if (this.state.password != this.state.confirmpassword) {
@@ -396,7 +396,7 @@ class DialogThem extends Component {
                 <Button name='btnHuy' onClick={this.handleClose} color="primary">
                   Hủy bỏ
                 </Button>
-                <Button name='btnXNhan' type="submit" color="primary" disabled={status}>
+                <Button name='btnXNhan'type="submit" color="primary" disabled={status}>
                   Xác nhận
                 </Button>
               </DialogActions>

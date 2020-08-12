@@ -100,7 +100,6 @@ export default function Threadlist(props) {
   const [getListTopic, setListTopic] = useState([]);
   const [page, setPage] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
-
   useEffect(() => {
     axios
       .get(
@@ -113,6 +112,7 @@ export default function Threadlist(props) {
         setPage(res.data.pages);
         const { data } = res.data;
         setListTopic(data);
+       
       })
       .catch((error) => {
         console.log("Lỗi", error);

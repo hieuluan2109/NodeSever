@@ -44,6 +44,9 @@ export default function GetQuestionList(props) {
     nguoitao:'',
     // mota:''
   });
+  // useEffect(() => {
+  //   getQuestionInforTN()
+  // },[dataQuestion])
   const getQuestionInforTN = (id) => {
     axios
       .get(

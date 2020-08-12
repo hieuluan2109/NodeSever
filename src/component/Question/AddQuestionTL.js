@@ -120,6 +120,9 @@ class AddQuestionsTL extends Component {
   handleClose = () => {
     this.setState({
       open: false,
+      errors:'', 
+      noi_dung:'',
+      danh_muc:'',
     });
   };
 

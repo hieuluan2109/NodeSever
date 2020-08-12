@@ -61,12 +61,13 @@ module.exports = {
             .populate('danh_muc', ['_id',  'tieu_de', 'mo_ta'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
-                if (err)
-                    res.status(400).json({'success': false, 'errors': err})
+                if (err || !result)
+                    res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                 else {
-                    let data = result;
-                    data.createAt =  customDatetime(result.createAt);
+                    let data = result.toObject();
+                    data.createdAt = customDatetime(result.createdAt);
                     data.updatedAt = customDatetime(result.updatedAt);
+                    console.log( data.createdAt)
                     res.status(200).json({'success': true, data})
                 }
             }))
@@ -75,12 +76,13 @@ module.exports = {
             .populate('danh_muc', ['_id', 'tieu_de', 'mo_ta'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
-                if (err)
-                    res.status(400).json({'success': false, 'errors': err})
+                if (err || !result)
+                    res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                 else {
-                    let data = result;
+                    let data = result.toObject();
                     data.createAt =  customDatetime(result.createAt);
                     data.updatedAt = customDatetime(result.updatedAt);
+                    console.log(data)
                     res.status(200).json({'success': true, data})
                 }
             }))

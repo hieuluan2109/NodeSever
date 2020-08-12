@@ -9,7 +9,7 @@ module.exports = {
         search = search ? {"tieu_de": {$regex:'.*'+search+'.*' }} : {};
         await LopHocSchema
             .find(search)
-            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .populate('nguoi_tao_id', ['_id', 'ma_sv', 'ho', 'ten'])
             .populate({
                 path: 'ds_sinh_vien',
                 model: 'SinhVien',
@@ -18,12 +18,12 @@ module.exports = {
             .populate({
                 path: 'ds_bai_thi',
                 model: 'BaiThi',
-                select: ['_id', 'tieu_de', 'trang_thai']
+                // select: ['_id', 'tieu_de', 'trang_thai']
             })
             .populate({
                 path: 'ds_bai_tap',
                 model: 'BaiTap',
-                select: ['_id', 'tieu_de', 'trang_thai']
+                // select: ['_id', 'tieu_de', 'trang_thai']
             })
             .skip((perPage * page) - perPage)
             .limit(perPage)
@@ -50,36 +50,35 @@ module.exports = {
             .populate({
                 path: 'ds_sinh_vien',
                 model: 'SinhVien',
-                select: ['_id', 'ho', 'ten']
+                select: ['_id', 'ma_sv', 'ho', 'ten']
             })
             .populate({
                 path: 'ds_bai_thi',
                 model: 'BaiThi',
-                select: ['_id', 'tieu_de', 'trang_thai']
+                // select: ['_id', 'tieu_de', 'trang_thai']
             })
             .populate({
                 path: 'ds_bai_tap',
                 model: 'BaiTap',
-                select: ['_id', 'tieu_de', 'trang_thai']
+                // select: ['_id', 'tieu_de', 'trang_thai']
             })
-            .exec((err, data) => {
-                if ( err && !result ) {
-                    res.status(400).json({'success': false, 'errors': err}) }
-                else {
-                    let result = {
-                        ds_sinh_vien: data.ds_sinh_vien,
-                        ds_bai_tap: data.ds_bai_tap,
-                        ds_bai_thi: data.ds_bai_thi,
-                        _id: data._id,
-                        tieu_de: data.tieu_de,
-                        nguoi_tao_id: data.nguoi_tao_id,
-                        _v: data._v,
-                        createdAt: customDatetime(data.createdAt),
-                        updatedAt: customDatetime(data.updatsdAt)
-                    };
-                    console.log(data);
-                    res.status(200).json({'success': true, 'data': result})
-                 }
+            .then((data)=>{
+                let result = {
+                    ds_sinh_vien: data.ds_sinh_vien,
+                    ds_bai_tap: data.ds_bai_tap,
+                    ds_bai_thi: data.ds_bai_thi,
+                    _id: data._id,
+                    tieu_de: data.tieu_de,
+                    nguoi_tao_id: data.nguoi_tao_id,
+                    _v: data._v,
+                    createdAt: customDatetime(data.createdAt),
+                    updatedAt: customDatetime(data.updatsdAt)
+                };
+                console.log(result);
+                res.status(200).json({'success': true, 'data': result})
+            })
+            .catch( (err)=>{
+                res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
             })
     }
 }

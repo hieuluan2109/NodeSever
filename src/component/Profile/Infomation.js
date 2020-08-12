@@ -150,6 +150,7 @@ const onSubmitInfo = (event) => {
     setError(false)
     setSuccess(false);
     setAsk(false);
+    window.location.reload()
   };
   const openUpdate =(event)=> {
     event.preventDefault();

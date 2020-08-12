@@ -133,12 +133,12 @@ class TopicInfor extends Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Chi tiết chủ đề </DialogTitle>
+          <DialogTitle id="form-dialog-title">Chi tiết danh mục</DialogTitle>
              <div style={{textAlign:'center',color:'red'}}> {errors}{this.props.success}</div>
           <DialogContent>
             <form onSubmit={this.props.onsubmit}>
             <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Tên chủ đề</label>
+                <label className={classes.titleFormControl}>Tên danh mục</label>
                 <input
                   className={classes.contentFormControl}
                   name="tieu_de"

@@ -28,8 +28,8 @@ export default class UserStats extends Component {
 				indexLabel: "{label}: {y}%",		
 				startAngle: -90,
 				dataPoints: [
-					{ y: ( data.sinh_vien % total ), label: "Sinh viên" },
-					{ y: ( data.giao_vien % total ), label: "Giáo viên" },
+					{ y: Math.round(( data.sinh_vien / total ) * 100), label: "Sinh viên" },
+					{ y: Math.round(( data.giao_vien / total ) * 100), label: "Giáo viên" },
 				]
 			}]
 		}

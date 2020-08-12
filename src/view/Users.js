@@ -21,7 +21,6 @@ import HomePage from "../view/Home";
 //   export default InfoUsers;
 
 class InfoUsers extends Component {
-  ư;
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +37,6 @@ class InfoUsers extends Component {
         <HomePage />
         <InfoUser
           title="Danh Sách Người Dùng"
-          stt="Số thứ tự"
           firstname="Họ"
           lastname="Tên"
           email="Email"

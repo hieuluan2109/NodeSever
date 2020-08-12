@@ -49,11 +49,8 @@ export default function Home() {
   return (
     <div >
       <Typography className={classes.title} variant="h6">
-      Navilearn
+      MERN STACK
       </Typography>
-      <IconButton className={classes.report} size="small">
-        Report <BugReportIcon />
-      </IconButton>
       <div className={classes.icons}>
         <IconButton aria-label="show 1 new mails" color="inherit">
           <Badge badgeContent={1} color="secondary">
@@ -66,7 +63,7 @@ export default function Home() {
           </Badge>
         </IconButton>
         <Menus />
-        <MyDrawer />
+        {/* <MyDrawer /> */}
       </div>
       <Appbarnav />
     </div>

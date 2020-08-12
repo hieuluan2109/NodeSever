@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import AccountInfo from "./Infomation";
 import ChangePassword from "./ChangePassword";
 import AlignItemsList from "./Notification";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",

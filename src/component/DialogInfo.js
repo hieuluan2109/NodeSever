@@ -95,6 +95,7 @@ class DialogInfo extends Component {
   };
   CheckValid=()=>{
     const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
+    const regSDT=/((09|03|07|08|05)+([0-9]{8})\b)/g
     let today = new Date();
     let getdate = today.getDate();
     let getmonth = today.getMonth() + 1;
@@ -111,7 +112,11 @@ class DialogInfo extends Component {
     this.setState({errors:'Họ không được bỏ trống',status:true})
   }else if(!regexp.test(this.props.Data.ho)){
     this.setState({errors:'Họ không hợp lệ',status:true})
-  }
+  }else if (this.props.Data.sdt == "") {
+    this.setState({ errors: "Số điện thoại không được bỏ trống" });
+  } else if (!regSDT.test(this.props.Data.sdt)) {
+    this.setState({ errors: "Số điện thoại không hợp lệ" });
+  } 
   else if(this.props.Data.ten==''){
     this.setState({errors:'Tên không được bỏ trống',status:true})
   }else if(!regexp.test(this.props.Data.ten)){
@@ -127,13 +132,14 @@ class DialogInfo extends Component {
 
   render() {
    
-    const { classes, children } = this.props;
+    const { classes} = this.props;
     const { open,errors,status} = this.state;
    
 
     return (
       <div>
         <IconButton
+          name='icon'
           size="small"
           className={classes.eyes}
           variant="outlined"
@@ -153,12 +159,12 @@ class DialogInfo extends Component {
              <div style={{textAlign:'center',color:'red'}}> {errors}{this.props.success}</div>
           <DialogContent>
             <form onSubmit={this.props.onSubmit}>
-            <Card elevation={3}>
-              <div className={classes.formControl}>
+         
+            
+          
+                  <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Họ</label>
-                <TextField
-                  variant="standard"
-                  size="small"
+                <input
                   className={classes.contentFormControl}
                   name="ho"
                   type="text"
@@ -168,6 +174,7 @@ class DialogInfo extends Component {
                   onBlur={this.CheckValid}
                 />
               </div>
+      
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Tên</label>
                 <input
@@ -205,8 +212,32 @@ class DialogInfo extends Component {
                 onChange={this.props.handleChange}
                 onBlur={this.CheckValid}
               />
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Số điện thoại</label>
+                <input
+                  name="sdt"
+                  className={classes.contentFormControl}
+                  type="number"
+                  value={this.props.Data.sdt}
+                  disabled={this.props.status}
+                  onChange={this.props.handleChange}
+                  onBlur={this.CheckValid}
+                />
+              </div>
 
-              <div className={classes.formControl}  style={{display:this.props.display}}>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Giới tính</label>
+                <input
+                  name="gioi_tinh"
+                  className={classes.contentFormControl}
+                  type="text"
+                  value={this.props.Data.gioi_tinh?'Nam':'Nữ'}
+                  disabled={true}
+                  onChange={this.props.handleChange}
+                />
+              </div>
+
+              <div className={classes.formControl}  style={{  display:this.props.display}}>
                 <label className={classes.titleFormControl}>Người tạo</label>
                 <input
                   name="nguoi_tao_id"
@@ -219,14 +250,14 @@ class DialogInfo extends Component {
               </div>
 
               <DialogActions>
-            {/* <Button onClick={this.handleClose} color="primary">
+            {/* <Button onClick={this.handleClose} color="primary" style={{display:this.props.display}}>
               Hủy bỏ
             </Button> */}
-            <Button type={this.props.type} onClick={this.props.status?this.handleClose:''} color="primary" disabled={this.props.status?'':status}>
+            <Button name='btnXacNhan' type={this.props.type} onClick={this.props.status?this.handleClose:''} color="primary" disabled={this.props.status?'':status}>
               Xác nhận
             </Button>
           </DialogActions>
-          </Card>
+    
             </form>
           </DialogContent>
 

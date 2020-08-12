@@ -4,6 +4,11 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SelectSort from "./SelectSort";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import {Button, Icon, TextField, Dialog, Paper, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 const styles = (theme) => ({
   btnThem: {
@@ -53,13 +58,9 @@ const styles = (theme) => ({
       borderColor: "#3f51b5",
     },
   },
-  ngaysinh: {
-    position: "absolute",
-    marginTop: "30px",
-  },
   contentNgaysinh: {
     marginTop: "5px",
-    marginLeft: "100px",
+    marginLeft: "5px",
   },
 });
 
@@ -79,6 +80,8 @@ class DialogThem extends Component {
       isInputValid: false,
       success: "",
       status: true,
+      gioi_tinh: true,
+      sdt: '',
     };
   }
 
@@ -98,18 +101,30 @@ class DialogThem extends Component {
       ma_sv: "",
       isInputValid: false,
       success: "",
-    });
+      gioi_tinh: true,
+      sdt: "",
+    }); 
   };
   handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-      status: true
-    });
+    if ( event.target.name == "gioi_tinh"){
+      this.setState({ 
+        gioi_tinh: !this.state.gioi_tinh
+      })
+    }
+    else {
+      this.setState({
+        [event.target.name]: event.target.value,
+        status: true
+      });
+    }
+    console.log(this.state)
   };
   checkvalid = () => {
-    const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
+    const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựýỳỵỷỹ]+$/;
     const regexE = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
     const regMSSV=/^\d{10}$/
+    const regSDT=/((09|03|07|08|05)+([0-9]{8})\b)/g
+    const regpassword=/^(?=.*[0-9])(?=.*[A-Z]).{6,24}$/
     let today = new Date();
     let getdate = today.getDate();
     let getmonth = today.getMonth() + 1;
@@ -143,13 +158,16 @@ class DialogThem extends Component {
       this.setState({ errors: "Vui lòng chọn ngày sinh" });
     } else if (this.state.ngay_sinh >= getToday) {
       this.setState({ errors: "Ngày sinh không hợp lệ" });
-    } else if (this.state.password == "") {
+    }else if (this.state.sdt == "") {
+      this.setState({ errors: "Vui lòng nhập số điện thoại" });
+    } else if (!regSDT.test(this.state.sdt)) {
+      this.setState({ errors: "Số điện thoại không hợp lệ" });
+    } 
+    else if (this.state.password == "") {
       this.setState({ errors: "Vui lòng nhập mật khẩu" });
-    } else if (
-      this.state.password.length < 6 ||
-      this.state.password.length > 24
-    ) {
-      this.setState({ errors: "Password không hợp lệ" });
+    }
+    else if (regpassword.test(this.state.password)==false){
+      this.setState({ errors: "Password phải từ 6-24 kí tự, có ít nhất 1 chữ in hoa" });
     } else if (this.state.confirmpassword == "") {
       this.setState({ errors: "Vui lòng xác nhận mật khẩu" });
     } else if (this.state.password != this.state.confirmpassword) {
@@ -176,13 +194,15 @@ class DialogThem extends Component {
       confirmpassword: "",
       errors: "",
       ma_sv: "",
+      gioi_tinh: true,
+      sdt: "",
       })
     
   }
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.isInputValid) {
-      const { ho, ten, email, ma_sv, password, ngay_sinh } = this.state;
+      const { ho, ten, email, ma_sv, password, ngay_sinh, sdt, gioi_tinh } = this.state;
       console.log(this.props.token);
       var url = "";
       this.props.value == true
@@ -190,8 +210,8 @@ class DialogThem extends Component {
         : (url = "https://navilearn.herokuapp.com/admin/user/add/student");
       var params;
       this.props.value == true
-        ? (params = { ho, ten, email, ngay_sinh, password })
-        : (params = { ho, ten, email, ma_sv, ngay_sinh, password });
+        ? (params = { ho, ten, email, ngay_sinh, password, sdt, gioi_tinh })
+        : (params = { ho, ten, email, ma_sv, ngay_sinh, password, sdt, gioi_tinh});
       console.log(params);
       axios
         .post(url, params, {
@@ -215,22 +235,26 @@ class DialogThem extends Component {
           }
         })
         .catch((error) => {
-          console.log("Lỗi", error.response.data);
-          this.setState({
-            errors: error.response.data.errors,
-          });
+          console.log("Lỗi", error.response.data.errors);
+          // this.setState({
+          //   errors: error.response.data.errors,
+          // });
         });
       return true;
     } else return false;
   };
 
   render() {
+    // const regpassword=/^(?=.*[0-9])(?=.*[a-z]).{6,24}$/
+    // const regpassword=/^(?=.*[0-9])(?=.*[A-Z]).{6,24}$/
     const { classes, children } = this.props;
     const { open, errors, success, status } = this.state;
     // const { ho, ten, email, password,ngaysinh } = this.state;
+  
     return (
       <div>
-        <Button
+        <Button 
+          name='icon-addCircle'
           className={classes.btnThem}
           variant="outlined"
           onClick={this.handleClickOpen}
@@ -309,7 +333,8 @@ class DialogThem extends Component {
                 />
               </div>
 
-              <span className={classes.ngaysinh}>Ngày sinh</span>
+              <div className={classes.formControl}>
+               <label className={classes.titleFormControl}>Ngày sinh</label>
               <TextField
                 name="ngay_sinh"
                 label="Birthday"
@@ -322,7 +347,27 @@ class DialogThem extends Component {
                 onChange={this.handleChange}
                 onBlur={this.checkvalid}
               />
-
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>SĐT</label>
+                <input
+                  name="sdt"
+                  className={classes.contentFormControl}
+                  type="number"
+                  value={this.state.sdt}
+                  onChange={this.handleChange}
+                  onBlur={this.checkvalid}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Giới tính</label>
+                <FormControl component="fieldset">
+                  <RadioGroup aria-label="gender" name="gioi_tinh" value={this.state.gioi_tinh} onChange={this.handleChange}>
+                    <FormControlLabel value={true} control={<Radio  checked={this.state.gioi_tinh} />} label="Nam" />
+                    <FormControlLabel value={false} control={<Radio checked={!this.state.gioi_tinh} />} label="Nữ" />
+                  </RadioGroup>
+                </FormControl>
+              </div>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Mật khẩu</label>
                 <input
@@ -348,10 +393,10 @@ class DialogThem extends Component {
                 />
               </div>
               <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
+                <Button name='btnHuy' onClick={this.handleClose} color="primary">
                   Hủy bỏ
                 </Button>
-                <Button type="submit" color="primary" disabled={status}>
+                <Button name='btnXNhan' type="submit" color="primary" disabled={status}>
                   Xác nhận
                 </Button>
               </DialogActions>

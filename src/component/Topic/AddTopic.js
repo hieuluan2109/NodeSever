@@ -131,7 +131,7 @@ class AddTopic extends Component {
         {headers:{ Authorization: `Bearer ${this.props.token}` }}
     ).then((res)=>{
         console.log(res.data)
-        this.setState({errors:'Thêm chủ đề thành công',
+        this.setState({errors:'Thêm danh mục thành công',
                             tieu_de:'',
                             mo_ta:''
     })
@@ -163,12 +163,12 @@ class AddTopic extends Component {
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">
-            Thêm mới chủ đề
+            Thêm mới danh mục
             <div className={classes.selectsort}></div>
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Để tạo chủ đề, vui lòng điền đầy đủ các thông tin
+              Để tạo danh mục, vui lòng điền đầy đủ các thông tin
             </DialogContentText>
             <div
               style={{ textAlign: "center", color: "red", fontWeight: "bold" }}
@@ -180,7 +180,7 @@ class AddTopic extends Component {
 
             <form onSubmit={this.handleSubmit}>
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Tên chủ đề</label>
+                <label className={classes.titleFormControl}>Tên danh mục</label>
                 <input
                   className={classes.contentFormControl}
                   name="tieu_de"

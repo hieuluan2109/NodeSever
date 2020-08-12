@@ -58,28 +58,30 @@ const styles = (theme) => ({
   titleFormControl: {
     width: "100px",
     float: "left",
-    // paddingTop: "32px",
+    paddingTop: "32px",
   },
   contentFormControl: {
     width: "400px",
     borderRadius: "5px",
     height: "30px",
     paddingLeft: "10px",
-    // marginTop: "25px",
+    marginTop: "25px",
     outline: "none",
     "&:focus": {
       borderColor: "#3f51b5",
     },
   },
   formControlCD: {
-    paddingTop: "5px",
+    paddingTop: "10px",
     paddingBottom: "5px",
    
   },
   DapAn:{
     marginLeft:'110px'
   },
-  formControlDA:{marginTop:'25px'}
+  formControlDA:{marginTop:'25px'},
+  formControlDM:{marginLeft:'10px', maxwidth: "900px",
+  minWidth: "200px",}
 });
 const LUA_CHON = ["Đáp án A", "Đáp án B", "Đáp Án C", "Đáp Án D"];
 
@@ -96,8 +98,8 @@ class AddQuestions extends Component {
       dap_an_b: "",
       dap_an_c: "",
       dap_an_d: "",
-      lua_chon: "",
-      lua_chon_value: "",
+      lua_chon: 0,
+      lua_chon_value: 0,
       inputValue: "",
       tieu_de: [],
       tieude0: "",
@@ -147,10 +149,10 @@ class AddQuestions extends Component {
   };
   handleSubmit = (event) => {
     event.preventDefault();
+    // const lua_chon=this.state.lua_chon.toString()
     const {
       noi_dung,
       danh_muc,
-      mo_ta,
       dap_an_a,
       dap_an_b,
       dap_an_c,
@@ -162,7 +164,6 @@ class AddQuestions extends Component {
     var params = {
       noi_dung,
       danh_muc,
-      mo_ta,
       dap_an_a,
       dap_an_b,
       dap_an_c,
@@ -175,7 +176,7 @@ class AddQuestions extends Component {
         headers: { Authorization: `Bearer ${this.props.token}` },
       })
       .then((res) => {
-        console.log("errors", res.data);
+        console.log( res.data);
       })
       .catch((error) => {
         console.log("Lỗi", error.response.data);
@@ -229,9 +230,9 @@ class AddQuestions extends Component {
                  />
                 </div>
               <div className={classes.formControlCD}>
-                <label className={classes.titleFormControl}>Chủ đề</label>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">Chủ đề</InputLabel>
+                <label className={classes.titleFormControl}>Danh mục</label>
+                <FormControl className={classes.formControlDM}>
+                  <InputLabel id="demo-simple-select-label">Danh mục</InputLabel>
                   <Select
                     name="danh_muc"
                     value={this.state.danh_muc}
@@ -246,7 +247,7 @@ class AddQuestions extends Component {
                 </FormControl>
               </div>
             
-              <div className={classes.formControl} style={{ display: this.props.display }}>
+              {/* <div className={classes.formControl} style={{ display: this.props.display }}>
                   <label className={classes.titleFormControl}>Mô tả</label>
                   <TextField
                   size="small"
@@ -257,18 +258,7 @@ class AddQuestions extends Component {
                   onChange={this.handleChange}
                  />
                 </div>
-             
-              <div className={classes.formControl}>
-                  <label className={classes.titleFormControl}>Điểm</label>
-                  <TextField
-                  size="small"
-                  variant="outlined"
-                  className={classes.contentFormControl}
-                   name="diem"
-                   type="text"
-                  onChange={this.handleChange}
-                 />
-                </div>
+              */}
                 <div className={classes.formControl}>
                   <label className={classes.titleFormControl}>Đáp Án A</label>
                   <TextField
@@ -286,7 +276,7 @@ class AddQuestions extends Component {
                   size="small"
                   variant="outlined"
                   className={classes.contentFormControl}
-                   name="dap_an_B"
+                   name="dap_an_b"
                    type="text"
                   onChange={this.handleChange}
                  />
@@ -319,7 +309,7 @@ class AddQuestions extends Component {
 
                 <Autocomplete
                 className={classes.DapAn}
-                  value={this.state.lua_chon_value}
+                  // value={this.state.lua_chon_value}
                   onChange={(event, newValue) => {
                     this.setState({
                       lua_chon: LUA_CHON.indexOf(newValue) + 1,

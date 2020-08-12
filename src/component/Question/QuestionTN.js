@@ -31,7 +31,7 @@ export default function GetQuestionList(props) {
   const { getList } = props;
   const classes = useStyles();
   const token = Cookies.get("token");
-  const title = [ "Nội dung", "Điểm", "Mô tả"];
+  const title = [ "Nội dung", "Điểm", "Danh mục"];
   const [dataQuestion, setDataQuestion] = useState({
     noidung: "",
     dapan: "",
@@ -42,7 +42,7 @@ export default function GetQuestionList(props) {
     luachonc: "",
     luachond: "",
     nguoitao:'',
-    mota:''
+    // mota:''
   });
   const getQuestionInforTN = (id) => {
     axios
@@ -66,7 +66,7 @@ export default function GetQuestionList(props) {
           luachonc: data.lua_chon[2].value,
           luachond: data.lua_chon[3].value,
           nguoitao: data.nguoi_tao_id.ten,
-          mota:data.danh_muc.mo_ta,
+          // mota:data.danh_muc.mo_ta,
           dapan:data.dap_an.value
         });
       })
@@ -91,9 +91,9 @@ export default function GetQuestionList(props) {
         {getList.map((row, index) => (
           <TableRow key={index + 1} hover>
             <TableCell align="left" width='700px'>{row.noi_dung}</TableCell>
-            <TableCell align="center" >{row.diem}</TableCell>
-            <TableCell align="left">{row.danh_muc.tieu_de}</TableCell>
-
+            {/* <TableCell align="center" >{row.diem}</TableCell> */}
+            <TableCell align="center">{row.danh_muc.tieu_de}</TableCell>
+            <TableCell align="center">{row.nguoi_tao_id.ten}</TableCell>
             <TableCell align="left">
               <IconButton size="small" className={classes.eyes}>
                 <DialogInforQSTN
@@ -109,7 +109,7 @@ export default function GetQuestionList(props) {
                   luachonc={dataQuestion.luachonc}
                   luachond={dataQuestion.luachond}
                   nguoitao={dataQuestion.nguoitao}
-                  mota={dataQuestion.mota}
+                  // mota={dataQuestion.mota}
                   dapan={dataQuestion.dapan}
                   icon={<VisibilityIcon />}
                   //   age={age}

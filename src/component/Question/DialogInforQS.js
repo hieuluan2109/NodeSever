@@ -136,26 +136,7 @@ class DialogInfo extends Component {
                   disabled={this.props.status}
                 />
               </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Mô tả</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="mota"
-                  type="text"
-                  value={mota}
-                  disabled={this.props.status}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Điểm</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="diem"
-                  type="text"
-                  value={diem}
-                  disabled={this.props.status}
-                />
-              </div>
+              
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Đáp án A</label>
                 <input

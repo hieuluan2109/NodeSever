@@ -27,8 +27,8 @@ export default class QuestionStats extends Component {
 				indexLabel: "{label}: {y}%",		
 				startAngle: -90,
 				dataPoints: [
-					{ y: ( data.cau_hoi_tu_luan % total ), label: "Trắc nghiệm" },
-					{ y: ( data.giao_vien % total ), label: "Tự luận" },
+					{ y: Math.round(( data.cau_hoi_trac_nghiem / total ) * 100), label: "Trắc nghiệm" },
+					{ y: Math.round(( data.cau_hoi_tu_luan / total ) * 100) , label: "Tự luận" },
 				]
 			}]
 		}

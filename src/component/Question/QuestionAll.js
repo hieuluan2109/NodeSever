@@ -57,15 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function QuestionAllList(props) {
   const classes = useStyles();
-  const title = ["Số thứ tự", "Nội dung", "Chủ đề", "Điểm"];
-  const title1 = [
-    "Số thứ tự",
-    "Nội dung",
-    "Chủ đề",
-    "Điểm",
-    "Ghi chú",
-    ".........",
-  ];
+  
   const token = Cookies.get("token");
   //   const {TITLE,STT,CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO}=props
   const [selectedIndex, setSelectedIndex] = useState(1);

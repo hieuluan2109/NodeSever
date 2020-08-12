@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
 export default function GetQuestionList(props) {
     const {getList}=props;
     const classes = useStyles();
-    const title=["Nội dung",'Điểm','Mô tả'];
+    const title=["Nội dung",'Danh mục','Người tạo'];
   return (
     <Table className={classes.table} size="small" aria-label="a dense table">
       <TableHead>
@@ -46,8 +46,9 @@ export default function GetQuestionList(props) {
         {getList.map((row, index) => (
           <TableRow key={index + 1} hover>
             <TableCell align="left" width='700px'>{row.noi_dung}</TableCell>
-            <TableCell align="center">{row.diem}</TableCell>
-            <TableCell align="left">{row.danh_muc.tieu_de}</TableCell>
+            {/* <TableCell align="center">{row.diem}</TableCell> */}
+            <TableCell align="center">{row.danh_muc.tieu_de}</TableCell>
+            <TableCell align="center">{row.nguoi_tao_id.ten}</TableCell>
             {/* <TableCell align="left">{row.danh_muc.mo_ta}</TableCell> */}
             <TableCell align="center">
               <IconButton size="small" className={classes.eyes}>

@@ -202,10 +202,12 @@ module.exports = {
         })
     },
     admin_handle_edit_profile_request_accept: async function (req, res){
-        const [{loai, _id,thong_tin_sua, nguoi_dung_id}, option] = [req.body, { new: true, useFindAndModify: false }];
-        const update ={$set: thong_tin_sua};
+        let [{loai, _id,thong_tin_sua, nguoi_dung_id}, option] = [req.body, { new: true, useFindAndModify: false }];
+        let tamp = thong_tin_sua;
+        delete tamp._id;
+        const update ={$set: tamp};
         (loai == 'SinhVien') ? (
-            SinhvienSchema.findOneAndUpdate({_id:nguoi_dung_id},update, option, function (err, updated){
+            SinhvienSchema.findOneAndUpdate({_id:nguoi_dung_id._id},update, option, function (err, updated){
                 if (err)
                  res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                 else {
@@ -225,7 +227,8 @@ module.exports = {
     },
     admin_handle_edit_profile_request_denied: async function(req, res){
         const [{_id}, option] = [req.body, { new: true, useFindAndModify: false }];
-        await SuaThongTin.findOneAndUpdate(_id,{$set: {trang_thai: true}}, option, function(err, updated){
+        console.log(_id)
+        await SuaThongTin.findOneAndUpdate({_id: _id},{$set: {trang_thai: true}}, option, function(err, updated){
             err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) 
                 : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
         })

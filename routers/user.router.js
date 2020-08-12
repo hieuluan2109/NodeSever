@@ -7,12 +7,12 @@ router.get(
     '/update-request',
     UserController.admin_get_edit_profile_user
 );
-router.get(
+router.post(
     '/update-request/accept',
     UserController.admin_handle_edit_profile_request_accept
 );
-router.get(
-    '/update-request/denied',
+router.post(
+    '/update-request/denined',
     UserController.admin_handle_edit_profile_request_denied
 );
 router.post(

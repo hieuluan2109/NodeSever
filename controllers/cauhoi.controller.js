@@ -78,6 +78,7 @@ module.exports = {
                 .json({'success': false, 'errors': errors.array()})
         }
         const data = req.body;
+        let check = await TracNghiemSchema.findOne({noi_dung: data.noi_dung}).countDocuments(count=>count);
         const dapAn =()=>{ switch(data.lua_chon){
             case '1': return data.dap_an_a;
             case '2': return data.dap_an_b;
@@ -97,11 +98,16 @@ module.exports = {
                 ],
                 'danh_muc': data.danh_muc,
                 'diem': data.diem ? data.diem : 10, })
-        question.save(function (err, doc) {
-            err
-                ? res.status(400).json({'success': false, 'errors': err})
-                : res.status(200).json({'success': true, 'msg': 'Thêm câu hỏi thành công'})
-        });
+        if (check > 0 ){
+            res.status(400).json({'success': false, 'errors': 'Câu hỏi bị trùng'})
+        }
+        else {
+            question.save(function (err, doc) {
+                err
+                    ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
+                    : res.status(200).json({'success': true, 'msg': 'Thêm câu hỏi thành công'})
+            });
+        }
     },
     admin_create_question_assay: async function (req, res, next) {
         const errors = await validationResult(req);

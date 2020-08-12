@@ -1,6 +1,6 @@
 const {validationResult} = require('express-validator');
 const {TracNghiemSchema, TuLuanSchema} = require('../model/index.schema');
-cons {customDatetime} = require('./admin_function');
+const {customDatetime} = require('./admin_function');
 module.exports = {
     admin_get_question_list: async function (req, res) {
         let perPage = req.query.limit || 10;

@@ -9,8 +9,9 @@ const TracNghiemSchema = require('./cauhoi_tracnghiem.schema');
 const TuLuanSchema = require('./cauhoi_tuluan.schema')
 const SuaThongTin = require('./suathongtin.schema');
 const QuenMatKhau = require('./forgotPW.schema')
-
+const GiaoVienSchema = require('./giaovien.schema');
 module.exports = {
+    GiaoVienSchema,
     NguoidungSchema,
     SinhvienSchema,
     DanhMucSchema,

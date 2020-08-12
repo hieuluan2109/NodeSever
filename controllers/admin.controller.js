@@ -91,7 +91,7 @@ module.exports = {
     },
     admin_get_notification: async function(req, res) {
         let {alert} = req.query;
-        alert = alert ? {trang_thai: true} : {};
+        alert = alert ? {trang_thai: false} : {};
         await SuaThongTin.find(alert)
         .populate('nguoi_dung_id', ['ho', 'ten', 'anh_dai_dien', 'email'])
         .then(data=>{

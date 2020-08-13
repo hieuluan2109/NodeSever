@@ -14,7 +14,7 @@ const BaiTapSchema = new Schema({
     noi_dung: String,
     diem: Number,
     ngay_tao: {type: Date, default: new Date()},
-    nguoi_tao_id: {type: Schema.Types.ObjectId, required: true},
+    nguoi_tao_id: {type: Schema.Types.ObjectId, ref: 'NguoiDung', required: true},
     lop_hoc_id: {type:Schema.Types.ObjectId, required: true},
     tap_tin: [tapTin],
     han_nop_bai: {type: Date, required: [true, 'Bắt buộc phải có hạn nộp']},

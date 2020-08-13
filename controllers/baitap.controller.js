@@ -1,21 +1,18 @@
-const {BaiThiSchema} = require('../model/index.schema');
+const {BaiTapSchema} = require('../model/index.schema');
 const {customDatetime} = require('./admin_function');
 module.exports = {
-    admin_get_test_list: async function (req, res) {
+    admin_get_exercise_list: async function (req, res) {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         let {search} = req.query;
         search = search
-                 ? {$or: [
-                     {"tieu_de": {$regex:'.*'+search.toLowerCase()+'.*' }},
-                     {"tieu_de": {$regex:'.*'+search.toUpperCase()+'.*' }}
-                    ]} : {}
-        await BaiThiSchema
+                 ? {"tieu_de": {$regex:'.*'+search+'.*' }, "noi_dung": {$regex:'.*'+search+'.*' }} : {}
+        await BaiTapSchema
             .find(search)
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .populate('ds_cau_hoi.cau_hoi_id', )
+            .populate('ds_sinh_vien_da_lam', ['ten ho ma_sv'])
             .exec( (err, data) => {
                 if ( data && !err ) {
                     let result= [];
@@ -24,19 +21,19 @@ module.exports = {
                             _id: item._id,
                             nguoi_tao_id: item.nguoi_tao_id,
                             tieu_de: item.tieu_de,
+                            noi_dung: item.noi_dung,
                             lop_hoc_id: item.lop_hoc_id,
+                            diem: item.diem,
+                            tap_tin: item.tap_tin,
                             ngay_thi: customDatetime(item.ngay_thi),
-                            thoi_gian_thi: item.thoi_gian_thi,
+                            han_nop_bai: item.han_nop_bai,
                             trang_thai: item.trang_thai,
-                            ds_cau_hoi: item.ds_cau_hoi,
-                            ds_sinh_vien: item.ds_sinh_vien,
-                            ds_binh_luan: item.ds_binh_luan,
-                            ds_sinh_vien_da_thi: item.ds_sinh_vien_da_thi,
+                            ds_sinh_vien_da_lam: item.ds_sinh_vien_da_lam,
                             createdAt: customDatetime(item.createdAt),
                             updatedAt: customDatetime(item.updatedAt),
                         })
                     })
-                    BaiThiSchema.countDocuments(search,
+                    BaiTapSchema.countDocuments(search,
                     (err, count) => {
                         err ? res.status(400).json({'success': false, 'errors': err})
                             : res.status(200).json({
@@ -50,19 +47,9 @@ module.exports = {
                 )} else res.status(400).json({success: false, errors: 'Không tìm thấy'})
         })
     },
-    admin_get_test_detail: async function (req, res) {
+    admin_get_exercise_belong_class: async function (req, res) {
         const {id} = req.query;
-        await BaiThiSchema
-            .findById(id)
-            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .populate('lop_hoc_id')
-            .exec( (err, data)=>{
-                err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'data': data})
-            });
-    },
-    admin_get_test_belong_class: async function (req, res) {
-        const {id} = req.query;
-        await BaiThiSchema
+        await BaiTapSchema
             .find({lop_hoc_id: id})
             .then((data)=>{
                 res.status(200).json({'success': true, data})

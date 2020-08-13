@@ -15,16 +15,6 @@ module.exports = {
                 model: 'SinhVien',
                 select: ['_id', 'ho', 'ten']
             })
-            .populate({
-                path: 'ds_bai_thi',
-                model: 'BaiThi',
-                // select: ['_id', 'tieu_de', 'trang_thai']
-            })
-            .populate({
-                path: 'ds_bai_tap',
-                model: 'BaiTap',
-                // select: ['_id', 'tieu_de', 'trang_thai']
-            })
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .exec((err, data) => {
@@ -51,16 +41,6 @@ module.exports = {
                 path: 'ds_sinh_vien',
                 model: 'SinhVien',
                 select: ['_id', 'ma_sv', 'ho', 'ten']
-            })
-            .populate({
-                path: 'ds_bai_thi',
-                model: 'BaiThi',
-                // select: ['_id', 'tieu_de', 'trang_thai']
-            })
-            .populate({
-                path: 'ds_bai_tap',
-                model: 'BaiTap',
-                // select: ['_id', 'tieu_de', 'trang_thai']
             })
             .then((data)=>{
                 let result = {

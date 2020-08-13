@@ -8,7 +8,8 @@ const session = require('express-session');
 const port = process.env.PORT || 8000;
 const flash = require('connect-flash');
 const connectDB = require('./config/connectDB');
-const [loginRouter, adminRouter, userRouter, classRouter, questionRouter, categoryRouter, testRouter, statsRouter ] = [
+const [exerciseRouter, loginRouter, adminRouter, userRouter, classRouter, questionRouter, categoryRouter, testRouter, statsRouter ] = [
+    require('./routers/exercise.router'),
     require('./routers/login.router'),
     require('./routers/admin.router'),
     require('./routers/user.router'),
@@ -45,6 +46,7 @@ app.use('/admin/class', classRouter);
 app.use('/admin/category', categoryRouter);
 app.use('/admin/test', testRouter);
 app.use('/admin/stats', statsRouter);
+app.use('/admin/exercise', exerciseRouter);
 app.listen(port, (error) => {
     error
         ? console.log('Error : ' + error)

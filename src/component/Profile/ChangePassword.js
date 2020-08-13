@@ -136,15 +136,14 @@ export default function Inforprofile(props) {
       })
       .catch((error) => {
         setError(true)
-        console.log(error)
-        // error.response.data.errors[0].msg ? setMessage(error.response.data.errors[0].msg) : setMessage(error.response.data.errors)
+        error.response.data.errors[0].msg ? setMessage(error.response.data.errors[0].msg) : setMessage(error.response.data.errors)
       });
   };
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === 'clickaway')
       return;
-    }
-    window.location.reload()
+    if ( success )
+      window.location.reload()
     setError(false)
     setSuccess(false);
   };

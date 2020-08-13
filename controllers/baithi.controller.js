@@ -4,7 +4,8 @@ module.exports = {
     admin_get_test_list: async function (req, res) {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
-        let {search} = req.query;
+        let {search, sort} = req.query;
+        sort = sort ? sort : {};
         search = search
                  ? {$or: [
                      {"tieu_de": {$regex:'.*'+search.toLowerCase()+'.*' }},
@@ -16,6 +17,7 @@ module.exports = {
             .limit(perPage)
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate('ds_cau_hoi.cau_hoi_id', )
+            .sort(sort)
             .exec( (err, data) => {
                 if ( data && !err ) {
                     let result= [];

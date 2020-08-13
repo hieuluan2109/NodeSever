@@ -5,7 +5,8 @@ module.exports = {
     admin_get_class_list: async function (req, res) {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
-        let {search} = req.query;
+        let {search, sort} = req.query;
+        sort = sort ? sort : {};
         search = search ? {"tieu_de": {$regex:'.*'+search+'.*' }} : {};
         await LopHocSchema
             .find(search)
@@ -17,6 +18,7 @@ module.exports = {
             })
             .skip((perPage * page) - perPage)
             .limit(perPage)
+            .sort(sort)
             .exec((err, data) => {
                 if ( !err && data) {
                 LopHocSchema.countDocuments(search,

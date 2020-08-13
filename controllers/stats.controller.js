@@ -26,13 +26,58 @@ module.exports = {
         })
         .catch(err =>  res.status(400).json({success: false, error: err}))
     },
-    // admin_stats_student: async function(req, res) {
-    //     Promise.all([
-    //         Schema.SinhvienSchema.countDocuments(   ),
-    //     ])
-    //     .then(result =>{
-    //         res.status(200).json({success: true, result});
-    //     })
-    //     .catch(err =>  res.status(400).json({success: false, error: err}))
-    // },
+    admin_stats_point: async (req, res) => {
+        Schema.DiemSchema.find({},'diem -_id')
+        .then((data)=>{
+            let result = {
+                0 : 0,
+                1 : 0,
+                2 : 0,
+                3 : 0,
+                4 : 0,
+                5 : 0,
+                6 : 0,
+                7 : 0,
+                8 : 0,
+                9 : 0,
+                10 : 0,
+            };
+            data.map((row, index)=>{
+                let tamp = Math.round(row.diem)
+                result[tamp] = result[tamp]+1;
+            })
+            res.json({data: result})
+        })
+        .catch((err)=>{
+            res.json({err})
+        })
+    },
+    admin_get_stats_top_student: async function(req, res) {
+        // Schema.DiemSchema.find({},'diem sinh_vien_id -_id')
+        //     .populate('sinh_vien_id', 'ma_sv -_id ho ten')
+        //     .then(result =>{
+        //         let data = [];
+        //         result.map((row, index)=>{
+        //             index == 0
+        //             ? data.push(row.sinh_vien_id.ma_sv)
+        //             : data.
+        //         })
+        //         res.status(200).json({success: true, data});
+        //     })
+        //     .catch(err =>  res.status(400).json({success: false, error: err}))
+        Schema.DiemSchema.aggregate([
+            {
+                $group : {
+                    _id : '$sinh_vien_id',
+                    count: { $avg: "$diem"} 
+                },
+                $limit : 3
+            }
+        ], function(err, data) {
+            if ( err || !data )
+                res.status(400).json({'success': false, 'errors': 'Lỗi không tìm thấy'})
+            else 
+                res.status(200).json({'success': true, data})
+        })
+    },
 };

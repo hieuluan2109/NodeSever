@@ -10,6 +10,7 @@ const TuLuanSchema = require('./cauhoi_tuluan.schema')
 const SuaThongTin = require('./suathongtin.schema');
 const QuenMatKhau = require('./forgotPW.schema')
 const GiaoVienSchema = require('./giaovien.schema');
+const DiemSchema = require('./diem.schema')
 module.exports = {
     GiaoVienSchema,
     NguoidungSchema,
@@ -22,5 +23,6 @@ module.exports = {
     TracNghiemSchema,
     TuLuanSchema,
     SuaThongTin,
-    QuenMatKhau
+    QuenMatKhau,
+    DiemSchema
 };

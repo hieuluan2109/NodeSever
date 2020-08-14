@@ -14,9 +14,9 @@ module.exports = {
             .find(search)
             .skip((perPage * page) - perPage)
             .limit(perPage)
+            .sort(sort)
             .populate('danh_muc',['tieu_de'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .sort(sort)
             .exec((err, data) => {  
                 console.log(data)
                 if ( data && !err ) {
@@ -37,9 +37,9 @@ module.exports = {
             .find(search,['trang_thai', 'noi_dung', 'danh_muc', 'diem'])
             .skip((perPage * page) - perPage)
             .limit(perPage)
+            .sort(sort)
             .populate('danh_muc',['tieu_de'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .sort(sort)
             .exec((err, data) => {
                 if ( !err && data) {
                 TracNghiemSchema.countDocuments(search,

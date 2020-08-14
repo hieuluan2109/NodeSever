@@ -16,7 +16,6 @@ module.exports = {
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .populate('ds_cau_hoi.cau_hoi_id', )
             .sort(sort)
             .exec( (err, data) => {
                 if ( data && !err ) {
@@ -57,17 +56,51 @@ module.exports = {
         await BaiThiSchema
             .findById(id)
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .populate('lop_hoc_id')
+            .populate('lop_hoc_id', '_id tieu_de')
+            .populate('ds_cau_hoi.cau_hoi_id', '-createdAt -updatedAt -nguoi_tao_id -diem')
+            .populate('ds_sinh_vien', 'ho ten _id')
+            .populate('ds_sinh_vien_da_thi', 'ho ten _id')
             .exec( (err, data)=>{
-                err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'data': data})
+                if( err ) 
+                    res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
+                else {
+                    let result = data.toObject()
+                    result.ngay_thi = customDatetime(data.ngay_thi)
+                    result.createdAt = customDatetime(data.createdAt)
+                    result.updatedAt = customDatetime(data.updatedAt)
+                    res.status(200).json({'success': true, 'data': result})
+                }
             });
     },
     admin_get_test_belong_class: async function (req, res) {
         const {id} = req.query;
         await BaiThiSchema
             .find({lop_hoc_id: id})
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .populate('lop_hoc_id', '_id tieu_de')
+            .populate('ds_cau_hoi.cau_hoi_id', '-createdAt -updatedAt -nguoi_tao_id -diem')
+            .populate('ds_sinh_vien', 'ho ten _id')
+            .populate('ds_sinh_vien_da_thi', 'ho ten _id')
             .then((data)=>{
-                res.status(200).json({'success': true, data})
+                let result= [];
+                data.map((item) => {
+                    result.push({
+                        _id: item._id,
+                        nguoi_tao_id: item.nguoi_tao_id,
+                        tieu_de: item.tieu_de,
+                        lop_hoc_id: item.lop_hoc_id,
+                        ngay_thi: customDatetime(item.ngay_thi),
+                        thoi_gian_thi: item.thoi_gian_thi,
+                        trang_thai: item.trang_thai,
+                        ds_cau_hoi: item.ds_cau_hoi,
+                        ds_sinh_vien: item.ds_sinh_vien,
+                        ds_binh_luan: item.ds_binh_luan,
+                        ds_sinh_vien_da_thi: item.ds_sinh_vien_da_thi,
+                        createdAt: customDatetime(item.createdAt),
+                        updatedAt: customDatetime(item.updatedAt),
+                    })
+                })
+                res.status(200).json({'success': true, data: result})
             })
             .catch((err)=>{
                 res.status(400).json({'success': false, 'errors': 'Không tìm thấy'})

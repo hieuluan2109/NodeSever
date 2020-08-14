@@ -21,6 +21,7 @@ const BaiThiSchema = new Schema({
     thoi_gian_thi: {type: Number, required: true},
     trang_thai: {type: Boolean, default: true},
     ds_sinh_vien: [{type: Schema.Types.ObjectId, ref: 'SinhVien'}],
+    ds_sinh_vien_da_thi: [{type: Schema.Types.ObjectId, ref: 'SinhVien'}],
     ds_cau_hoi: [cauHoi],
     ds_binh_luan: [binhLuan],
 }, {timestamps: true});

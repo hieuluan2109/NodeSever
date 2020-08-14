@@ -14,7 +14,7 @@ export default class PointStats extends Component {
 	}
 	componentDidMount(){
 		axios.get(
-		"https://navilearn.herouapp.com/admin/stats/diem")
+		"https://navilearn.herokuapp.com/admin/stats/diem")
 		.then((res)=>{
 			this.setState({
 				data : res.data.data

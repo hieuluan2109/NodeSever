@@ -69,7 +69,7 @@ class Appbarnav extends Component {
               style={{ textDecoration: "none", color: "white" }}
             >
               <HomeIcon className={classes.iconMenu} />
-              DASHBOARD
+              TRANG CHỦ
             </Link>
           </li>
           <li className={classes.Menu}>

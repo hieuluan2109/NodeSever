@@ -8,7 +8,9 @@ import TableRow from "@material-ui/core/TableRow";
 import CreateIcon from "@material-ui/icons/Create";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
-
+import DialogInforTN from './DialogInfoQSTL'
+import axios from "axios";
+  import Cookies from "js-cookie";
 const useStyles = makeStyles(() => ({
   table: {
     // marginLeft: 25,
@@ -27,8 +29,43 @@ const useStyles = makeStyles(() => ({
   }
 export default function GetQuestionList(props) {
     const {getList}=props;
+    const [dataQuestion, setDataQuestion] = React.useState({
+      noi_dung: "",
+      danh_muc: "",
+      mo_ta: "",
+      ho: "",
+      ten: "",
+      updated: "",
+    });
     const classes = useStyles();
     const title=["Nội dung",'Danh mục','Người tạo'];
+    const token = Cookies.get("token");
+    const getQuestionInforTL = (id) => {
+      axios
+        .get(
+          `https://navilearn.herokuapp.com/admin/question/detail?loai=assay&q_id=${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          const { data } = res.data;
+          setDataQuestion({
+            noi_dung: data.noi_dung,
+            danh_muc: data.danh_muc.tieu_de,
+            mo_ta:data.danh_muc.mo_ta,
+            ho:data.nguoi_tao_id.ho,
+            ten: data.nguoi_tao_id.ten,
+            updated: data.updatedAt,
+          })
+          console.log(data)
+        
+        })
+        .catch((error) => {
+          console.log("Lỗi", error);
+        });
+    };
+
   return (
     <Table className={classes.table} size="small" aria-label="a dense table">
       <TableHead>
@@ -52,7 +89,19 @@ export default function GetQuestionList(props) {
             {/* <TableCell align="left">{row.danh_muc.mo_ta}</TableCell> */}
             <TableCell align="center">
               <IconButton size="small" className={classes.eyes}>
-                <VisibilityIcon />
+              <DialogInforTN
+               title="Thông tin câu hỏi"
+                icon={  <VisibilityIcon />}
+                id={row._id}
+                noi_dung={dataQuestion.noi_dung}
+                danh_muc={dataQuestion.danh_muc}
+                mo_ta={dataQuestion.mo_ta}
+                update={dataQuestion.updated}
+                ho_nguoi_tao={dataQuestion.ho}
+                ten_nguoi_tao={dataQuestion.ten}
+                getDataQuestion={getQuestionInforTL}
+              />
+              
               </IconButton>
             </TableCell>
           </TableRow>

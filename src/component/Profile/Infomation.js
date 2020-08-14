@@ -127,8 +127,9 @@ useEffect(() => {
 }, []);
 const onSubmitInfo = (event) => {
   event.preventDefault();
+  const regexSDT=/((09|03|07|08|05)+([0-9]{8})\b)/g
   let {ho, ten, ngay_sinh, gioi_tinh, sdt} = updateData;
-  if ( !ho || !ten || !ngay_sinh ){
+  if ( !ho || !ten || !ngay_sinh ||!regexSDT.test(sdt)){
     setError(true);
     setAsk(false);
   }
@@ -159,6 +160,7 @@ const onSubmitInfo = (event) => {
     setError(false)
     setSuccess(false);
     setAsk(false);
+    if(success)
     window.location.reload()
   };
   const openUpdate =(event)=> {
@@ -255,7 +257,6 @@ const onSubmitInfo = (event) => {
             <label className={classes.titleFormControl}>Ngày sinh</label>
             {getDataProfile.ngay_sinh ? ( <TextField
             id="date"
-            label="   "
             type="date"
             name="ngay_sinh"
             onChange={handleChange}

@@ -31,7 +31,7 @@ export default function GetQuestionList(props) {
   const { getList } = props;
   const classes = useStyles();
   const token = Cookies.get("token");
-  const title = [ "Nội dung", "Điểm", "Danh mục"];
+  const title = [ "Nội dung", "Danh mục", "Người tạo"];
   const [dataQuestion, setDataQuestion] = useState({
     noidung: "",
     dapan: "",
@@ -61,7 +61,7 @@ export default function GetQuestionList(props) {
         console.log(data)
         setDataQuestion({
           noidung: data.noi_dung,
-          dapan: data.dapan,
+          // dapan: data.dapan,
           diem: data.diem,
           chude: data.danh_muc.tieu_de,
           luachona: data.lua_chon[0].value,

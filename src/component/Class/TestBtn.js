@@ -14,23 +14,32 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "36ch",
     backgroundColor: theme.palette.background.paper,
   },
+
   inline: {
     display: "inline",
   },
+  divider: { margin: "left" },
 }));
 
-export default function StudentList(props) {
+export default function HomeWorkList(props) {
   const classes = useStyles();
   const { data } = props;
-
   return (
     <div>
-      {data.map((row, index) => (
-        <List className={classes.root}>
-          <ListItemText primary={""} />
-          <Divider variant="inset" component="li" />
-        </List>
-      ))}
+      {data == "" ? (
+        <div className={classes.student}>
+          Không có bài thi nào trong lớp học này
+        </div>
+      ) : (
+        data.map((row, index) => (
+          <List>
+            <ListItem alignItems="flex-start" className={classes.student}>
+              <ListItemText primary={row.tieu_de} className={classes.ten} />
+            </ListItem>
+            <Divider />
+          </List>
+        ))
+      )}
     </div>
   );
 }

@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleTabs(props) {
+    console.log(props.data2 ,"SSSSSSSSSSSSFRE")
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -64,7 +65,7 @@ export default function SimpleTabs(props) {
     };
     return (
         <Paper elevation={3}>
-                <Tabs
+                <Tabs 
                      indicatorColor="primary"
                     textColor="primary"
                     centered="centered"

@@ -71,7 +71,7 @@ export default function Home() {
   return (
     <div >
       <Typography className={classes.title} variant="h6">
-      MERN STACK
+      NAVILEARN
       </Typography>
       <div className={classes.icons}>
         <IconButton aria-label="show 1 new mails" color="inherit">

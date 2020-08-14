@@ -15,11 +15,12 @@ const SinhVienSchema = new Schema({
         type: String
     },
     sdt: {
-        required: true,
+        // required: true,
         type: String,
+        default: '0912345678'
     },
     gioi_tinh: {
-        required: true,
+        // required: true,
         type: Boolean,
         default: true,
     },

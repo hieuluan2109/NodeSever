@@ -6,7 +6,7 @@ module.exports = {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         let {search, sort} = req.query;
-        sort = sort ? sort : {};
+        sort = sort ? { [sort]: 1} : {};
         search = search ? {"tieu_de": {$regex:'.*'+search+'.*' }} : {};
         await LopHocSchema
             .find(search)
@@ -53,8 +53,8 @@ module.exports = {
                     tieu_de: data.tieu_de,
                     nguoi_tao_id: data.nguoi_tao_id,
                     _v: data._v,
-                    createdAt: customDatetime(data.createdAt),
-                    updatedAt: customDatetime(data.updatsdAt)
+                    createdAt: customDatetime(data.createdAt, 1),
+                    updatedAt: customDatetime(data.updatsdAt, 1)
                 };
                 console.log(result);
                 res.status(200).json({'success': true, 'data': result})

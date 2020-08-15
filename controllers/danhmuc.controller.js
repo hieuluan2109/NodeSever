@@ -1,6 +1,6 @@
 const {validationResult} = require('express-validator');
 const {DanhMucSchema} = require('../model/index.schema');
-const {customDatetime} = require('./admin_function');
+const {customDatetime, capitalizeFirstLetter} = require('./admin_function');
 module.exports = {
     admin_create_category: async function (req, res) {
         const errors = await validationResult(req);
@@ -8,7 +8,7 @@ module.exports = {
             return res.status(400).json({'success': false, 'errors': errors.array()})
         }
         const [_id,{tieu_de, mo_ta}, option] = [req.user, req.body,{ new: true, useFindAndModify: false }];
-        const update= {tieu_de: tieu_de, mo_ta: mo_ta, nguoi_tao_id: _id};
+        const update= {tieu_de: capitalizeFirstLetter(tieu_de), mo_ta: capitalizeFirstLetter(mo_ta), nguoi_tao_id: _id};
         await DanhMucSchema.findOne({tieu_de: tieu_de})
         .then(result => {
             if ( result)
@@ -31,7 +31,7 @@ module.exports = {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         let {search, sort} = req.query;
-        sort = sort ? sort : {};
+        sort = sort ? { [sort]: 1} : {};
         search = search ? {"mo_ta": {$regex:'.*'+search+'.*' }, "tieu_de": {$regex:'.*'+search+'.*' }} : {};
         await DanhMucSchema
             .find(search)

@@ -48,7 +48,9 @@ module.exports = {
     checkPassword: function(password, password2) {
         return bcrypt.compareSync(password, password2);
     },
-    customDatetime: function(date){
+    customDatetime: function(date, loai){
+        if (loai == 1)
+            return moment(date).format('YYYY-MM-DD HH:mm'); 
         return moment(date).format('YYYY-MM-DD');
     },
     sendForgotPasswordMail: async function(mail,code, hoten){

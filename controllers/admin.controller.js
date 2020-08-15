@@ -87,6 +87,9 @@ module.exports = {
                 else res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công', 'data': updated}) 
             })}
         )
+        .catch(err=>{
+            res.status(400).json({success: false, errors: 'Lỗi'})
+        })
         .catch(err => res.status(400).json({success: false, msg: 'Mã code đã hết hạn'}))
     },
     admin_get_notification: async function(req, res) {

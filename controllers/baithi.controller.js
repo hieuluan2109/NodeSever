@@ -5,7 +5,7 @@ module.exports = {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         let {search, sort} = req.query;
-        sort = sort ? sort : {};
+        sort = sort ? { [sort]: 1} : {};
         search = search
                  ? {$or: [
                      {"tieu_de": {$regex:'.*'+search.toLowerCase()+'.*' }},
@@ -65,10 +65,10 @@ module.exports = {
                     res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                 else {
                     let result = data.toObject()
-                    result.ngay_thi = customDatetime(data.ngay_thi)
-                    result.createdAt = customDatetime(data.createdAt)
-                    result.updatedAt = customDatetime(data.updatedAt)
-                    res.status(200).json({'success': true, 'data': result})
+                    result.ngay_thi = customDatetime(data.ngay_thi, 1)
+                    result.createdAt = customDatetime(data.createdAt, 1)
+                    result.updatedAt = customDatetime(data.updatedAt, 1)
+                    res.status(200).json({'success': true, 'data': result}, 1)
                 }
             });
     },
@@ -89,15 +89,15 @@ module.exports = {
                         nguoi_tao_id: item.nguoi_tao_id,
                         tieu_de: item.tieu_de,
                         lop_hoc_id: item.lop_hoc_id,
-                        ngay_thi: customDatetime(item.ngay_thi),
+                        ngay_thi: customDatetime(item.ngay_thi, 1),
                         thoi_gian_thi: item.thoi_gian_thi,
                         trang_thai: item.trang_thai,
                         ds_cau_hoi: item.ds_cau_hoi,
                         ds_sinh_vien: item.ds_sinh_vien,
                         ds_binh_luan: item.ds_binh_luan,
                         ds_sinh_vien_da_thi: item.ds_sinh_vien_da_thi,
-                        createdAt: customDatetime(item.createdAt),
-                        updatedAt: customDatetime(item.updatedAt),
+                        createdAt: customDatetime(item.createdAt, 1),
+                        updatedAt: customDatetime(item.updatedAt, 1),
                     })
                 })
                 res.status(200).json({'success': true, data: result})

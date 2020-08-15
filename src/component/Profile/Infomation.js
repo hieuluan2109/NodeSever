@@ -20,6 +20,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
+
 const useStyles = makeStyles((theme) => ({
   progressButton: {
     position: 'absolute',
@@ -90,10 +91,9 @@ const useStyles = makeStyles((theme) => ({
       },
     }));
 
-export default function AccountInfo() {
+export default function AccountInfo(props) {
 const [success, setSuccess] = useState(false)
 const [getDataProfile, setDataProfile] = useState({ho:'',ten:'',ngay_sinh:'', gioi_tinh: true, sdt: ''});
-const [updateData, setUpdateData] = useState({ho:'',ten:'',ngay_sinh:'', gioi_tinh: true, sdt: ''});
 const [onUpdate, setOnUpdate] = useState(false)
 const [error, setError] = useState(false);
 const [ask, setAsk] = useState(false)
@@ -106,8 +106,8 @@ const handleGender =()=>{
 const handleChange = (event) => {
   if ( event.target.name == 'gioi_tinh')
       handleGender()
-    setUpdateData({
-    ...updateData,[event.target.name]: event.target.value,
+  setDataProfile({
+    ...getDataProfile,[event.target.name]: event.target.value,
   })
   console.log(getDataProfile)
 };
@@ -115,21 +115,11 @@ const Confirm =(event)=>{
   event.preventDefault();
   setAsk(true);
 }
-useEffect(() => {
-  axios
-    .get("https://navilearn.herokuapp.com/admin/profile", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .then((res) => {
-      setUpdateData(res.data.data);
-      setDataProfile(res.data.data);
-    });
-}, []);
 const onSubmitInfo = (event) => {
   event.preventDefault();
-  const regexSDT=/((09|03|07|08|05)+([0-9]{8})\b)/g
-  let {ho, ten, ngay_sinh, gioi_tinh, sdt} = updateData;
-  if ( !ho || !ten || !ngay_sinh ||!regexSDT.test(sdt)){
+  console.log(getDataProfile)
+  let {ho, ten, ngay_sinh, gioi_tinh, sdt} = getDataProfile;
+  if ( !ho || !ten || !ngay_sinh ){
     setError(true);
     setAsk(false);
   }
@@ -143,10 +133,10 @@ const onSubmitInfo = (event) => {
         }
       )
       .then((res) => {
-        Cookies.set("ten", ten)
         setOnUpdate(false);
         setSuccess(true);
         setAsk(false);
+        console.log(res);
       })
       .catch((error) => {
         setError(true)
@@ -160,18 +150,17 @@ const onSubmitInfo = (event) => {
     setError(false)
     setSuccess(false);
     setAsk(false);
-    if(success)
     window.location.reload()
   };
   const openUpdate =(event)=> {
     event.preventDefault();
+    setDataProfile(props.data)
     setOnUpdate(true);
   }
   const handleCancel=()=>{
     setSuccess(false);
     setAsk(false);
     setOnUpdate(false);
-    setUpdateData(getDataProfile);
   }
   return (
     <div>
@@ -179,37 +168,33 @@ const onSubmitInfo = (event) => {
         <Paper elevation={3} className={classes.formInfo}>
           <div className={classes.formControl}>
               <label className={classes.titleFormControl}>Họ</label>
-              { getDataProfile.ho ? <TextField
+              { props.data.ho ? <TextField
                 size="small"
-                required
                 variant="outlined"
                 className={classes.contentFormControl}
                 name="ho"
                 type="text"
-                disabled={!onUpdate}
-                value={!onUpdate ? getDataProfile.ho : updateData.ho}
+                value={onUpdate ? getDataProfile.ho : props.data.ho }
                 onChange={handleChange}
               />
                : ( <Skeleton animation="wave" className={classes.contentFormControl} variant="text" /> ) }
           </div> 
           <div className={classes.formControl}>
               <label className={classes.titleFormControl}>Tên</label>
-              { getDataProfile.ten ? (
+              { props.data.ten ? (
                 <TextField
-                required
                 size="small"
                 variant="outlined"
                 className={classes.contentFormControl}
                 name="ten"
                 type="text"
-                disabled={!onUpdate}
-                value={!onUpdate ? getDataProfile.ten : updateData.ten}
+                value={onUpdate ? getDataProfile.ten : props.data.ten }
                 onChange={handleChange}
               /> ) : ( <Skeleton animation="wave" className={classes.contentFormControl} variant="text" /> ) }
           </div> 
            <div className={classes.formControl}>
             <label className={classes.titleFormControl}>Email</label>
-            { getDataProfile.email ? (
+            { props.data.email ? (
               <TextField
               size="small"
               required={true}
@@ -217,51 +202,48 @@ const onSubmitInfo = (event) => {
               name="email"
               className={classes.contentFormControl}
               type="text"
-              enabled={onUpdate}
-              value={getDataProfile.email}
+              value={onUpdate ? getDataProfile.email :props.data.email}
               disabled={true}
               onChange={handleChange}
             /> ) : ( <Skeleton animation="wave" className={classes.contentFormControl} variant="text" /> ) }
         </div>
         <div className={classes.formControl}>
             <label className={classes.titleFormControl}>Số điện thoại</label>
-            { getDataProfile.sdt ? (
+            { props.data.email ? (
               <TextField
-              required
-              disabled={!onUpdate}
               size="small"
               required={true}
               variant="outlined"
               name="sdt"
               className={classes.contentFormControl}
               type="number"
-              value={!onUpdate ? getDataProfile.sdt : updateData.sdt}
+              value={onUpdate ? getDataProfile.sdt : props.data.sdt}
               onChange={handleChange}
             /> ) : ( <Skeleton animation="wave" className={classes.contentFormControl} variant="text" /> ) }
         </div>
         <div className={classes.formControl}>
             <label className={classes.titleFormControl}>Giới tính</label>
-            { getDataProfile ? (
+            { props.data ? (
               onUpdate ?
               <FormControl component="fieldset">
-                <RadioGroup aria-label="gender" name="gioi_tinh" value={getDataProfile.gioi_tinh} onChange={handleChange}>
+                <RadioGroup aria-label="gender" name="gioi_tinh" value={true} onChange={handleChange}>
                   <FormControlLabel value={true} control={<Radio  checked={gender} />} label="Nam" />
                   <FormControlLabel value={false} control={<Radio checked={!gender} />} label="Nữ" />
                 </RadioGroup>
               </FormControl>
-              : ( getDataProfile.gioi_tinh ? 
+              : ( getDataProfile.gioi_tinh == true ? 
               <div style={{marginTop: "10px"}}>Nam</div> : <div style={{marginTop: "10px"}}>Nữ</div>)
             ) : ( <Skeleton animation="wave" className={classes.contentFormControl} variant="text" /> ) }
         </div>
         <div className={classes.formControl}>
             <label className={classes.titleFormControl}>Ngày sinh</label>
-            {getDataProfile.ngay_sinh ? ( <TextField
+            { props.data.ngay_sinh ? ( <TextField
             id="date"
+            label="   "
             type="date"
             name="ngay_sinh"
             onChange={handleChange}
-            disabled={!onUpdate}
-            value={onUpdate ? updateData.ngay_sinh :getDataProfile.ngay_sinh}
+            value={onUpdate ? getDataProfile.ngay_sinh :props.data.ngay_sinh}
             className={classes.textField}
             InputLabelProps={{
                 shrink: true,
@@ -272,7 +254,7 @@ const onSubmitInfo = (event) => {
             <input
               className={classes.btnXacnhan}
               type="submit"
-              disabled={getDataProfile.ho ? false : true}
+              disabled={props.data.ho ? false : true}
               value={ onUpdate ? "Cập nhật" : "Chỉnh sửa" }
             />
             <input
@@ -287,7 +269,7 @@ const onSubmitInfo = (event) => {
       </form>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}}
-        autoHideDuration={1500}
+        autoHideDuration={6000}
         onClose={handleClose}
         open={success}>
       <Alert onClose={handleClose} severity="success">

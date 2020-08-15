@@ -18,7 +18,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { Link } from "react-router-dom";
 import AccountInfo from "./Infomation";
 import ChangePassword from "./ChangePassword";
-import Notification from "./Notification";
+import AlignItemsList from "./Notification";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,7 +77,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Inforprofile(props) {
   const classes = useStyles();
-  const ten = Cookies.get("ten");
+  let data;
+  const [getTen,setGetTen]=useState('');
   const [item, setItem] = useState(false);
   const token = Cookies.get("token");
   const [titleRight, setTitleRight] = useState(1);
@@ -95,14 +96,26 @@ export default function Inforprofile(props) {
   }
   const HandleContent =()=>{
     switch(titleRight) {
-      case 1: return <AccountInfo />
+      case 1: return <AccountInfo data={getDataProfile} />
       case 2: return <ChangePassword />
-      case 3: return <Notification />
+      case 3: return <AlignItemsList />
       default: return <AccountInfo data={getDataProfile} />
     }
   }
   const [getDataProfile, setDataProfile] = useState({ho:'',ten:'',ngay_sinh:''});
   const handleItem =()=> setItem(!item);
+  useEffect(() => {
+    axios
+      .get("https://navilearn.herokuapp.com/admin/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        handleItem()
+        data = res.data.data;
+        setGetTen(data.ten);
+        setDataProfile(data);
+      });
+  }, []);
   return (
     <div>
       <Grid container
@@ -112,8 +125,8 @@ export default function Inforprofile(props) {
           <div className={classes.leftInfo} >
             <Avatar className={classes.avatar} />
             <div className={classes.info}>Tài khoản của</div>
-            {ten
-              ? <div className={classes.name}>{ten}</div>
+            { getTen
+              ? <div className={classes.name}>{getTen}</div>
               : ( <Skeleton animation="wave" className={classes.NameSkeleton} variant="text" /> ) }
           </div> 
           <Paper elevation={3}>

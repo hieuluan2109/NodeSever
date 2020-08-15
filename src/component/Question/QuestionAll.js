@@ -14,7 +14,6 @@ import AddQuestions from "./AddQuestion";
 import Pagination from "@material-ui/lab/Pagination";
 import Loading from '../Loading'
 import AddQuestionsTL from './AddQuestionTL'
-import Grid from '@material-ui/core/Grid';
 const useStyles = makeStyles((theme) => ({
   loading: {
     position: "fixed",
@@ -68,7 +67,6 @@ export default function QuestionAllList(props) {
   };
   const handleChange = (event) => {
     setValueQuestion((event.target.name = event.target.value));
-    setSort(' ');
   };
   const [loading, setLoading] = useState(false);
   const [getListTN, setGetListTN] = useState([]);
@@ -77,7 +75,6 @@ export default function QuestionAllList(props) {
   const [pageTL, setPageTL] = useState(1);
   const [pageNumberTN, setPageNumberTN] = useState(1);
   const [pageNumberTL, setPageNumberTL] = useState(1);
-  const [sort, setSort] = useState(' ');
   const url = [
     `https://navilearn.herokuapp.com/admin/question/list/?loai=choice&page=${pageNumberTN}`,
     `https://navilearn.herokuapp.com/admin/question/list/?loai=assay&page=${pageNumberTL}`,
@@ -97,7 +94,7 @@ export default function QuestionAllList(props) {
       .catch((error) => {
         console.log("Lỗi", error);
       });
-  }, [pageNumberTN]||[getListTN]);
+  }, [pageNumberTN]);
   useEffect(() => {
     axios
       .get(url[1], { headers: { Authorization: `Bearer ${token}` } })
@@ -149,44 +146,17 @@ export default function QuestionAllList(props) {
         });
     }, 300);
   };
-  const handleSort=(event)=>{
-    setSort(event.target.value)
-    if ( valueQuestion ){
-      setLoading(false)
-      axios
-        .get(`https://navilearn.herokuapp.com/admin/question/list/?loai=choice&page=${pageNumberTN}&sort=${event.target.value}`, 
-          { headers: { Authorization: `Bearer ${token}` } })
-        .then((res) => {
-          setLoading(true)
-          // const {data}=res.data
-          setGetListTN(res.data.data);
-          setPageTN(res.data.pages);
-          console.log("TN", res.data);
-        })
-        .catch((error) => {
-          console.log("Lỗi", error);
-        });
-      }
-  }
+
   return (
     <div className='row'>
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> Danh sách câu hỏi </div>
+
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
           <FormControl className={classes.formControl}>
-          <Grid container spacing={2}>
-            <Grid item style={{position: 'relative'}} >
-              <InputLabel style={{top:'20%', left: '10%'}}>Sort</InputLabel>
-              <Select value={sort} onChange={handleSort}>
-                <MenuItem value=' '>None</MenuItem>
-                <MenuItem value='noi_dung'>Nội dung</MenuItem>
-                <MenuItem value='danh_muc'>Danh mục</MenuItem>
-              </Select>
-            </Grid>
-            <Grid item style={{position: 'relative'}}>
-            <InputLabel id="demo-simple-select-label" style={{top:'20%', left: '10%'}}>Loại</InputLabel>
+            <InputLabel id="demo-simple-select-label">Loại</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -196,8 +166,6 @@ export default function QuestionAllList(props) {
               <MenuItem value={true}>Trắc nghiệm</MenuItem>
               <MenuItem value={false}>Tự luận</MenuItem>
             </Select>
-            </Grid>
-          </Grid>
           </FormControl>
           {valueQuestion?<AddQuestions token={token} valueQuestion={true}/>:<AddQuestionsTL token={token} valueQuestion={false}/>}
      

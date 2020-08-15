@@ -250,9 +250,7 @@ class DialogInfo extends Component {
               </div>
 
               <DialogActions>
-
-              
-            {/* <Button onClick={this.handleClose} color="primary"    style={{ display: this.props.age == true ? "block" : "none"}}>
+            {/* <Button onClick={this.handleClose} color="primary" style={{display:this.props.display}}>
               Hủy bỏ
             </Button> */}
             <Button name='btnXacNhan' type={this.props.type} onClick={this.props.status?this.handleClose:''} color="primary" disabled={this.props.status?'':status}>

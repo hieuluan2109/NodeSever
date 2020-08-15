@@ -44,10 +44,7 @@ class LoginForm extends Component {
       data: { email, password },
     })
       .then((res) => {
-        console.log( '////////////' , res.data.data)
-        const token = Cookies.set("token", res.data.token);
-        Cookies.set("ten", res.data.data[1]);
-        Cookies.set("anh_dai_dien", res.data.data[0])
+        const token=Cookies.set("token", res.data.token);
         this.setState({
           Error: "",
           cookie:token

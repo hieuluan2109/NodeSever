@@ -15,7 +15,7 @@ import SearchButton from "../Search";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
-import TestDetail from './TestDetail'
+
 const useStyles = makeStyles((theme) => ({
   containerForm: {
     marginTop: "50px",
@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const topicTitle = ["Tên bài thi", "Thời gian thi", "Ngày thi", "Người tạo",''];
+const topicTitle = ["Tên bài thi", "Thời gian thi", "Ngày thi", "Người tạo",];
 
 export default function Threadlist(props) {
   const classes = useStyles();
@@ -133,7 +133,7 @@ export default function Threadlist(props) {
       const params = {
         param: value,
       };
-      const url = `https://navilearn.herokuapp.com/admin/test/list?search=${params.param}`;
+      const url = `https://navilearn.herokuapp.com/admin/category/list?search=${params.param}`;
       axios
         .get(url, {
           headers: { Authorization: `Bearer ${token}` },
@@ -151,47 +151,71 @@ export default function Threadlist(props) {
     }, 300);
   };
 
-  const [dataTestListInfor, setDataTestListInfor] = useState({
-    // ds_bai_tap: [],
-    // ds_bai_thi: [],
-    // ds_sinh_vien: [],
-    // nguoi_tao_id: { _id: "", ho: "", ten: "" },
-    // tieu_de: "",
-    // updatedAt: "",
-  });
+//   const [dataTopicInfor, setDataTopicInfor] = useState({
+//     _id: "",
+//     tieu_de: "",
+//     mo_ta: "",
+//     nguoi_tao: "",
+//     ngay_tao: "",
+//   });
+//   const [getSuccess, setSuccess] = useState("");
+//   const getTopicInfor = (id) => {
+//     axios
+//       .get(`https://navilearn.herokuapp.com/admin/category/detail/${id}`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       })
+//       .then((res) => {
+//         const { data } = res.data;
+//         console.log(data);
+//         setDataTopicInfor({
+//           tieu_de: data.tieu_de,
+//           mo_ta: data.mo_ta,
+//           nguoi_tao: data.nguoi_tao_id.ten,
+//           ngay_tao: data.createdAt,
+//           _id: data._id,
+//         });
+//         console.log("GV", dataTopicInfor);
+//       })
+//       .catch((error) => {
+//         console.log("Lỗi", error);
+//       });
+//   };
+//   const handleChangeTopic = (event, status) => {
+//     setDataTopicInfor({
+//       ...dataTopicInfor,
+//       [event.target.name]: event.target.value,
+//     });
+//     console.log(dataTopicInfor._id);
+//   };
 
-  const TestListInfor = (id) => {
-    axios
-      .get(`https://navilearn.herokuapp.com/admin/test/detail/?id=${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const { data } = res.data;
-        console.log(data);
-        // setDataClassRoomInfor(data)
-        // setDataClassRoomInfor({
-        //   ds_bai_tap: data.ds_bai_tap,
-        //   ds_bai_thi: data.ds_bai_thi,
-        //   ds_sinh_vien: data.ds_sinh_vien,
-        //   nguoi_tao_id: {
-        //     _id: data.nguoi_tao_id._id,
-        //     ho: data.nguoi_tao_id.ho,
-        //     ten: data.nguoi_tao_id.ten,
-        //   },
-        //   tieu_de: data.tieu_de,
-        //   updatedAt: data.updatedAt,
-        // });
-        // console.log("information classroom detail", dataClassRoomInfor);
-      })
-      .catch((error) => {
-        console.log("Lỗi", error);
-      });
-    }
+//   const onSubmitChangeTopic = (event) => {
+//     event.preventDefault();
+//     const { _id, tieu_de, mo_ta } = dataTopicInfor;
+//     axios
+//       .post(
+//         `https://navilearn.herokuapp.com/admin/category/update/${_id}`,
+//         { tieu_de, mo_ta },
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         }
+//       )
+//       .then((res) => {
+//         setSuccess(res.data.msg);
+//         console.log(res.data);
+//         // setSuccess(res.data.msg);
+//       })
+//       .catch((error) => {
+//         console.log("Lỗi", error.response);
+//       });
+//   };
+// const clearSuccess=()=>{
+//   setSuccess('')
+// }
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> Danh sách bài kiểm tra </div>
+        <div className={classes.titleformInfo}> {title} </div>
 
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
@@ -225,17 +249,20 @@ export default function Threadlist(props) {
                       <TableCell align="center">
                         {value.nguoi_tao_id.ten}
                       </TableCell>
-                      <TableCell align="center">
-                        <IconButton size="small">
-                        <TestDetail
-                            icon={<VisibilityIcon />}
+                      {/* <TableCell align="center">
+                        <IconButton size="small" className={classes.eyes}>
+                          <TopicInfor
                             id={value._id}
-                            testList={TestListInfor}
-                            // getData={dataTestListInfor}
+                            getInfor={getTopicInfor}
+                            data={dataTopicInfor}
+                            icon={<VisibilityIcon />}
+                            disable={true}
+                            status={true} 
+                            clearForm={clearSuccess}
                           />
                         </IconButton>
                       
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>

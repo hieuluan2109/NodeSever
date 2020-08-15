@@ -159,8 +159,7 @@ export default function ClassList(props) {
     tieu_de: "",
     updatedAt: "",
   });
-const [dsBaiTap,setDataBaiTap]=useState([])
-const [dsBaiThi,setDataBaiThi]=useState([])
+
   // const [dataClassRoomInfor,setDataClassRoomInfor] = useState([])
   const [getSuccess, setSuccess] = useState("");
 
@@ -186,34 +185,6 @@ const [dsBaiThi,setDataBaiThi]=useState([])
           updatedAt: data.updatedAt,
         });
         console.log("information classroom detail", dataClassRoomInfor);
-      })
-      .catch((error) => {
-        console.log("Lỗi", error);
-      })
-
-      axios
-      .get(`https://navilearn.herokuapp.com/admin/exercise/belong-class/?id=${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const { data } = res.data;
-       
-        setDataBaiTap({data})
-        console.log('BT',dsBaiTap)
-      })
-      .catch((error) => {
-        console.log("Lỗi", error);
-      });
-
-      axios
-      .get(`https://navilearn.herokuapp.com/admin/test/belong-class?id=${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const { data } = res.data;
-       
-        setDataBaiThi({data})
-        console.log('BThi',dsBaiThi)
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -261,8 +232,6 @@ const [dsBaiThi,setDataBaiThi]=useState([])
                             id={value._id}
                             dataClassDetail={getClassRoomInfor}
                             getData={dataClassRoomInfor}
-                            dsBaiTap={dsBaiTap}
-                            dsBaiThi={dsBaiThi}
                           />
                         </IconButton>
                       </TableCell>

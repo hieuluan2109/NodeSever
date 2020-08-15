@@ -33,9 +33,9 @@ class App extends Component {
     super(props);
     this.state = {
       cookie: this.props.cookie,
-      name: null
     };
   }
+
   render() {
     let token = Cookies.get("token");
     if (this.props.token == false) {

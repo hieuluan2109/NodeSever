@@ -94,7 +94,7 @@ export default function Inforprofile(props) {
       $("#password1, #password").keyup(function(){
           if ($("#password1").val().length < 6 || $("#password1").val().length > 24)
             setNewPassword(true)
-          else if ($("#password").val() == $("#password1").val())
+          else if ($("#password").val()== $("#password1").val())
             setNewPassword(true)
           else { 
             setNewPassword(false)
@@ -106,7 +106,7 @@ export default function Inforprofile(props) {
   const [getPassword, setGetPassword] = useState({password:'',password1:'',password2:''});
   const token = Cookies.get("token");
   const [confirmPassword, setConfirmPassword] = useState(false);
-  const [oldPassword, setOldPassword] = useState(true);
+  const [oldPassword, setOldPassword] = useState(false);
   const [newPassword, setNewPassword] = useState(false);
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false);
@@ -123,6 +123,7 @@ export default function Inforprofile(props) {
   const onSubmitInfo = (event) => {
     event.preventDefault();
     const {password,password1,password2}=getPassword
+    // setDataProfile(getDataProfile)
     axios
       .post(
         "https://navilearn.herokuapp.com/admin/changepassword",
@@ -140,10 +141,9 @@ export default function Inforprofile(props) {
       });
   };
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway')
+    if (reason === 'clickaway') {
       return;
-    if ( success )
-      window.location.reload()
+    }
     setError(false)
     setSuccess(false);
   };
@@ -154,7 +154,6 @@ export default function Inforprofile(props) {
           <div className={classes.formControl}>
             <label className={classes.titleFormControl}>Mật khẩu cũ</label>
             <TextField
-              autoFocus={true}
               size="small"
               error = {oldPassword}
               variant="outlined"
@@ -200,7 +199,6 @@ export default function Inforprofile(props) {
           <div className={classes.formControl}>
             <input
               className={classes.btnXacnhan}
-              disabled={ !(!confirmPassword && !oldPassword && !newPassword)  }
               type="submit"
               value="Đổi mật khẩu"
             />

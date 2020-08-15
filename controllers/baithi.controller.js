@@ -68,7 +68,7 @@ module.exports = {
                     result.ngay_thi = customDatetime(data.ngay_thi, 1)
                     result.createdAt = customDatetime(data.createdAt, 1)
                     result.updatedAt = customDatetime(data.updatedAt, 1)
-                    res.status(200).json({'success': true, 'data': result}, 1)
+                    res.status(200).json({'success': true, 'data': result})
                 }
             });
     },

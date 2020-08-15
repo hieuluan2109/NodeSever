@@ -210,16 +210,9 @@ class DialogThem extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.isInputValid) {
-      const {
-        ho,
-        ten,
-        email,
-        ma_sv,
-        password,
-        ngay_sinh,
-        sdt,
-        gioi_tinh,
-      } = this.state;
+      const { ho, ten, email, ma_sv, password, sdt, gioi_tinh } = this.state;
+      let { ngay_sinh } = this.state;
+      ngay_sinh = moment(ngay_sinh).format("YYYY-MM-DD");
       console.log(this.props.token);
       var url = "";
       this.props.value == true
@@ -245,28 +238,29 @@ class DialogThem extends Component {
         })
         .then((res) => {
           console.log("AAA", res.data);
-          // if (res.data.success == true) {
-          this.setState({
-            ho: "",
-            ten: "",
-            email: "",
-            ngay_sinh: new Date(),
-            password: "",
-            confirmpassword: "",
-            sdt: "",
-            // errors: "",
-            ma_sv: "",
-            isInputValid: false,
-            errors: "Thêm thành công",
-            gioi_tinh: true,
-          });
-          // }
+          if (res.data.success == true) {
+            this.setState({
+              ho: "",
+              ten: "",
+              email: "",
+              ngay_sinh: new Date(),
+              password: "",
+              confirmpassword: "",
+              sdt: "",
+              // errors: "",
+              ma_sv: "",
+              isInputValid: false,
+              errors: "Thêm thành công",
+              gioi_tinh: true,
+              status: true,
+            });
+          }
         })
         .catch((error) => {
           console.log("Lỗi", error.response.data);
-          // this.setState({
-          //   errors: error.response.data,
-          // });
+          this.setState({
+            errors: error.response.data.errors,
+          });
         });
       return true;
     } else return false;
@@ -297,9 +291,9 @@ class DialogThem extends Component {
           name="icon-addCircle"
           className={classes.btnThem}
           variant="outlined"
-          onClick={this.handleClickOpen} name='btnThem'
+          onClick={this.handleClickOpen}
         >
-          <AddCircleIcon className={classes.iconbtnThem} name="circleIcon" />
+          <AddCircleIcon className={classes.iconbtnThem} />
           Thêm
         </Button>
 
@@ -387,21 +381,9 @@ class DialogThem extends Component {
                       <label className={classes.titleFormControl}>
                         Ngày sinh
                       </label>
-                      {/* <TextField
-                  name="ngay_sinh"
-                  label="Birthday"
-                  type="date"
-                  value={this.state.ngay_sinh}
-                  className={classes.contentNgaysinh}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={this.handleChange}
-                  onBlur={this.checkvalid}
-                /> */}
                       <TextField
                         name="ngay_sinh"
-                        label="Birthday"
+                        label="Ngày sinh"
                         type="date"
                         value={this.state.ngay_sinh}
                         className={classes.contentNgaysinh}

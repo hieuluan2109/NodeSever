@@ -43,9 +43,9 @@ let validateSignUpTecher = () => {
             .isEmpty(),
         check('password', 'password phải từ 6-24 kí tự').isLength({min: 6, max: 24}),
         check('password', 'password không hợp lệ').matches(regex().mat_khau),
-        check('sdt', 'Số điện thoại không được để trống').not().isEmpty(),
-        check('sdt', 'Số điện thoại không hợp lệ').matches(regex().sdt),
-        check('gioi_tinh', 'Giới tính được để trống').not().isEmpty()
+        // check('sdt', 'Số điện thoại không được để trống').not().isEmpty(),
+        // check('sdt', 'Số điện thoại không hợp lệ').matches(regex().sdt),
+        // check('gioi_tinh', 'Giới tính được để trống').not().isEmpty()
     ];
 };
 let validateSignUpStudent = () => {
@@ -82,9 +82,9 @@ let validateSignUpStudent = () => {
             .isEmpty(),
         check('password', ' password phải từ 6-24 kí tự').isLength({min: 6, max: 24}),
         check('password', 'password không hợp lệ').matches(regex().mat_khau),
-        check('sdt', 'Số điện thoại không được để trống').not().isEmpty(),
-        check('sdt', 'Số điện thoại không hợp lệ').matches(regex().sdt),
-        check('gioi_tinh', 'Giới tính được để trống').not().isEmpty()
+        // check('sdt', 'Số điện thoại không được để trống').not().isEmpty(),
+        // check('sdt', 'Số điện thoại không hợp lệ').matches(regex().sdt),
+        // check('gioi_tinh', 'Giới tính được để trống').not().isEmpty()
     ];
 };
 let validateChangePassword = (req, res, next) => {

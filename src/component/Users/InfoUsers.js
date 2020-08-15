@@ -21,6 +21,7 @@ import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
 import Sear from "./Search";
 import Loading from '../Loading';
+import Grid from '@material-ui/core/Grid';
 const useStyles = makeStyles((theme) => ({
   loading: {
     position: "fixed",
@@ -93,6 +94,7 @@ export default function InfoUsers(props) {
 
   const handleChange = (event) => {
     setAge(event.target.value);
+    setSort(' ')
   };
   const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "",sdt:'' });
   const [name, setName] = useState("");
@@ -194,12 +196,54 @@ export default function InfoUsers(props) {
   const [pageSV, setPageSV] = useState(1);
   const [pageNumbberGV, setPageNumberGV] = useState(1);
   const [pageNumbberSV, setPageNumberSV] = useState(1);
-
+  const [sort, setSort] = useState(' ');
+  const handleSort=(event)=>{
+    setSort(event.target.value)
+    if (age == 1){
+      setLoading(false)
+      axios
+        .get(
+          `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}&sort=${event.target.value}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          setLoading(true)
+          const { data } = res.data;
+          setGetList(data);
+          setPageNumberGV(res.data.pages);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error);
+        });
+      }
+      else {
+        setLoading(false)
+        axios
+          .get(
+            `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}&sort=${event.target.value}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+          .then((res) => {
+            setLoading(true)
+            const { data } = res.data;
+            setListSV(data);
+            setPageNumberSV(res.data.pages);
+          })
+          .catch((error) => {
+            console.log("Lỗi", error);
+          });
+    }
+    
+  }
   useEffect(() => {
     setLoading(false)
     axios
       .get(
-        `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}`,
+        `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}&sort=${sort}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -283,11 +327,25 @@ export default function InfoUsers(props) {
         <form>
           <SearchButton onChange={handleSearch} />
           <FormControl className={classes.formControl}>
-            <InputLabel>Loại</InputLabel>
-            <Select value={age} onChange={handleChange}>
-              <MenuItem value={1}>Giáo viên</MenuItem>
-              <MenuItem value={0}>Sinh viên</MenuItem>
-            </Select>
+          <Grid container spacing={2}>
+            <Grid item style={{position: 'relative'}} >
+              <InputLabel style={{top:'20%', left: '10%'}}>Sort</InputLabel>
+              <Select value={sort} onChange={handleSort}>
+                <MenuItem value=' '>None</MenuItem>
+                <MenuItem value='ho'>Họ</MenuItem>
+                <MenuItem value='ten'>Tên</MenuItem>
+                <MenuItem value='email'>Email</MenuItem>
+                <MenuItem value='ngay_sinh'>Ngày Sinh</MenuItem>
+              </Select>
+            </Grid>
+            <Grid item style={{position: 'relative'}}>
+              <InputLabel style={{top:'20%', left: '10%'}}>Loại</InputLabel>
+              <Select value={age} onChange={handleChange}>
+                <MenuItem value={1}>Giáo viên</MenuItem>
+                <MenuItem value={0}>Sinh viên</MenuItem>
+              </Select>
+            </Grid>
+          </Grid>
           </FormControl>
 
           <DialogThem value={create} token={token} display={display}>

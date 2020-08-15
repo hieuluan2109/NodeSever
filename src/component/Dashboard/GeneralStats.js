@@ -20,7 +20,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import CategoryIcon from '@material-ui/icons/Category';
 import ExtensionIcon from '@material-ui/icons/Extension';
-
+import ViewStreamIcon from '@material-ui/icons/ViewStream';
 const useStyles = makeStyles((theme) => ({
     root: {
     width: '100%',
@@ -106,6 +106,13 @@ export default function GeneralStats(props) {
             <ExtensionIcon />
           </ListItemIcon>
           <ListItemText primary={<CountUp className="general-stats" prefix="Bài thi: " end={countUp.bai_thi ? countUp.bai_thi : 0} duration={5} />} />
+        </ListItem>
+        <Divider />
+        <ListItem button>
+          <ListItemIcon>
+            <ViewStreamIcon />
+          </ListItemIcon>
+          <ListItemText primary={<CountUp className="general-stats" prefix="Chủ đề: " end={countUp.danh_muc ? countUp.danh_muc : 0} duration={5} />} />
         </ListItem>
         <Divider />
       </List>

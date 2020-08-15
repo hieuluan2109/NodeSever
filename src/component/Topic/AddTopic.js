@@ -81,7 +81,7 @@ class AddTopic extends Component {
         errors:''
     };
   }
-
+  
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -119,7 +119,6 @@ class AddTopic extends Component {
     tieu_de:'',
     errors: "",
     })
-  
 }
   
   handleSubmit = (event) => {
@@ -133,7 +132,7 @@ class AddTopic extends Component {
         console.log(res.data)
         this.setState({errors:'Thêm danh mục thành công',
                             tieu_de:'',
-                            mo_ta:''
+                            mo_ta:'',status:true
     })
     }).catch((error)=>{
         console.log(error.response.data)

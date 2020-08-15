@@ -6,6 +6,7 @@ import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import Button from "@material-ui/core/Button";
 import { Redirect } from "react-router";
 import App from './../App'
 import Profile from './Profile/Profile';
@@ -18,7 +19,7 @@ import {
   // useRouteMatch,
   // useParams
 } from "react-router-dom";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 export default function MenuAppbar(props) {
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,9 +28,16 @@ export default function MenuAppbar(props) {
     menus:{
       position:'absolute',
       top:'0px',
-      left:'100px'
+      left:'100px',
+    },
+    ten: {
+      fontSize: "16px",
+      fontFamily: " Arial, sans-serif",
+      marginLeft: "10px",
     }
   }));
+  const data = Cookies.get("data");
+  const [anh_dai_dien, ten] = [Cookies.get("anh_dai_dien"), Cookies.get("ten")];
   const [anchorEl, setAnchorEl] = React.useState(null);
   const classes = useStyles();
   const open = Boolean(anchorEl);
@@ -53,16 +61,18 @@ export default function MenuAppbar(props) {
 //  }
   return (
     <div className={classes.menus}>
-        <IconButton
+        <Button
           size="small"
+          style={{width: "30vh", height: "6vh"}}
           onClick={handleMenu}
           color="inherit"
         >
-          <Avatar alt="Luân mập" src="/static/images/avatar/1.jpg" />
-          Luân
+          <Avatar alt="Luân mập" src={anh_dai_dien} />
+          <p className={classes.ten}>{ten}</p>
           <KeyboardArrowDownIcon />
-        </IconButton>
+        </Button>
         <Menu
+          style={{position: 'absolute'}}
           id="simple-menu"
           anchorEl={anchorEl}
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -74,9 +84,14 @@ export default function MenuAppbar(props) {
           <Link to="/profile"  style={{textDecoration:'none',color:'black'}} >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
          </Link>
-          
+         <Link to="/profile/notification"  style={{textDecoration:'none',color:'black'}} >
+            <MenuItem onClick={handleMenuClose}>Xử lí thông báo</MenuItem>
+         </Link>
+         <Link to="/profile/changepassword"  style={{textDecoration:'none',color:'black'}} >
+            <MenuItem onClick={handleMenuClose}>Đổi mật khẩu</MenuItem>
+         </Link>
           <Link to='/logout'  style={{textDecoration:'none',color:'black'}}>
-          <MenuItem> Sign out </MenuItem>
+          <MenuItem> Đăng xuất </MenuItem>
           </Link>
           {/* <Link to="/changepassword"  style={{textDecoration:'none',color:'black'}}>
             <MenuItem onClick={handleMenuClose}>Change password</MenuItem>

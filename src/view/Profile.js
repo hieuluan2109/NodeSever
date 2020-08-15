@@ -1,11 +1,11 @@
 import React from "react";
 import TableData from "../component/Profile/ProfileAdmin";
 import HomePage from "../view/Home";
-function Profile() {
+function Profile(props) {
   return (
     <div>
       <HomePage />
-        <TableData/> 
+      <TableData view={props.view} /> 
     </div>
   );
 }

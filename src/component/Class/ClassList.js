@@ -16,6 +16,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
 import ClassDetail from "./ClassroomDetail";
+import Loading from '../Loading';
+
 // import TopicInfor from "./TopicInfor";
 
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +86,11 @@ const useStyles = makeStyles((theme) => ({
   pagination: {
     marginRight: "70px",
   },
+  loading: {
+    position: "fixed",
+    top: "50%",
+    left: "50%"
+  },
 }));
 
 const ClassTitle = ["Tên Lớp", "Người tạo", "Chi tiết"];
@@ -93,6 +100,8 @@ export default function ClassList(props) {
   const { title } = props;
   const [selectedIndex, setSelectedIndex] = useState(1);
   const token = Cookies.get("token");
+  const [loading, setLoading] = useState(false);
+
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
@@ -101,6 +110,7 @@ export default function ClassList(props) {
   const [pageIndex, setPageIndex] = useState(1);
 
   useEffect(() => {
+    setLoading(false)
     axios
       .get(
         `https://navilearn.herokuapp.com/admin/class/list?page=${pageIndex}`,
@@ -110,6 +120,7 @@ export default function ClassList(props) {
       )
       .then((res) => {
         console.log(res.data);
+        setLoading(true)
         setPage(res.data.pages);
         const { data } = res.data;
         setClassList(data);
@@ -159,7 +170,8 @@ export default function ClassList(props) {
     tieu_de: "",
     updatedAt: "",
   });
-
+const [dsBaiTap,setDataBaiTap]=useState([])
+const [dsBaiThi,setDataBaiThi]=useState([])
   // const [dataClassRoomInfor,setDataClassRoomInfor] = useState([])
   const [getSuccess, setSuccess] = useState("");
 
@@ -183,8 +195,37 @@ export default function ClassList(props) {
           },
           tieu_de: data.tieu_de,
           updatedAt: data.updatedAt,
+          createdAt: data.createdAt
         });
         console.log("information classroom detail", dataClassRoomInfor);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      })
+
+      axios
+      .get(`https://navilearn.herokuapp.com/admin/exercise/belong-class/?id=${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        const { data } = res.data;
+       
+        setDataBaiTap({data})
+        console.log('BT',dsBaiTap)
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+
+      axios
+      .get(`https://navilearn.herokuapp.com/admin/test/belong-class?id=${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        const { data } = res.data;
+       
+        setDataBaiThi({data})
+        console.log('BThi',dsBaiThi)
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -195,7 +236,7 @@ export default function ClassList(props) {
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> Danh sách lớp học </div>
-
+        <div hidden={loading} className={classes.loading}><Loading /></div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
           <div>
@@ -232,6 +273,8 @@ export default function ClassList(props) {
                             id={value._id}
                             dataClassDetail={getClassRoomInfor}
                             getData={dataClassRoomInfor}
+                            dsBaiTap={dsBaiTap}
+                            dsBaiThi={dsBaiThi}
                           />
                         </IconButton>
                       </TableCell>

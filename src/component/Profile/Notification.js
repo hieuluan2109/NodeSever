@@ -24,6 +24,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TextField from "@material-ui/core/TextField";
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -31,11 +35,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     marginLeft: "10%",
     background: "#FFFF",
-    overflow: 'auto',
-    position: 'relative',
-    height: '70vh',
-    behavior: 'smooth',
-    overflow: 'auto'
+
   },
   inline: {
     display: 'inline',
@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "6%",
     height: "70vh",
     background: "white",
+    overflow: 'auto',
+    position: 'relative',
+    behavior: 'smooth',
   },
   content: {
     marginLeft: "20px",
@@ -60,23 +63,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlignItemsList() {
+export default function Notification() {
   const classes = useStyles();
-  const [data, setData] = useState('');
+  const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
   const [editData, setEditData] = useState('');
+  const [status, setStatus] = useState(false);
+  const [action, setAction] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+
   const handleClose = () => {
     setOpen(false);
+    setConfirm(false);
+    setSuccess(false);
+    setError(false);
   };
   useEffect(() => {
     axios
-      .get("https://navilearn.herokuapp.com/admin/notification")
+      .get("https://navilearn.herokuapp.com/admin/notification?alert=true")
       .then((res) => {
         setData(res.data.data)
+        let tamp = [];
+        res.data.data.map((row, index)=>{
+          tamp.push(row.trang_thai)
+        })
+        setStatus(tamp)
+        console.log(res.data.data)
       })
       .catch((error) => console.log(error))
   }, []);
-  const OpenDialog=(index)=>{
+  const handleAccept =(index)=>{
+    axios
+    .post("https://navilearn.herokuapp.com/admin/user/update-request/accept", data[index])
+    .then((res) => {
+      handleAcceptSucces(index)
+      setSuccess(true)
+      setOpen(false);
+      setConfirm(false);
+    })
+    .catch((error) => setError(false))
+  }
+  const handleDenined =(index)=>{
+    axios
+    .post("https://navilearn.herokuapp.com/admin/user/update-request/denined", data[index])
+    .then((res) => {
+      handleAcceptSucces(index)
+      setSuccess(true)
+      setOpen(false);
+      setConfirm(false);
+    })
+    .catch((error) => setError(false))
+  }
+  const handleGetUpdateRequest =(index)=>{
     axios
       .get(`https://navilearn.herokuapp.com/admin/user/update-request?id=${data[index]._id}`)
       .then((res) => {
@@ -84,17 +124,40 @@ export default function AlignItemsList() {
         setOpen(true)
       })
       .catch((error) => console.log(error))
-  };
+  }
+  const handleAcceptSucces =(index)=>{
+    let tamp = status;
+    tamp[index] = !status[index];
+    setStatus(tamp);
+  }
+  const handleAction = ()=>{
+    switch(action.type){
+      case 1: {
+        handleAccept(action.index);
+        break;
+      }
+      case 2: {
+        handleDenined(action.index);
+        break;
+      }
+      default: handleAccept(action.index);
+    }
+  }
+  const OpenDialog=(type, index)=>{
+    setConfirm(true);
+    let tamp = {type, index};
+    setAction(tamp)
+    }
   return (
    <div>
     <form>
     <Paper elevation={3} className={classes.formInfo} >
-      <List className={classes.root}>
+      <List className={classes.root} key="luân">
         { !data
          ? <Skeleton variant="rect" width="100%" height="100%" />
          : data.map((row, index)=>(
         <Paper elevation={3} className={classes.listItem} >
-        <ListItem alignItems="center" name="button" key={index} disabled={row.trang_thai}>
+        <ListItem alignItems="center" name="button" key={index} disabled={status[index]}>
           <ListItemAvatar>
             <Avatar alt="Remy Sharp" src={row.nguoi_dung_id.anh_dai_dien} />
           </ListItemAvatar>
@@ -108,25 +171,59 @@ export default function AlignItemsList() {
                   className={classes.inline}
                   color="textPrimary"
                 >
-                 <div style={{marginLeft: "2%"}}>{row.loai == 'SinhVien' ? 'Sinh viên' : 'Giáo viên' }</div>
+                 <div style={{marginLeft: "2%"}}><p>{row.loai == 'SinhVien' ? 'Sinh viên' : 'Giáo viên' }</p></div>
                 </Typography>
               </React.Fragment> }/>
               <ListItemSecondaryAction name="button">
                 <Grid name={index} style={{marginTop: "25px"}} container direction="column" justify="center">
-                  <Button disabled={row.trang_thai} name="button" onClick={()=>OpenDialog(index)} color="primary"> View </Button>
-                  <Button disabled={row.trang_thai} color="primary"> Xác nhận </Button>
-                  <Button disabled={row.trang_thai} color="primary"> Hủy </Button>
+                  <Button disabled={status[index]} onClick={ () => handleGetUpdateRequest(index) } color="primary"> View </Button>
+                  <Button disabled={status[index]} onClick={() => OpenDialog(1,index) } color="primary"> Xác nhận </Button>
+                  <Button disabled={status[index]} onClick={() => OpenDialog(2,index) } color="primary"> Hủy </Button>
                 </Grid>
               </ListItemSecondaryAction>
           </ListItem>
-          <div className={classes.content} enabled={false}>
-              Lý do: {row.ly_do}
-          </div>
+          <TextField className={classes.content} disabled={status[index]} label="Lý do: " value={row.ly_do}>
+          </TextField>
         </Paper>
         ))}
       </List>
       </Paper>
       </form>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        open={success}>
+      <Alert onClose={handleClose} severity="success">
+        Thành công !!
+      </Alert>
+    </Snackbar>
+    <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        open={error}>
+      <Alert onClose={handleClose} severity="error">
+        Lỗi !! Vui lòng kiểm tra lại
+      </Alert>
+    </Snackbar>
+      <Dialog
+        open={confirm}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogContent>
+              <p>Bạn có chắc chắn ?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Hủy
+          </Button>
+          <Button onClick={handleAction} color="primary">
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -136,8 +233,6 @@ export default function AlignItemsList() {
         <DialogContent>
           <DialogContentText>
           </DialogContentText>
-          {/* <div style={{margin: "10px"}}>Tên:   <b>{editData.ho+' '+editData.ten}</b><br/></div>
-          <div style={{margin: "10px"}}>Email: <b>{editData.email}</b><br/></div> */}
           <Table className={classes.table} aria-label="simple table">
         <TableBody>
           <TableRow key="1">

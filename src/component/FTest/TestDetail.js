@@ -7,9 +7,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
-import TabPanel from './Tab'
+import TabTest from "./Tabs";
 import TextField from "@material-ui/core/TextField";
-
 const styles = (theme) => ({
   dialogPaper: {
     minHeight: "90vh",
@@ -21,21 +20,20 @@ const styles = (theme) => ({
   info: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    width:'190px'
+    width: "220px",
+    marginBottom:'20px'
   },
- 
 });
 
 class ClassRoomDetail extends Component {
   constructor(props) {
     super(props);
-  
+
     this.state = {
       open: false,
       errors: "",
       status: true,
       value: 0,
-      
     };
   }
 
@@ -45,7 +43,7 @@ class ClassRoomDetail extends Component {
 
   handleClickOpen = () => {
     this.setState({ open: true });
-    this.props.dataClassDetail(this.props.id);
+    this.props.testList(this.props.id);
   };
   handleClose = () => {
     this.setState({ open: false });
@@ -54,13 +52,9 @@ class ClassRoomDetail extends Component {
     this.setState({ open: true });
   };
 
-
-
   render() {
-    const { classes,  getData,dsBaiTap,dsBaiThi } = this.props;
+    const { classes, disable, data } = this.props;
     const { open } = this.state;
-    console.log ("1",getData.ds_sinh_vien)
-    console.log("2",dsBaiTap.data)
     return (
       <div>
         <IconButton
@@ -79,47 +73,65 @@ class ClassRoomDetail extends Component {
           aria-labelledby="max-width-dialog-title"
         >
           <DialogTitle id="max-width-dialog-title">
-            {getData.tieu_de}
+            {data.tieu_de}
             <Divider />
           </DialogTitle>
 
           <DialogContent className={classes.formsize}>
             <Grid container>
-              <Grid item xs={3}>
-              
-                <Paper aria-label="simple tabs example"
+              <Grid item xs={4}>
+                <Paper
                   square
-                 
                   className={classes.info}
                   elevation={3}
                   style={{ marginRight: "50px", padding: "5px" }}
                 >
-                <TextField label="Người tạo" 
+                  <TextField label="Người tạo" 
                   id="outlined-size-normal"
                   defaultValue="Normal"
                   variant="outlined"
                   margin="normal"
-                 value= {getData.nguoi_tao_id.ho+" "+ getData.nguoi_tao_id.ten} />
+                   value= {data.nguoi_tao.ho+" "+ data.nguoi_tao.ten} />
                 <br />
                 <TextField label="Ngày tạo" 
                   id="outlined-size-normal"
                   defaultValue="Normal"
                   variant="outlined"
                   margin="normal"
-                  value={getData.createdAt} />
+                  value={data.ngay_tao} />
                   <br />
                 <TextField label="Cập nhật" 
                   id="outlined-size-normal"
                   defaultValue="Normal"
                   variant="outlined"
                   margin="normal"
-                  value={getData.updatedAt} />
+                  value={data.updatedAt} />
+                </Paper>
+                <Paper 
+                  square
+                  className={classes.info}
+                  elevation={3}
+                  style={{ marginRight: "50px", padding: "5px" }}
+                >
+                  <TextField label="Ngày thi" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                  value={data.ngay_thi} />
+                  <br />
+                  <TextField label="Thời gian thi" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                  value={data.thoi_gian_thi+' phút'} />
+                  <br />
+                  
                 </Paper>
               </Grid>
-              <Grid item xs={9}>
-                <TabPanel data1={getData.ds_sinh_vien}
-                          data2={dsBaiTap.data}
-                          data3={dsBaiThi.data}   />
+              <Grid item xs={8}>
+                <TabTest data={data} />
               </Grid>
             </Grid>
           </DialogContent>

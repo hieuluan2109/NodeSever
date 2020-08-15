@@ -9,7 +9,7 @@ import './style/index.css';
 import Paper from '@material-ui/core/Paper';
 import Breadcrumb from './Breadcrumb';
 import Loading from './Loading';
-
+import Cookie from 'js-cookie';
 export default class DashBoard extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +24,7 @@ export default class DashBoard extends Component {
             .then((res) => {
                 const {stats} = res.data
                     this.setState({'data': stats, 'isLoading': false})
-            })
+            });
     };
     render() {
         return (

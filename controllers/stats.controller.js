@@ -61,16 +61,16 @@ module.exports = {
             {
                 $group : {
                     _id : '$sinh_vien_id',
-                    count: { $avg: "$diem"} 
-                },
-                $limit : 3
-            }
-        ], function(err, data) {
-            if ( err || !data )
-                res.status(400).json({'success': false, 'errors': 'Lỗi không tìm thấy'})
-            else 
-                res.status(200).json({'success': true, data})
+                    count: { $avg: '$diem'} 
+            }},
+            {$limit : 3}
+        ])
+        .then(data=>{
+            res.status(200).json({'success': true, data})
+        }).catch((error)=>{
+            res.status(400).json({'success': false, 'errors': 'Lỗi không tìm thấy'})
         })
+
     },
     amdin_get_class_belong_a_teacher: async function (req, res) {
         let {id} = req.query;

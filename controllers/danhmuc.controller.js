@@ -48,8 +48,8 @@ module.exports = {
                             tieu_de: item.tieu_de,
                             mo_ta: item.mo_ta,
                             nguoi_tao_id: item.nguoi_tao_id,
-                            createdAt: customDatetime(item.createdAt),
-                            updatedAt : customDatetime(item.updated),
+                            createdAt: customDatetime(item.createdAt, 1),
+                            updatedAt : customDatetime(item.updated, 1),
                         })
                     })
                 DanhMucSchema.countDocuments(search,
@@ -81,8 +81,8 @@ module.exports = {
                     res.status(400).json({'success': false, 'errors': err}) 
                 else {
                     let data = result.toObject();
-                    data.createdAt = customDatetime(result.createdAt);
-                    data.updatedAt = customDatetime(result.updatedAt);
+                    data.createdAt = customDatetime(result.createdAt, 1);
+                    data.updatedAt = customDatetime(result.updatedAt, 1);
                     res.status(200).json({'success': true, 'data': data})
                 }
             })

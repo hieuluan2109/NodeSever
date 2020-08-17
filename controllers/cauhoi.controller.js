@@ -68,8 +68,8 @@ module.exports = {
                     res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                 else {
                     let data = result.toObject();
-                    data.createdAt = customDatetime(result.createdAt);
-                    data.updatedAt = customDatetime(result.updatedAt);
+                    data.createdAt = customDatetime(result.createdAt, 1);
+                    data.updatedAt = customDatetime(result.updatedAt, 1);
                     console.log( data.createdAt)
                     res.status(200).json({'success': true, data})
                 }
@@ -83,8 +83,8 @@ module.exports = {
                     res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})
                 else {
                     let data = result.toObject();
-                    data.createAt =  customDatetime(result.createAt);
-                    data.updatedAt = customDatetime(result.updatedAt);
+                    data.createAt =  customDatetime(result.createAt, 1);
+                    data.updatedAt = customDatetime(result.updatedAt, 1);
                     console.log(data)
                     res.status(200).json({'success': true, data})
                 }

@@ -154,8 +154,8 @@ module.exports = {
                     anh_dai_dien: data.anh_dai_dien,
                     nguoi_tao_id: data.nguoi_tao_id,
                     ngay_sinh : customDatetime(data.ngay_sinh),
-                    createdAt : customDatetime(data.createdAt),
-                    updatedAt : customDatetime(data.updatedAt),
+                    createdAt : customDatetime(data.createdAt, 1),
+                    updatedAt : customDatetime(data.updatedAt, 1),
                 };
                 res.status(200).json({'success': true, 'data': result})
             } else res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
@@ -180,8 +180,8 @@ module.exports = {
                     sdt: data.sdt,
                     gioi_tinh: data.gioi_tinh,
                     ngay_sinh : customDatetime(data.ngay_sinh),
-                    createdAt : customDatetime(data.createdAt),
-                    updatedAt : customDatetime(data.updatedAt),
+                    createdAt : customDatetime(data.createdAt, 1),
+                    updatedAt : customDatetime(data.updatedAt, 1),
                     gioi_tinh : data.gioi_tinh ? data.gioi_tinh : null,
                     sdt: data.sdt? data.sdt : null,
                 };

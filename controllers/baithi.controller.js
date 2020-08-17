@@ -1,5 +1,5 @@
 const {BaiThiSchema} = require('../model/index.schema');
-const {customDatetime} = require('./admin_function');
+const {customDatetime, capitalizeFirstLetter} = require('./admin_function');
 module.exports = {
     admin_get_test_list: async function (req, res) {
         let perPage = req.query.limit || 10;
@@ -8,9 +8,10 @@ module.exports = {
         sort = sort ? { [sort]: 1} : {};
         search = search
                  ? {$or: [
+                     {"tieu_de": {$regex:'.*'+search+'.*' }},
                      {"tieu_de": {$regex:'.*'+search.toLowerCase()+'.*' }},
-                     {"tieu_de": {$regex:'.*'+search.toUpperCase()+'.*' }}
-                    ]} : {}
+                     {"tieu_de": {$regex:'.*'+capitalizeFirstLetter(search)+'.*' }}
+                    ]} : {};
         await BaiThiSchema
             .find(search)
             .skip((perPage * page) - perPage)
@@ -26,15 +27,15 @@ module.exports = {
                             nguoi_tao_id: item.nguoi_tao_id,
                             tieu_de: item.tieu_de,
                             lop_hoc_id: item.lop_hoc_id,
-                            ngay_thi: customDatetime(item.ngay_thi),
+                            ngay_thi: customDatetime(item.ngay_thi, 1),
                             thoi_gian_thi: item.thoi_gian_thi,
                             trang_thai: item.trang_thai,
                             ds_cau_hoi: item.ds_cau_hoi,
                             ds_sinh_vien: item.ds_sinh_vien,
                             ds_binh_luan: item.ds_binh_luan,
                             ds_sinh_vien_da_thi: item.ds_sinh_vien_da_thi,
-                            createdAt: customDatetime(item.createdAt),
-                            updatedAt: customDatetime(item.updatedAt),
+                            createdAt: customDatetime(item.createdAt, 1),
+                            updatedAt: customDatetime(item.updatedAt, 1),
                         })
                     })
                     BaiThiSchema.countDocuments(search,

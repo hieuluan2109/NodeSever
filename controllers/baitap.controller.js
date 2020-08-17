@@ -23,14 +23,12 @@ module.exports = {
                             tieu_de: item.tieu_de,
                             noi_dung: item.noi_dung,
                             lop_hoc_id: item.lop_hoc_id,
-                            diem: item.diem,
                             tap_tin: item.tap_tin,
-                            ngay_thi: customDatetime(item.ngay_thi),
-                            han_nop_bai: item.han_nop_bai,
+                            han_nop_bai:  customDatetime(item.han_nop_bai, 1),
                             trang_thai: item.trang_thai,
                             ds_sinh_vien_da_lam: item.ds_sinh_vien_da_lam,
-                            createdAt: customDatetime(item.createdAt),
-                            updatedAt: customDatetime(item.updatedAt),
+                            createdAt: customDatetime(item.createdAt, 1),
+                            updatedAt: customDatetime(item.updatedAt, 1),
                         })
                     })
                     BaiTapSchema.countDocuments(search,
@@ -62,14 +60,12 @@ module.exports = {
                             tieu_de: item.tieu_de,
                             noi_dung: item.noi_dung,
                             lop_hoc_id: item.lop_hoc_id,
-                            diem: item.diem,
                             tap_tin: item.tap_tin,
-                            ngay_thi: customDatetime(item.ngay_thi),
-                            han_nop_bai: item.han_nop_bai,
+                            han_nop_bai: customDatetime(item.han_nop_bai, 1),
                             trang_thai: item.trang_thai,
                             ds_sinh_vien_da_lam: item.ds_sinh_vien_da_lam,
-                            createdAt: customDatetime(item.createdAt),
-                            updatedAt: customDatetime(item.updatedAt),
+                            createdAt: customDatetime(item.createdAt, 1),
+                            updatedAt: customDatetime(item.updatedAt, 1),
                         })
                     })
                 res.status(200).json({'success': true, data: result})

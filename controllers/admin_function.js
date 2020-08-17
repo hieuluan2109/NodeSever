@@ -20,9 +20,9 @@ module.exports = {
         };
         return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET || 'Monkey D Naruto');
     },
-        hashPassWord: function (password) {
-            return bcrypt.hash(password, 10)
-        },
+    hashPassWord: function (password) {
+        return bcrypt.hash(password, 10)
+    },
     regex: function(){
         return {
             'sdt': /((09|03|07|08|05)+([0-9]{8})\b)/,

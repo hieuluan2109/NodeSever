@@ -58,13 +58,12 @@ module.exports = {
     admin_forgot_password: async function(req, res, next) {
         const {email} = req.body;
         await NguoidungSchema
-            .findOne({'email': email, 'loai': true},)
+            .findOne({'email': email},)
             .exec( async (err, data)=>{
                 if (err || !data)
                     return res.status(400).json({'success': false, 'msg': 'Không tồn tại email '+email})
                 else {
                     const code = await makeCode();
-                    console.log(code)
                     sendForgotPasswordMail(email, code, data.ho+' ' + data.ten)
                     const newRC = new QuenMatKhau({
                         code: code,

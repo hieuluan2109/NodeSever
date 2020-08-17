@@ -7,19 +7,23 @@ const URL = 'http://navilearn.herokuapp.com/';
 //  `;
 
 const createMailOption = { // config mail server
-    service: SERVICE_MAIL || 'gmail',
-    host: HOST_MAIL || 'smtp.googlemail.com',
-    port: PORT_MAIL || 587,
-    secure: SECURE_MAIL || true,
-    requireTLS: TLS_MAIL || false,
+    service:'gmail',
+    host: 'smtp.googlemail.com',
+    port: 587,
+    secure:true,
+    requireTLS: false,
     auth: {
-        user: A_MAIL || 'hieuluan.2109@gmail.com',
-        pass: P_MAIL || 'Cookcie00999'
+        user: 'hieuluan.2109@gmail.com',
+        pass: 'Cookcie00999'
     },
+    tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+    }
 };
 const sendMailOption = (mail, content) => {
     return {
-        from: 'Navilearn',
+        from: 'Navilearn <hieuluan.2109@gmail.com',
         to: mail, 
         subject: 'Navilearn: Mail reset password',
         html: content }

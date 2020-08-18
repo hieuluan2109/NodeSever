@@ -3,11 +3,11 @@ const {customDatetime} = require('./admin_function');
 module.exports = {
     admin_dashboard: async function (req, res) {
         let choseTime = req.query.time;
-        choseTime = choseTime ? { $lt: choseTime } : { $lte: Date.now() };
+        choseTime = choseTime ? { $lte: choseTime } : { $lte: Date.now() };
         Promise.all([
             Schema.NguoidungSchema.countDocuments({'loai': false, createdAt: choseTime}),
             Schema.SinhvienSchema.countDocuments({ createdAt: choseTime }),
-            Schema.LopHocSchema.countDocuments(),
+            Schema.LopHocSchema.countDocuments({ createdAt: choseTime }),
             Schema.TracNghiemSchema.countDocuments({createdAt: choseTime}),
             Schema.TuLuanSchema.countDocuments({createdAt: choseTime}),
             Schema.DanhMucSchema.countDocuments({createdAt: choseTime}),

@@ -73,9 +73,9 @@ module.exports = {
                data[1] ? Schema.SinhvienSchema.findById(data[1]._id,'ho ten') : next,
                data[2] ? Schema.SinhvienSchema.findById(data[2]._id,'ho ten') : next,
            ]).then(re=>{
-               let result = {data, info};
-               res.json({result})
-           })
+               let result = {data, info: re};
+               res.status(200).json({result})
+            })
         })
             // res.status(200).json({'success': true, data})
         // }).catch((error)=>{

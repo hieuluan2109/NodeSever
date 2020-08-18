@@ -56,20 +56,31 @@ module.exports = {
             res.json({err})
         })
     },
-    admin_get_stats_top_student: async function(req, res) {
+    admin_get_stats_top_student: async function(req, res, next) {
         Schema.DiemSchema.aggregate([
             {
                 $group : {
                     _id : '$sinh_vien_id',
-                    count: { $avg: '$diem'} 
-            }},
+                    avg: { $avg: '$diem'} 
+                }
+            },
             {$limit : 3}
         ])
-        .then(data=>{
-            res.status(200).json({'success': true, data})
-        }).catch((error)=>{
-            res.status(400).json({'success': false, 'errors': 'Lỗi không tìm thấy'})
+        // .then(data=>{
+        .exec((err, data)=>{
+           Promise.all([
+               data[0] ? Schema.SinhvienSchema.findById(data[0]._id,'ho ten') : next,
+               data[1] ? Schema.SinhvienSchema.findById(data[1]._id,'ho ten') : next,
+               data[2] ? Schema.SinhvienSchema.findById(data[2]._id,'ho ten') : next,
+           ]).then(re=>{
+               let result = {data, info};
+               res.json({result})
+           })
         })
+            // res.status(200).json({'success': true, data})
+        // }).catch((error)=>{
+        //     res.status(400).json({'success': false, 'errors': 'Lỗi không tìm thấy'})
+        // })
 
     },
     amdin_get_class_belong_a_teacher: async function (req, res) {

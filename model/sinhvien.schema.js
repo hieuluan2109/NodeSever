@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const SinhVienSchema = new Schema({
+    trang_thai: {
+        type: Boolean,
+        default: true,
+    },
     ma_sv: {
         required: true,
         unique: true,

@@ -45,5 +45,9 @@ const NguoidungSchema = new Schema({
         type: Boolean,
         default: true,
     },
+    trang_thai: {
+        type: Boolean,
+        default: true,
+    },
 }, {timestamps: true});
 module.exports = mongoose.model('NguoiDung', NguoidungSchema, 'nguoi_dung');

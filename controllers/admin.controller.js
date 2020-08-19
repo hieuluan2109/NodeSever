@@ -2,6 +2,7 @@ const {hashPassWord, checkPassword, customDatetime, sendForgotPasswordMail, make
 const {NguoidungSchema, QuenMatKhau, SuaThongTin} = require('../model/index.schema');
 const {validationResult} = require('express-validator');
 const moment = require('moment');
+const { db } = require('../model/diem.schema');
 module.exports = {
     admin_change_password: async function (req, res) {
         const errors = await validationResult(req);
@@ -102,5 +103,15 @@ module.exports = {
         .catch(err=>{
             res.status(400).json({success: false, errors: 'Lỗi không xác định'})
         })
-    }
+    },
+    update_123: async function(req, res) {
+        NguoidungSchema.find(
+            {loai: false},'_id'
+    ).then( data=>{
+        for( let i=0; i <data.length; i++)
+        NguoidungSchema.findByIdAndUpdate(data._id, {$set: {trang_thai: true}}, { new: true, useFindAndModify: false })
+        console.log('done')
+    })
+    .catch(err=>console.log(err))
+}
 };

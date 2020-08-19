@@ -81,6 +81,8 @@ module.exports = {
         const update = {mat_khau: await hashPassWord(password)}
         await QuenMatKhau.findOne({'code': code, 'expire' : {$gte : Date.now()}})
         .then(user => {
+            QuenMatKhau.findOneAndUpdate({'code': code}, {'expire': -user.expire}, option)
+            .then(up => { console.log(up) }).catch(err => console.log(error))
             NguoidungSchema.findOneAndUpdate({email: user.email}, { $set: update }, option, function (err, updated) { // need some attention
                 if(err || !updated)
                     res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) 

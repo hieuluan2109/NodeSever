@@ -287,7 +287,7 @@ module.exports = {
         },
     admin_set_status_student: async function (req, res){
         const [{trang_thai, id }, option] = [req.query,{ new: true, useFindAndModify: false }];
-        await SinhvienSchema.findByIdAndUpdate(id,{ $set: {trang_thai: trang_thai }},option)
+        await SinhvienSchema.findByIdAndUpdate({_id: id},{ $set: {trang_thai: trang_thai }},option)
             .then(()=>{
                 res.status(200).json({success: true})
             })

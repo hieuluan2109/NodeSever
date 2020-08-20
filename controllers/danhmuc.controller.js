@@ -47,6 +47,7 @@ module.exports = {
                             _id: item._id,
                             tieu_de: item.tieu_de,
                             mo_ta: item.mo_ta,
+                            trang_thai: item.trang_thai,
                             nguoi_tao_id: item.nguoi_tao_id,
                             createdAt: customDatetime(item.createdAt, 1),
                             updatedAt : customDatetime(item.updated, 1),
@@ -76,15 +77,14 @@ module.exports = {
         await DanhMucSchema
             .findOne({'_id': req.params.id})
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .exec((err, result) => {
-                if (err)
-                    res.status(400).json({'success': false, 'errors': err}) 
-                else {
-                    let data = result.toObject();
-                    data.createdAt = customDatetime(result.createdAt, 1);
-                    data.updatedAt = customDatetime(result.updatedAt, 1);
-                    res.status(200).json({'success': true, 'data': data})
-                }
+            .then((result) => {
+                let data = result.toObject();
+                data.createdAt = customDatetime(result.createdAt, 1);
+                data.updatedAt = customDatetime(result.updatedAt, 1);
+                res.status(200).json({'success': true, 'data': data})
+            })
+            .catch(err=>{
+                res.status(400).json({'success': false, 'errors': 'Lỗi không danh mục không tồn tại'}) 
             })
     },
     admin_update_category: async function (req, res) {
@@ -101,4 +101,14 @@ module.exports = {
             (err || !updated) ? res.status(400).json({'success': false, 'errors': err}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
         })
     },
+    admin_set_status: async function (req, res) {
+        const [{trang_thai, id }, option] = [req.query,{ new: true, useFindAndModify: false }]
+        await DanhMucSchema.findOneAndUpdate({_id: id},{ $set: {trang_thai: trang_thai}}, option)
+            .then(data=>{
+                res.status(200).json({'success': true, 'msg': 'Cập nhật thành công'})
+            })
+            .catch(err=>{
+                res.status(400).json({'success': false, 'errors': err})
+            })
+    }
 }

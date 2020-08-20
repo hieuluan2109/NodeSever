@@ -4,6 +4,11 @@ const passport = require('passport');
 const {validate} = require('../controllers/admin_validator');
 const {CategoryController} = require('../controllers/index.controller');
 router.get(
+    '/update/status',
+    passport.authenticate('jwt', {session: false}),
+    CategoryController.admin_set_status
+);
+router.get(
     '/list',
     passport.authenticate('jwt', {session: false}),
     CategoryController.admin_get_category_list

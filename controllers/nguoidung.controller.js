@@ -84,6 +84,7 @@ module.exports = {
                         ten: item.ten,
                         _id: item._id,
                         email: item.email,
+                        trang_thai: item.trang_thai,
                         ngay_sinh: moment(item.ngay_sinh).format('YYYY-MM-DD'),
                     })
                 });
@@ -109,7 +110,7 @@ module.exports = {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         await SinhvienSchema
-            .find(search, ['ho', 'ten', '_id', 'email', 'ngay_sinh'])
+            .find(search, ['ho', 'ten', '_id', 'email', 'ngay_sinh', 'trang_thai'])
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .sort(sort)
@@ -122,6 +123,7 @@ module.exports = {
                         ten: item.ten,
                         _id: item._id,
                         email: item.email,
+                        trang_thai: item.trang_thai,
                         ngay_sinh: moment(item.ngay_sinh).format('YYYY-MM-DD'),
                     })
                 })
@@ -150,6 +152,7 @@ module.exports = {
                     ten: data.ten,
                     email: data.email,
                     sdt: data.sdt,
+                    trang_thai: data.trang_thai,
                     gioi_tinh: data.gioi_tinh,
                     anh_dai_dien: data.anh_dai_dien,
                     nguoi_tao_id: data.nguoi_tao_id,
@@ -165,28 +168,18 @@ module.exports = {
         await SinhvienSchema
             .findOne({ '_id': id }, ['-mat_khau'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .populate({path: 'ds_lop_hoc', model: 'LopHoc'})
-            .exec((err, data) => {
-                if ( !err && data ){
-                let result = {
-                    ma_sv: data.ma_sv,
-                    ds_lop_hoc: data.ds_lop_hoc,
-                    _id: data._id,
-                    ho : data.ho,
-                    ten: data.ten,
-                    email: data.email,
-                    anh_dai_dien: data.anh_dai_dien,
-                    nguoi_tao_id: data.nguoi_tao_id,
-                    sdt: data.sdt,
-                    gioi_tinh: data.gioi_tinh,
-                    ngay_sinh : customDatetime(data.ngay_sinh),
-                    createdAt : customDatetime(data.createdAt, 1),
-                    updatedAt : customDatetime(data.updatedAt, 1),
-                    gioi_tinh : data.gioi_tinh ? data.gioi_tinh : null,
-                    sdt: data.sdt? data.sdt : null,
-                };
+            .populate({path: 'ds_lop_hoc', model: 'LopHoc', select: 'tieu_de'})
+            .then((data) => {
+                let result = data.toObject();
+                result.ngay_sinh = customDatetime(data.ngay_sinh),
+                result.createdAt = customDatetime(data.createdAt, 1),
+                result.updatedAt = customDatetime(data.updatedAt, 1),
+                result.gioi_tinh = data.gioi_tinh ? data.gioi_tinh : null,
+                result.sdt =  data.sdt? data.sdt : null,
                 res.status(200).json({'success': true, 'data': result})
-            } else res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
+            })
+            .catch(err=>{
+                res.status(400).json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
             })
     },
     admin_get_edit_profile_user: async function(req, res){
@@ -279,5 +272,23 @@ module.exports = {
             })
         };
         res.status(200).json({'success': true})
+    },
+    admin_set_status_users: async function (req, res){
+        const [{loai, trang_thai, id }, option] = [req.query,{ new: true, useFindAndModify: false }]
+        loai == true
+        ? await NguoidungSchema.findByIdAndUpdate({_id: id, loai: false},{ $set: {trang_thai: trang_thai }},option)
+            .then(data=>{
+                res.status(200).json({success: true})
+            })
+            .catch(err=>{
+                res.status(400).json({success: false, errors: 'Lỗi không xác định'})
+            })
+        : await SinhvienSchema.findByIdAndUpdate(id,{ $set: {trang_thai: trang_thai }},option)
+            .then(data=>{
+                res.status(200).json({success: true})
+            })
+            .catch(err=>{
+                res.status(400).json({success: false, errors: 'Lỗi không xác định'})
+            })
     },
 };

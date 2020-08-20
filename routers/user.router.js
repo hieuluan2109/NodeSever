@@ -3,6 +3,10 @@ const router = express.Router();
 const passport = require('passport');
 const {validate} = require('../controllers/admin_validator');
 const {UserController} = require('../controllers/index.controller');
+router.get('/update/status', 
+    passport.authenticate('jwt', {session: false}),
+    UserController.admin_set_status_users
+);
 router.get(
     '/update-request',
     UserController.admin_get_edit_profile_user

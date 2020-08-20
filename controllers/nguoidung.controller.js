@@ -275,18 +275,20 @@ module.exports = {
         };
         res.status(200).json({'success': true})
     },
-    admin_set_status_users: async function (req, res){
-        const [{loai, trang_thai, id }, option] = [req.query,{ new: true, useFindAndModify: false }]
-        loai == true
-        ? await NguoidungSchema.findByIdAndUpdate({_id: id, loai: false},{ $set: {trang_thai: trang_thai }},option)
-            .then(data=>{
+    admin_set_status_teacher: async function (req, res){
+        const [{trang_thai, id }, option] = [req.query,{ new: true, useFindAndModify: false }];
+        await NguoidungSchema.findByIdAndUpdate({_id: id, loai: false},{ $set: {trang_thai: trang_thai }},option)
+            .then(()=>{
                 res.status(200).json({success: true})
             })
             .catch(err=>{
                 res.status(400).json({success: false, errors: 'Lỗi không xác định'})
             })
-        : await SinhvienSchema.findByIdAndUpdate(id,{ $set: {trang_thai: trang_thai }},option)
-            .then(data=>{
+        },
+    admin_set_status_student: async function (req, res){
+        const [{trang_thai, id }, option] = [req.query,{ new: true, useFindAndModify: false }];
+        await SinhvienSchema.findByIdAndUpdate(id,{ $set: {trang_thai: trang_thai }},option)
+            .then(()=>{
                 res.status(200).json({success: true})
             })
             .catch(err=>{

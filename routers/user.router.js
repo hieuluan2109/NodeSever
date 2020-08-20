@@ -3,9 +3,13 @@ const router = express.Router();
 const passport = require('passport');
 const {validate} = require('../controllers/admin_validator');
 const {UserController} = require('../controllers/index.controller');
-router.get('/update/status', 
+router.get('/teacher/status', 
     passport.authenticate('jwt', {session: false}),
-    UserController.admin_set_status_users
+    UserController.admin_set_status_teacher
+);
+router.get('/student/status', 
+    passport.authenticate('jwt', {session: false}),
+    UserController.admin_set_status_student
 );
 router.get(
     '/update-request',

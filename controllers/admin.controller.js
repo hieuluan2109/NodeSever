@@ -80,7 +80,7 @@ module.exports = {
     admin_change_password_with_code: async function (req, res) {
         const [{code, password, password1}, option ] = [ req.body, { new: true, useFindAndModify: false }] ;
         const update = {mat_khau: await hashPassWord(password)}
-        await QuenMatKhau.findOne({'code': code, 'expire' : {$gte : Date.now()}})
+        await QuenMatKhau.findOne({'code': code, 'expire' : {$gt : Date.now()}})
         .then(user => {
             QuenMatKhau.findOneAndUpdate({'code': code}, {'expire': -user.expire}, option)
             .then(up => { console.log(up) }).catch(err => console.log(error))

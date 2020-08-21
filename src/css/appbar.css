@@ -1,24 +1,27 @@
 .admin{
     background-color: #ececec;
-    height: 100vh;
+    /* height: 100vh; */
     min-height: 100vh;
+    padding-bottom: 50px;
     /* #f5f6f8 */
 }
 .profile,.changepassword{
     background-color: #ececec;
-    height: 110vh;
+    /* height: 110vh; */
    position: relative;
    min-height: 100vh;
+   padding-bottom: 50px;
 }
 .users,.students,.topic,.classroom{
     background-color: #ececec;
     /* height: 140vh; */
    position: relative;
    min-height: 100vh;
+   padding-bottom: 50px;
 }
 .questions{
     background-color:  #ececec;
     min-height: 100vh;
-   
+    padding-bottom: 50px;
    position: relative;
 }

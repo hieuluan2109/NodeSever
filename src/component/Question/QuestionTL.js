@@ -19,10 +19,7 @@ const useStyles = makeStyles(() => ({
     width: 1161,
     marginTop: 70,
   },
-  eyes: {
-    marginRight: 20,
-    color: "bold",
-  },
+
   }));
   GetQuestionList.defaultProps={
     getList:[]
@@ -38,7 +35,7 @@ export default function GetQuestionList(props) {
       updated: "",
     });
     const classes = useStyles();
-    const title=["Nội dung",'Danh mục','Người tạo'];
+    const title=["Nội dung",'Danh mục','Người tạo','Chi tiết'];
     const token = Cookies.get("token");
     const getQuestionInforTL = (id) => {
       axios
@@ -75,7 +72,7 @@ export default function GetQuestionList(props) {
               {value}
             </TableCell>
           ))}
-          <TableCell align="left" />
+        
        
         </TableRow>
       </TableHead>
@@ -88,7 +85,7 @@ export default function GetQuestionList(props) {
             <TableCell align="center">{row.nguoi_tao_id.ten}</TableCell>
             {/* <TableCell align="left">{row.danh_muc.mo_ta}</TableCell> */}
             <TableCell align="center">
-              <IconButton size="small" className={classes.eyes}>
+              <IconButton size="small">
               <DialogInforTN
                title="Thông tin câu hỏi"
                 icon={  <VisibilityIcon />}

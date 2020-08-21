@@ -21,55 +21,28 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const styles = (theme) => ({
-  textField: {
-    marginLeft: "100px",
-    position: "relative",
-    marginTop: "-28px",
-  },
-  titleformInfo: {
-    position: "absolute",
-    fontSize: 17,
-  },
+
+  
   formControl: {
-    maxwidth: "700px",
+    marginTop:'20px'
   },
   titleFormControlND: {
     width: "100px",
     float: "left",
-    marginTop: "105px",
+    marginTop: "80px",
   },
   titleFormControl: {
     width: "100px",
     float: "left",
-    paddingTop: "45px",
+    paddingTop: "20px"
   },
   contentFormControl: {
-    width: "400px",
-    borderRadius: "5px",
-    height: "30px",
-    paddingLeft: "10px",
-    marginTop: "25px",
-    outline: "none",
-    "&:focus": {
-      borderColor: "#3f51b5",
-    },
+    width: "350px",
   },
   formControl: {
-    minWidth: "200px",
-    marginTop: "20px",
-  },
-  formControlCD: {
-    marginTop: "80px",
-    marginLeft: "-90px",
-    minWidth: "200px",
-  },
-  titleFormControlCD: {
-    width: "100px",
-    float: "left",
-    paddingTop: "105px",
-    marginRight: "100px",
-    marginLeft: "-100px",
-  },
+    margin: "20px",
+  }
+ 
 });
 
 class AddQuestionsTL extends Component {
@@ -126,7 +99,7 @@ class AddQuestionsTL extends Component {
                   disabled={true}
                 />
               </div>
-              <div className={classes.formControl}>
+              {/* <div className={classes.formControl}>
                 <label className={classes.titleFormControlCD}>Danh mục</label>
                 <FormControl className={classes.formControlCD}>
                   <InputLabel id="demo-simple-select-label">
@@ -138,6 +111,18 @@ class AddQuestionsTL extends Component {
                     value={this.props.danh_muc}
                   ></Select>
                 </FormControl>
+              </div> */}
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Danh mục</label>
+                <TextField
+                  size="small"
+                  variant="outlined"
+                  className={classes.contentFormControl}
+                  name="danh_muc"
+                  value={this.props.danh_muc}
+                  type="text"
+                  disabled={true}
+                />
               </div>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Mô tả</label>
@@ -158,7 +143,7 @@ class AddQuestionsTL extends Component {
                   variant="outlined"
                   className={classes.contentFormControl}
                   name="updatedAt"
-                  value={this.props.update}
+                  value={this.props.createdAt}
                   type="text"
                   disabled={true}
                 />

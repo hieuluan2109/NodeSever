@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10px",
     width: "120px",
     height: "40px",
-    marginLeft: "150px",
+    marginLeft: "170px",
     cursor: "pointer",
   },
   time: {

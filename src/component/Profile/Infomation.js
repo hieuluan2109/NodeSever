@@ -5,10 +5,8 @@ import Cookies from "js-cookie";
 import Skeleton from '@material-ui/lab/Skeleton';
 import Paper from '@material-ui/core/Paper';
 import TextField from "@material-ui/core/TextField";
-import ButtonMenu from './../ButtonMenu'
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -18,7 +16,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+
+
 
 const useStyles = makeStyles((theme) => ({
   progressButton: {
@@ -88,8 +87,10 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "-15px",
         width: 150,
       },
+     
     }));
 
+    
 export default function AccountInfo() {
 const [success, setSuccess] = useState(false)
 const [getDataProfile, setDataProfile] = useState({ho:'',ten:'',ngay_sinh:'', gioi_tinh: true, sdt: ''});
@@ -268,7 +269,7 @@ const onSubmitInfo = (event) => {
             }}
             /> ) : ( <Skeleton animation="wave" className={classes.contentFormControl} variant="text" /> ) }
         </div>
-        <div className={classes.formControl}>
+        <div className={classes.formControl} style={{marginTop:'5px'}}>
             <input
               className={classes.btnXacnhan}
               type="submit"

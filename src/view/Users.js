@@ -35,14 +35,7 @@ class InfoUsers extends Component {
     return (
       <div>
         <HomePage />
-        <InfoUser
-          title="Danh Sách Người Dùng"
-          firstname="Họ"
-          lastname="Tên"
-          email="Email"
-          DoB="Ngày sinh"
-            // info={this.state.a}
-        />
+        <InfoUser />
       </div>
     );
   }

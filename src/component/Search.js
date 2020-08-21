@@ -84,6 +84,7 @@ class SearchButton extends Component {
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
+          value={this.props.value}
           onChange={this.props.onChange}
           inputProps={{ 'aria-label': 'search' }}
         />

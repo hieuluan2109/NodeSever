@@ -1,21 +1,13 @@
 import { withStyles } from "@material-ui/core/styles";
 import React, { Component } from "react";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
-import Paper from "@material-ui/core/Paper";
+import{Dialog,DialogContent,DialogTitle,IconButton,Grid,Divider,Paper,TextField} from '@material-ui/core'
 import TabPanel from './Tab'
-import TextField from "@material-ui/core/TextField";
 
 const styles = (theme) => ({
   dialogPaper: {
     minHeight: "90vh",
     maxHeight: "90vh",
     minWidth: "140vh",
-    // maxWidth: "170vh",
   },
   heightgrd: { height: "90vh", width: "140vh" },
   info: {
@@ -29,7 +21,6 @@ const styles = (theme) => ({
 class ClassRoomDetail extends Component {
   constructor(props) {
     super(props);
-  
     this.state = {
       open: false,
       errors: "",
@@ -59,8 +50,6 @@ class ClassRoomDetail extends Component {
   render() {
     const { classes,  getData,dsBaiTap,dsBaiThi } = this.props;
     const { open } = this.state;
-    console.log ("1",getData.ds_sinh_vien)
-    console.log("2",dsBaiTap.data)
     return (
       <div>
         <IconButton
@@ -82,7 +71,6 @@ class ClassRoomDetail extends Component {
             {getData.tieu_de}
             <Divider />
           </DialogTitle>
-
           <DialogContent className={classes.formsize}>
             <Grid container>
               <Grid item xs={3}>

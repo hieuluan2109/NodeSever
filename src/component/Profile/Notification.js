@@ -27,7 +27,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TextField from "@material-ui/core/TextField";
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-
+import moment from 'moment';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -148,6 +148,41 @@ export default function Notification() {
     let tamp = {type, index};
     setAction(tamp)
     }
+  const listNotifacation =()=>{
+    if (data.length == 0)
+      return <Typography style={{textAlign: 'center'}} >Không có yêu cầu sửa thông tin nào</Typography>
+    else return data.map((row, index)=>(
+      <Paper elevation={3} className={classes.listItem} >
+      <ListItem alignItems="center" name="button" key={index} disabled={status[index]}>
+        <ListItemAvatar>
+          <Avatar alt="Remy Sharp" src={row.nguoi_dung_id.anh_dai_dien} />
+        </ListItemAvatar>
+        <ListItemText
+          primary={row.nguoi_dung_id.ho + ' ' +row.nguoi_dung_id.ten}
+          secondary={
+            <React.Fragment>
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.inline}
+                color="textPrimary"
+              >
+               <div style={{marginLeft: "2%"}}><p>{row.loai == 'SinhVien' ? 'Sinh viên' : 'Giáo viên' }</p></div>
+              </Typography>
+            </React.Fragment> }/>
+            <ListItemSecondaryAction name="button">
+              <Grid name={index} style={{marginTop: "35px"}} container direction="column" justify="center">
+                <Button disabled={status[index]} onClick={ () => handleGetUpdateRequest(index) } color="primary"> View </Button>
+                <Button disabled={status[index]} onClick={() => OpenDialog(1,index) } color="primary"> Xác nhận </Button>
+                <Button disabled={status[index]} onClick={() => OpenDialog(2,index) } color="primary"> Hủy </Button>
+              </Grid>
+            </ListItemSecondaryAction>
+        </ListItem>
+        <TextField className={classes.content} disabled={status[index]} label="Lý do: " value={row.ly_do}>
+        </TextField>
+      </Paper>
+      ))
+  }
   return (
    <div>
     <form>
@@ -155,37 +190,7 @@ export default function Notification() {
       <List className={classes.root} key="luân">
         { !data
          ? <Skeleton variant="rect" width="100%" height="100%" />
-         : data.map((row, index)=>(
-        <Paper elevation={3} className={classes.listItem} >
-        <ListItem alignItems="center" name="button" key={index} disabled={status[index]}>
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src={row.nguoi_dung_id.anh_dai_dien} />
-          </ListItemAvatar>
-          <ListItemText
-            primary={row.nguoi_dung_id.ho + ' ' +row.nguoi_dung_id.ten}
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary"
-                >
-                 <div style={{marginLeft: "2%"}}><p>{row.loai == 'SinhVien' ? 'Sinh viên' : 'Giáo viên' }</p></div>
-                </Typography>
-              </React.Fragment> }/>
-              <ListItemSecondaryAction name="button">
-                <Grid name={index} style={{marginTop: "25px"}} container direction="column" justify="center">
-                  <Button disabled={status[index]} onClick={ () => handleGetUpdateRequest(index) } color="primary"> View </Button>
-                  <Button disabled={status[index]} onClick={() => OpenDialog(1,index) } color="primary"> Xác nhận </Button>
-                  <Button disabled={status[index]} onClick={() => OpenDialog(2,index) } color="primary"> Hủy </Button>
-                </Grid>
-              </ListItemSecondaryAction>
-          </ListItem>
-          <TextField className={classes.content} disabled={status[index]} label="Lý do: " value={row.ly_do}>
-          </TextField>
-        </Paper>
-        ))}
+         :  listNotifacation()} 
       </List>
       </Paper>
       </form>
@@ -234,17 +239,41 @@ export default function Notification() {
           <DialogContentText>
           </DialogContentText>
           <Table className={classes.table} aria-label="simple table">
-        <TableBody>
-          <TableRow key="1">
-            <TableCell component="th" scope="row">
-              Email: 
-            </TableCell>
-            <TableCell align="right">{editData.email}</TableCell>
-            <TableCell align="right">b</TableCell>
-            <TableCell align="right">color</TableCell>
-            <TableCell align="right">d</TableCell>
-          </TableRow>
-        </TableBody>
+        <Paper elevation={3} style={{width: '50vh'}}>
+          <TextField label="Họ và tên " 
+            style={{marginLeft: '10px'}}
+            id="outlined-size-normal"
+            defaultValue="Normal"
+            variant="outlined"
+            margin="normal"
+            width="100%"
+            value= {editData.ho+" "+ editData.ten} />
+          <br />
+          <TextField label="Số điện thoại "
+            style={{marginLeft: '10px'}} 
+            id="outlined-size-normal"
+            defaultValue="Normal"
+            variant="outlined"
+            margin="normal"
+            value= {editData.sdt} />
+          <br />
+          <TextField label="Giới tính" 
+            style={{marginLeft: '10px'}}
+            id="outlined-size-normal"
+            defaultValue="Normal"
+            variant="outlined"
+            margin="normal"
+            value= {editData.gioi_tinh ? 'Nam' : 'Nữ'} />
+          <br />
+          <TextField label="Ngày sinh " 
+            style={{marginLeft: '10px'}}
+            id="outlined-size-normal"
+            defaultValue="Normal"
+            variant="outlined"
+            margin="normal"
+            value= {moment(editData.ngay_sinh).format('YYYY-MM-DD')} />
+          <br />
+        </Paper>
       </Table>
         </DialogContent>
         <DialogActions>

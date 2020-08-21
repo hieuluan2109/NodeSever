@@ -13,15 +13,10 @@ import Cookies from "js-cookie";
 import axios from "axios";
 const useStyles = makeStyles(() => ({
   table: {
-    // marginLeft: 25,
     minWidth: 600,
     maxwidth: 1200,
     width: 1161,
     marginTop: 70,
-  },
-  eyes: {
-    marginRight: 20,
-    color: "bold",
   },
 }));
 GetQuestionList.defaultProps = {
@@ -31,7 +26,7 @@ export default function GetQuestionList(props) {
   const { getList } = props;
   const classes = useStyles();
   const token = Cookies.get("token");
-  const title = [ "Nội dung", "Danh mục", "Người tạo"];
+  const title = [ "Nội dung", "Danh mục", "Người tạo","Chi tiết"];
   const [dataQuestion, setDataQuestion] = useState({
     noidung: "",
     dapan: "",
@@ -42,7 +37,8 @@ export default function GetQuestionList(props) {
     luachonc: "",
     luachond: "",
     nguoitao:'',
-    // mota:''
+    created:'',
+    updated:''
   });
   // useEffect(() => {
   //   getQuestionInforTN()
@@ -69,7 +65,8 @@ export default function GetQuestionList(props) {
           luachonc: data.lua_chon[2].value,
           luachond: data.lua_chon[3].value,
           nguoitao: data.nguoi_tao_id.ten,
-          // mota:data.danh_muc.mo_ta,
+          created:data.createdAt,
+          updated:data.updatedAt,
           dapan:data.dap_an.value
         });
       })
@@ -86,7 +83,7 @@ export default function GetQuestionList(props) {
               {value}
             </TableCell>
           ))}
-          <TableCell align="center" style={{ color: "#ffffff" }} />
+         
         
         </TableRow>
       </TableHead>
@@ -97,8 +94,8 @@ export default function GetQuestionList(props) {
             {/* <TableCell align="center" >{row.diem}</TableCell> */}
             <TableCell align="center">{row.danh_muc.tieu_de}</TableCell>
             <TableCell align="center">{row.nguoi_tao_id.ten}</TableCell>
-            <TableCell align="left">
-              <IconButton size="small" className={classes.eyes}>
+            <TableCell align="center">
+              <IconButton size="small">
                 <DialogInforQSTN
                   title="Thông tin câu hỏi"
                   id={row._id}
@@ -112,8 +109,10 @@ export default function GetQuestionList(props) {
                   luachonc={dataQuestion.luachonc}
                   luachond={dataQuestion.luachond}
                   nguoitao={dataQuestion.nguoitao}
-                  // mota={dataQuestion.mota}
+                  created={dataQuestion.created}
+                  updated={dataQuestion.updated}
                   dapan={dataQuestion.dapan}
+                  
                   icon={<VisibilityIcon />}
                   //   age={age}
                     status={true}

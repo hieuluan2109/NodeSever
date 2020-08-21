@@ -1,20 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import TableContainer from "@material-ui/core/TableContainer";
-import MenuItem from "@material-ui/core/MenuItem";
+import {TableContainer,MenuItem,InputLabel,Select,FormControl,Grid} from '@material-ui/core'
 import SearchButton from "../Search";
 import axios from "axios";
 import Cookies from "js-cookie";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import GetQuestionTN from "./QuestionTN";
 import GetQuestionTL from "./QuestionTL";
 import AddQuestions from "./AddQuestion";
 import Pagination from "@material-ui/lab/Pagination";
 import Loading from '../Loading'
 import AddQuestionsTL from './AddQuestionTL'
-import Grid from '@material-ui/core/Grid';
 const useStyles = makeStyles((theme) => ({
   loading: {
     position: "fixed",
@@ -40,11 +35,6 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "30px",
     maxwidth: "600px",
   },
-  eyes: {
-    marginRight: 20,
-    color: "bold",
-  },
-
   formControl: {
     position: "absolute",
     right: "15%",
@@ -58,9 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function QuestionAllList(props) {
   const classes = useStyles();
-  
   const token = Cookies.get("token");
-  //   const {TITLE,STT,CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO}=props
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [valueQuestion, setValueQuestion] = useState(true);
   const handleListItemClick = (event, index) => {
@@ -89,23 +77,21 @@ export default function QuestionAllList(props) {
       .get(url[0], { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         setLoading(true)
-        // const {data}=res.data
         setGetListTN(res.data.data);
         setPageTN(res.data.pages);
-        console.log("TN", res.data);
       })
       .catch((error) => {
         console.log("Lỗi", error);
       });
-  }, [pageNumberTN]||[getListTN]);
+  }, [pageNumberTN]);
   useEffect(() => {
+    setLoading(false)
     axios
       .get(url[1], { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        // const {data}=res.data
+        setLoading(true)
         setGetListTL(res.data.data);
         setPageTL(res.data.pages);
-        console.log("TL", res.data);
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -158,21 +144,32 @@ export default function QuestionAllList(props) {
           { headers: { Authorization: `Bearer ${token}` } })
         .then((res) => {
           setLoading(true)
-          // const {data}=res.data
           setGetListTN(res.data.data);
           setPageTN(res.data.pages);
-          console.log("TN", res.data);
         })
         .catch((error) => {
           console.log("Lỗi", error);
         });
+      } else {
+        setLoading(false)
+    axios
+      .get(`https://navilearn.herokuapp.com/admin/question/list/?loai=assay&page=${pageNumberTL}&sort=${event.target.value}`
+        , { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
+        setLoading(true)
+        setGetListTL(res.data.data);
+        setPageTL(res.data.pages);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
       }
   }
   return (
     <div className='row'>
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> Danh sách câu hỏi </div>
+        <div className={classes.titleformInfo}> DANH SÁCH CÂU HỎI </div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
           <FormControl className={classes.formControl}>
@@ -199,7 +196,7 @@ export default function QuestionAllList(props) {
             </Grid>
           </Grid>
           </FormControl>
-          {valueQuestion?<AddQuestions token={token} valueQuestion={true}/>:<AddQuestionsTL token={token} valueQuestion={false}/>}
+          {/* {valueQuestion?<AddQuestions token={token} valueQuestion={true}/>:<AddQuestionsTL token={token} valueQuestion={false}/>} */}
      
           <div hidden={loading} className={classes.loading}><Loading /></div>
           <div className={classes.formInfo}>

@@ -8,8 +8,11 @@ import {
   TableHead,
   TableRow,
   IconButton,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@material-ui/core";
-import CreateIcon from "@material-ui/icons/Create";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import SearchButton from "../Search";
 import axios from "axios";
@@ -33,9 +36,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
   },
   formControl: {
-    paddingTop: "30px",
-    paddingLeft: "30px",
-    maxwidth: "600px",
+    position: "absolute",
+    right: "120px",
+    top: "20%",
   },
   table: {
     minWidth: 600,
@@ -43,51 +46,13 @@ const useStyles = makeStyles((theme) => ({
     width: 1161,
     marginTop: 70,
   },
-  eyes: {
-    marginRight: 20,
-    color: "bold",
-  },
-  containerNext: {
-    position: "absolute",
-    left: "90%",
-    top: "87%",
-  },
-  containerBack: {
-    position: "absolute",
-    left: "79%",
-    top: "87%",
-  },
-  next: {
-    fontSize: "1rem",
-  },
-  back: {
-    fontSize: "1rem",
-  },
-  buttonPageNumber: {
-    display: "inline",
-    padding: ".2rem .41rem",
-    borderRadius: "30px!important",
-    backgroundColor: "#5089de",
-    "&": {
-      color: "red",
-      margin: "0 3px",
-      color: "#fff",
-      borderColor: "#5089de",
-    },
-  },
-
-  page: {
-    position: "absolute",
-    left: "80%",
-    top: "85%",
-  },
   pagination: {
     marginRight: "70px",
   },
   loading: {
     position: "fixed",
     top: "50%",
-    left: "50%"
+    left: "50%",
   },
 }));
 
@@ -101,19 +66,14 @@ const topicTitle = [
 
 export default function Threadlist(props) {
   const classes = useStyles();
-  const { title } = props;
-  const [selectedIndex, setSelectedIndex] = useState(1);
   const token = Cookies.get("token");
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
   const [getListTest, setListTest] = useState([]);
   const [page, setPage] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  const [sort, setSort] = useState(" ");
   useEffect(() => {
-    setLoading(false)
+    setLoading(false);
     axios
       .get(
         `https://navilearn.herokuapp.com/admin/test/list?page=${pageIndex}`,
@@ -122,7 +82,7 @@ export default function Threadlist(props) {
         }
       )
       .then((res) => {
-        setLoading(true)
+        setLoading(true);
         setPage(res.data.pages);
         const { data } = res.data;
         setListTest(data);
@@ -131,6 +91,7 @@ export default function Threadlist(props) {
         console.log("Lỗi", error);
       });
   }, [pageIndex]);
+
   const handleChangePage = (e, value) => {
     setPageIndex(value);
   };
@@ -175,14 +136,7 @@ export default function Threadlist(props) {
     nguoi_tao: { _id: "", ho: "", ten: "" },
     updatedAt: "",
     diem: "",
-    ngay_tao:''
-
-    // ds_bai_tap: [],
-    // ds_bai_thi: [],
-    // ds_sinh_vien: [],
-    // nguoi_tao_id: { _id: "", ho: "", ten: "" },
-    // tieu_de: "",
-    // updatedAt: "",
+    ngay_tao: "",
   });
 
   const TestListInfor = (id) => {
@@ -205,10 +159,30 @@ export default function Threadlist(props) {
             ho: data.nguoi_tao_id.ho,
             ten: data.nguoi_tao_id.ten,
           },
-          ngay_tao:data.createdAt,
+          ngay_tao: data.createdAt,
           updatedAt: data.updatedAt,
           diem: data.diem,
         });
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  };
+  const handleSort = (event) => {
+    setSort(event.target.value)
+    setLoading(false);
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/test/list?page=${pageIndex}&sort=${event.target.value}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setLoading(true);
+        setPage(res.data.pages);
+        const { data } = res.data;
+        setListTest(data);
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -218,11 +192,22 @@ export default function Threadlist(props) {
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> Danh sách bài thi </div>
-        <div hidden={loading} className={classes.loading}><Loading /></div>
+        <div className={classes.titleformInfo}> DANH SÁCH BÀI THI </div>
+        <div hidden={loading} className={classes.loading}>
+          <Loading />
+        </div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
-
+          <FormControl className={classes.formControl}>
+            <InputLabel>Sort</InputLabel>
+            <Select value={sort} onChange={handleSort}>
+              <MenuItem value=" ">None</MenuItem>
+              <MenuItem value="tieu_de">Tên bài thi</MenuItem>
+              <MenuItem value="thoi_gian_thi">Thời gian thi</MenuItem>
+              <MenuItem value="ngay_thi">Ngày thi</MenuItem>
+              <MenuItem value="nguoi_tao_id">Người tạo</MenuItem>
+            </Select>
+          </FormControl>
           <div className={classes.formInfo}>
             <TableContainer>
               <Table

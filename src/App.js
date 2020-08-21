@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,Fragment } from "react";
 import "./App.css";
 import {
   BrowserRouter,
@@ -14,7 +14,6 @@ import LoginForm from "./component/Login/Login_Form";
 import Header from "./view/Home";
 import Profile from "./view/Profile";
 import Users from "./view/Users";
-import StudentList from "./view/Students";
 import QuestionsList from "./view/Question";
 import Topic from "./view/Topic";
 import Cookies from "js-cookie";
@@ -26,7 +25,7 @@ import Logout from "./component/Login/Logout";
 import ClassRoom from './view/ClassRoom'
 import TestList from './view/Test'
 import ForgotPassword from './view/ForgotPassword'
-
+import ResetPW from './view/ResetPassword'
 class App extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +35,7 @@ class App extends Component {
     };
   }
   render() {
+
     let token = Cookies.get("token");
     if (this.props.token == false) {
       token = Cookies.remove("token");
@@ -43,11 +43,11 @@ class App extends Component {
     if (token != null) {
       return (
         <BrowserRouter>
-          <Route exact path="/" render={() => <Redirect to="/admin" />} />
-          <Route exact path="/forgotpassword" render={() => <Redirect to="/admin" />} />
-          <Route exact path="/*" render={() => <Redirect to="/admin" />} />
+          
+          {/* <Route exact path="/*" render={() => <Redirect to="/admin" />} /> */}
           <Switch>
-            <Route exact path="/admin">
+          {/* <Fragment> */}
+            <Route exact path="/admin" >
               <div className="admin">
                 <HomePage />
               </div>
@@ -72,11 +72,7 @@ class App extends Component {
                 <Users />
               </div>
             </Route>
-            <Route exact path="/students">
-              <div className="students">
-                <StudentList />
-              </div>
-            </Route>
+           
             <Route exact path="/questions">
               <div className="questions">
                 <QuestionsList />
@@ -107,6 +103,9 @@ class App extends Component {
                 <TestList />
               </div>
             </Route>
+            <Route exact path="*" render={() => <Redirect to="/admin" />} />
+            {/* <Route exact path="/forgotpassword" render={() => <Redirect to="/admin" />} /> */}
+            {/* </Fragment> */}
           </Switch>
           
         </BrowserRouter>
@@ -114,8 +113,9 @@ class App extends Component {
     } else {
       return (
         <BrowserRouter>
-          <Route exact path="/*" render={() => <Redirect to="/" />} />
-          {/* <Switch> */}
+         <Switch>
+        
+         
           <Route exact path="/">
             <div className="Login">
               <LoginV />
@@ -126,7 +126,13 @@ class App extends Component {
               <ForgotPassword />
             </div>
           </Route>
-          {/* </Switch> */}
+          <Route exact path="/reset">
+            <div className="Login">
+              <ResetPW />
+            </div>
+          </Route>
+          <Route exact path="*" render={() => <Redirect to="/" />} />
+          </Switch>
         </BrowserRouter>
       );
     }

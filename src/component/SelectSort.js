@@ -1,11 +1,9 @@
-import { fade,withStyles,useTheme } from "@material-ui/core/styles";
+import {withStyles } from "@material-ui/core/styles";
 import React, { Component } from 'react'
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import View from '../view/Profile'
-import View1 from '../view/Question'
 const styles = theme => ({
       formControl: {
         position:'absolute',

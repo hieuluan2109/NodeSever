@@ -76,9 +76,6 @@ class SearchButton extends Component {
     const Value={
       a:e.target.value
     }
-   
-    console.log('value',this.state.search)
-    console.log('value',Value.a)
   }
 
   render() {

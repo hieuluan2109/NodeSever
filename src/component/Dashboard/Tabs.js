@@ -11,42 +11,39 @@ import Paper from '@material-ui/core/Paper';
 import UserStats from './UserStats';
 import QuestionStats from './QuestionStats';
 import PointStats from './PointStats';
-
 function TabPanel(props) {
-    const {
-        children,
-        value,
-        index,
-        ...other
-    } = props;
-
+    const { children, value, index, ...other } = props;
+  
     return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}>
-            {
-                value === index && (
-                    <Box p={3}>
-                        <Typography>{children}</Typography>
-                    </Box>
-                )
-            }
-        </div>
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`scrollable-auto-tabpanel-${index}`}
+        aria-labelledby={`scrollable-auto-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box p={3}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
     );
-}
-
-TabPanel.propTypes = {
+  }
+  
+  TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired
-};
+    value: PropTypes.any.isRequired,
+  };
+  
 
-function a11yProps(index) {
-    return {id: `simple-tab-${index}`, 'aria-controls': `simple-tabpanel-${index}`};
-}
+  function a11yProps(index) {
+    return {
+      id: `scrollable-auto-tab-${index}`,
+      'aria-controls': `scrollable-auto-tabpanel-${index}`,
+    };
+  }
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -64,17 +61,19 @@ export default function SimpleTabs(props) {
     };
     return (
         <Paper elevation={3}>
-                <Tabs
-                     indicatorColor="primary"
-                    textColor="primary"
-                    centered="centered"
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="simple tabs example">
-                    <Tab label="Người dùng" {...a11yProps(0)}/>
-                    <Tab label="Câu hỏi" {...a11yProps(1)}/>
-                    <Tab label="Điểm" {...a11yProps(2)}/>
-                </Tabs>
+            <Tabs
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+                indicatorColor="primary"
+                textColor="primary"
+                centered="centered"
+                value={value}
+                onChange={handleChange}>
+                <Tab label="Người dùng" {...a11yProps(0)}/>
+                <Tab label="Câu hỏi" {...a11yProps(1)}/>
+                <Tab label="Điểm" {...a11yProps(2)}/>
+            </Tabs>
             <TabPanel value={value} index={0}>
                 <UserStats
                     data={props.data}

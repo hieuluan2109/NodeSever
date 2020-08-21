@@ -12,7 +12,8 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
 import CreateIcon from "@material-ui/icons/Create";
-
+import Grid from "@material-ui/core/Grid";
+import { Paper } from "@material-ui/core";
 const styles = (theme) => ({
   btnThem: {
     position: "absolute",
@@ -25,52 +26,41 @@ const styles = (theme) => ({
       background: theme.palette.primary.light,
     },
   },
-  selectsort: {
-    position: "absolute",
-    top: "10px",
-    right: "25px",
-  },
-  formInfo: {
-    marginTop: "107px",
-    marginRight: "6%",
-    marginLeft: "6%",
-    height: "70vh",
-    background: "white",
-  },
-  titleformInfo: {
-    position: "absolute",
-    marginTop: "65px",
-    marginLeft: 60,
-    fontSize: 17,
-  },
+
   formControl: {
-    maxwidth: "700px",
+    // maxwidth: "400px",
+    margin: "20px",
+    display: "flex",
   },
   titleFormControl: {
-    width: "100px",
+    width: "90px",
     float: "left",
-    paddingTop: "32px",
+    paddingTop: "20px",
   },
   contentFormControl: {
-    width: "400px",
-    borderRadius: "5px",
-    height: "30px",
-    paddingLeft: "10px",
-    marginTop: "25px",
-    outline: "none",
-    "&:focus": {
-      borderColor: "#3f51b5",
-    },
+    width: "350px",
+    // borderRadius: "5px",
+    // height: "30px",
+    // outline: "none",
+    // "&:focus": {
+    //   borderColor: "#3f51b5",
+    // },
   },
-  ngaysinh: {
-    position: "absolute",
-    marginTop: "30px",
+  // contentNgaysinh: {
+  //   marginTop: "15px",
+  //   marginLeft: "10px",
+  // },
+  gioi_tinh: {
+    margin: "20px 10px",
   },
-  contentNgaysinh: {
-    marginTop: "5px",
-    marginLeft: "100px",
+  dialogPaper: {
+    minHeight: "80vh",
+    maxHeight: "90vh",
+    minWidth: "170vh",
+    // maxWidth: "170vh",
   },
- 
+  paper: { marginLeft: "20px" },
+  btn: { marginLeft: "75%" },
 });
 
 class DialogInfo extends Component {
@@ -83,17 +73,28 @@ class DialogInfo extends Component {
 
   handleClickOpen = () => {
     this.setState({ open: true });
-    this.props.getDataQuestionInfor(this.props.id)
+    this.props.getDataQuestionInfor(this.props.id);
   };
   handleClose = () => {
     this.setState({ open: false });
   };
-  
 
   render() {
-    const { classes, dapan,noidung,diem,chude,luachona,luachonb,luachonc,luachond,nguoitao,mota } = this.props;
+    const {
+      classes,
+      dapan,
+      noidung,
+      diem,
+      chude,
+      luachona,
+      luachonb,
+      luachonc,
+      luachond,
+      nguoitao,
+      created,
+      updated,
+    } = this.props;
     const { open } = this.state;
-
     return (
       <div>
         <IconButton
@@ -105,112 +106,239 @@ class DialogInfo extends Component {
           {this.props.icon}
         </IconButton>
 
-      
-       
         <Dialog
+          classes={{ paper: classes.dialogPaper }}
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
+          <DialogTitle id="form-dialog-title">
+            {this.props.title}
             
-          <DialogContent>
-            <form>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Nội dung</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="noidung"
-                  type="text"
-                  value={noidung}
-                  disabled={this.props.status}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Chủ đề</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="chude"
-                  type="text"
-                  value={chude}
-                  disabled={this.props.status}
-                />
-              </div>
-              
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp án A</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="dap_an_a"
-                  type="text"
-                  value={luachona}
-                  disabled={this.props.status}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp án B</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="dap_an_b"
-                  type="text"
-                  value={luachonb}
-                  disabled={this.props.status}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp án C</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="dap_an_c"
-                  type="text"
-                  value={luachonc}
-                  disabled={this.props.status}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp án D</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="dap_an_d"
-                  type="text"
-                  value={luachond}
-                  disabled={this.props.status}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Đáp án</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="dap_an"
-                  type="text"
-                  value={dapan}
-                  disabled={this.props.status}
-                />
-              </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Người Tạo</label>
-                <input
-                  className={classes.contentFormControl}
-                  name="nguoitao"
-                  type="text"
-                  value={nguoitao}
-                  disabled={this.props.status}
-                />
-              </div>
+              <Button
+                onClick={this.handleClose}
+                name="btnXNhan"
+                color="primary"
+                className={classes.btn}
+                // disabled={status}
+              >
+                Đóng
+              </Button>
+            
+          </DialogTitle>
 
-            
-              <DialogActions>
-            {/* <Button onClick={this.handleClose} color="primary">
-              Hủy bỏ
-            </Button> */}
-            <Button  onClick={this.handleClose} color="primary">
-              Xác nhận
-            </Button>
-          </DialogActions>
+          <DialogContent>
+            {/* <DialogContentText>
+              Để tạo tài khoản, vui lòng điền đầy đủ các thông tin
+            </DialogContentText> */}
+
+            <form>
+              <Paper elevation={3} style={{marginBottom:'10px'}}>
+                <Grid container>
+                  <Grid item xs={6} className={classes.grid1}>
+                    {/* <Paper  elevation={3} className={classes.paper}> */}
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Nội dung
+                      </label>
+                      <TextField
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="noidung"
+                        value={noidung}
+                        disabled={this.props.status}
+                        type="text"
+                        multiline={true}
+                      />
+                    </div>
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Danh mục
+                      </label>
+                      <TextField
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="chude"
+                        type="text"
+                        value={chude}
+                        disabled={this.props.status}
+                      />
+                    </div>
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Người tạo
+                      </label>
+                      <TextField
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="ngay_tao"
+                        type="text"
+                        value={this.props.nguoitao}
+                        disabled={this.props.status}
+                      />
+                    </div>
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Ngày tạo
+                      </label>
+                      <TextField
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="ngaytao"
+                        type="text"
+                        value={created}
+                        disabled={this.props.status}
+                      />
+                    </div>
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                      Cập nhật
+                      </label>
+                      <TextField
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="update"
+                        type="text"
+                        value={updated}
+                        disabled={this.props.status}
+                      />
+                    </div>
+                  </Grid>
+
+                  <Grid item xs={6} className={classes.grid2}>
+                    <div
+                      className={classes.formControl}
+                      style={{ display: this.props.display }}
+                    >
+                      <label className={classes.titleFormControl}>
+                        Đáp án A
+                      </label>
+                      <TextField
+                        multiline={true}
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="dap_an_a"
+                        type="text"
+                        value={luachona}
+                        disabled={this.props.status}
+                      />
+                    </div>
+
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Đáp án B
+                      </label>
+                      <TextField
+                        multiline={true}
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="dap_an_b"
+                        type="text"
+                        value={luachonb}
+                        disabled={this.props.status}
+                      />
+                    </div>
+
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Đáp án C
+                      </label>
+                      <TextField
+                        multiline={true}
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="dap_an_c"
+                        type="text"
+                        value={luachonc}
+                        disabled={this.props.status}
+                      />
+                    </div>
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Đáp án D
+                      </label>
+                      <TextField
+                        multiline={true}
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="dap_an_d"
+                        type="text"
+                        value={luachond}
+                        disabled={this.props.status}
+                      />
+                    </div>
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>Đáp án</label>
+                      <TextField
+                        multiline={true}
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="dap_an"
+                        type="text"
+                        value={dapan}
+                        disabled={this.props.status}
+                      />
+                    </div>
+                    {/* <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>SĐT</label>
+                      <TextField
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="sdt"
+                        value={this.state.sdt}
+                        type="number"
+                        onChange={this.handleChange}
+                        onBlur={this.checkvalid}
+                      />
+                    </div>
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Mật khẩu
+                      </label>
+                      <TextField
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="password"
+                        value={this.state.password}
+                        type="password"
+                        onChange={this.handleChange}
+                        onBlur={this.checkvalid}
+                      />
+                    </div>
+                    <div className={classes.formControl}>
+                      <label className={classes.titleFormControl}>
+                        Xác nhận mật khẩu
+                      </label>
+                      <TextField
+                        size="small"
+                        variant="outlined"
+                        className={classes.contentFormControl}
+                        name="confirmpassword"
+                        value={this.state.confirmpassword}
+                        type="password"
+                        onChange={this.handleChange}
+                        onBlur={this.checkvalid}
+                      />
+                    </div> */}
+
+                    <DialogActions></DialogActions>
+                  </Grid>
+                </Grid>
+              </Paper>
             </form>
           </DialogContent>
-
-        
         </Dialog>
       </div>
     );

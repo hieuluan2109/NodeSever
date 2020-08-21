@@ -21,7 +21,10 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import Loading from '../Loading';
+import Loading from "../Loading";
+import CheckedStatus from "../Status";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -54,59 +57,30 @@ const useStyles = makeStyles((theme) => ({
     width: 1161,
     marginTop: 70,
   },
-  eyes: {
-    marginRight: 20,
-    color: "bold",
-  },
-  containerNext: {
-    position: "absolute",
-    left: "90%",
-    top: "87%",
-  },
-  containerBack: {
-    position: "absolute",
-    left: "79%",
-    top: "87%",
-  },
-  next: {
-    fontSize: "1rem",
-  },
-  back: {
-    fontSize: "1rem",
-  },
-  buttonPageNumber: {
-    display: "inline",
-    padding: ".2rem .41rem",
-    borderRadius: "30px!important",
-    backgroundColor: "#5089de",
-    "&": {
-      color: "red",
-      margin: "0 3px",
-      color: "#fff",
-      borderColor: "#5089de",
-    },
-  },
 
-  page: {
-    position: "absolute",
-    left: "80%",
-    top: "85%",
-  },
   pagination: {
     marginRight: "70px",
-  },Hello:{
-    position:'absolute',
-    right:'15%',
-    marginTop:'2px'
+  },
+  Hello: {
+    position: "absolute",
+    right: "15%",
+    marginTop: "2px",
   },
   loading: {
     position: "fixed",
     top: "50%",
-    left: "50%"
+    left: "50%",
   },
 }));
 
-const topicTitle = ["Tên chủ đề", "Mô tả", "Người tạo", ""];
+const topicTitle = [
+  "Tên chủ đề",
+  "Mô tả",
+  "Người tạo",
+  "Chi tiết",
+  "Cập nhật",
+  "Trạng thái",
+];
 
 export default function Threadlist(props) {
   const classes = useStyles();
@@ -120,20 +94,20 @@ export default function Threadlist(props) {
   const [page, setPage] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
   useEffect(() => {
-    setLoading(false)
+    setLoading(false);
     axios
       .get(
-        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}`,
+        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${sort}&search=${param}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
       .then((res) => {
-        setLoading(true)
+        setLoading(true);
         setPage(res.data.pages);
         const { data } = res.data;
         setListTopic(data);
-       
+        console.log(res.data);
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -142,7 +116,7 @@ export default function Threadlist(props) {
   const handleChangePage = (e, value) => {
     setPageIndex(value);
   };
-  const [sort, setSort] = useState(' ');
+  const [sort, setSort] = useState(" ");
   const [param, setParam] = useState("");
   const typingTimeoutRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -180,6 +154,7 @@ export default function Threadlist(props) {
     mo_ta: "",
     nguoi_tao: "",
     ngay_tao: "",
+    trang_thai: true,
   });
   const [getSuccess, setSuccess] = useState("");
   const getTopicInfor = (id) => {
@@ -195,9 +170,10 @@ export default function Threadlist(props) {
           mo_ta: data.mo_ta,
           nguoi_tao: data.nguoi_tao_id.ten,
           ngay_tao: data.createdAt,
+          update: data.updatedAt,
           _id: data._id,
+          trang_thai: data.trang_thai,
         });
-        console.log("GV", dataTopicInfor);
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -231,45 +207,79 @@ export default function Threadlist(props) {
         console.log("Lỗi", error.response);
       });
   };
-const clearSuccess=()=>{
-  setSuccess('')
-}
-const handleSort=(event)=>{
-  setSort(event.target.value)
-  setLoading(false)
-  axios
-    .get(
-      `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${event.target.value}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
-    .then((res) => {
-      setLoading(true)
-      setPage(res.data.pages);
-      const { data } = res.data;
-      setListTopic(data);
-    
-    })
-    .catch((error) => {
-      console.log("Lỗi", error);
-    });
-}
+  const clearSuccess = () => {
+    setSuccess("");
+  };
+  const handleSort = (event) => {
+    setSort(event.target.value);
+    setLoading(false);
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${event.target.value}&search=${param}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setLoading(true);
+        setPage(res.data.pages);
+        const { data } = res.data;
+        setListTopic(data);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  };
+
+  const onSubmitChangeStatus = (id, trangthai) => {
+    // event.preventDefault();
+    // const {_id}=getListTopic
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/category/update/status?id=${id}&trang_thai=${trangthai}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setSuccess(res.data.msg);
+        console.log(res.data);
+        // setSuccess(res.data.msg);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error.response);
+      });
+  };
+
+  const [checked, setchecked] = useState([]);
+
+  // {Object.keys(getListTopic).map((item,index)=>{
+  //     const list=getListTopic[item]
+  //     // setchecked(item.trang_thai)
+  //     let trang_thai=checked[item]
+  //     if(typeof trang_thai === 'undefined') {
+  //       trang_thai = list.trang_thai;
+  //   }
+  //   console.log(list,'l')
+  //   console.log(trang_thai,'tt')
+  //   })}
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> {title} </div>
-        <div hidden={loading} className={classes.loading}><Loading /></div>
+        <div className={classes.titleformInfo}> DANH SÁCH CHỦ ĐỀ </div>
+        <div hidden={loading} className={classes.loading}>
+          <Loading />
+        </div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
           <FormControl className={classes.Hello}>
-            <InputLabel style={{ left: '10%'}}>Sort</InputLabel>
-              <Select value={sort} onChange={handleSort}>
-                <MenuItem value=' '>None</MenuItem>
-                <MenuItem value='tieu_de'>Tên</MenuItem>
-                <MenuItem value='mo_ta'>Mô tả</MenuItem>
-              </Select>
+            <InputLabel style={{ left: "10%" }}>Sort</InputLabel>
+            <Select value={sort} onChange={handleSort}>
+              <MenuItem value=" ">None</MenuItem>
+              <MenuItem value="tieu_de">Tên</MenuItem>
+              <MenuItem value="mo_ta">Mô tả</MenuItem>
+            </Select>
           </FormControl>
           <AddTopic token={token} />
           <div className={classes.formInfo}>
@@ -301,18 +311,20 @@ const handleSort=(event)=>{
                         {value.nguoi_tao_id.ten}
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton size="small" className={classes.eyes}>
+                        <IconButton size="small">
                           <TopicInfor
                             id={value._id}
                             getInfor={getTopicInfor}
                             data={dataTopicInfor}
                             icon={<VisibilityIcon />}
                             disable={true}
-                            status={true} 
+                            status={true}
                             clearForm={clearSuccess}
                           />
                         </IconButton>
-                        <IconButton size="small" className={classes.eyes}>
+                      </TableCell>
+                      <TableCell align="center">
+                        <IconButton size="small">
                           <TopicInfor
                             id={value._id}
                             getInfor={getTopicInfor}
@@ -328,6 +340,49 @@ const handleSort=(event)=>{
                             clearForm={clearSuccess}
                           />
                         </IconButton>
+                      </TableCell>
+                      <TableCell align="center">
+                        <CheckedStatus 
+                         id={value._id}
+                        change={onSubmitChangeStatus}
+                        trang_thai={value.trang_thai}
+                      />
+{/*                        
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              // onChange={()=>{
+                              //   setchecked({[item]:!trang_thai})
+                              // }}
+                              // onChange={(event) => {
+                              //   onSubmitChangeStatus(
+                              //     value._id,
+                              //     event.target.checked
+                              //   );
+                              // }}
+                              // checked={trang_thai}
+                              // value={trang_thai}
+                              // name="trang_thai"
+                            />
+                          }
+                        /> */}
+              
+                        {/* <FormControl className={classes.formControl}>
+                         
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={value.trang_thai}
+                            onChange={(event) => {
+                               
+                               event.target.value=!value.trang_thai
+                              }}
+                          >
+                            <MenuItem value={true}>Enable</MenuItem>
+                            <MenuItem value={false}>Disable</MenuItem>
+              
+                          </Select>
+                        </FormControl> */}
                       </TableCell>
                     </TableRow>
                   ))}

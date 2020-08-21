@@ -1,8 +1,6 @@
 import React from "react";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-// import Search from './Search'
-import BugReportIcon from "@material-ui/icons/BugReport";
 import {makeStyles,Typography,IconButton,Badge} from "@material-ui/core";
 import Menus from "../ButtonMenu";
 import Appbarnav from "../Appbar";
@@ -12,13 +10,7 @@ import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import {
-  // BrowserRouter as Router,
-  // Switch,
-  // Route,
   Link,
-  // NavLink,
-  // useRouteMatch,
-  // useParams
 } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
@@ -48,7 +40,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Home() {
   const classes = useStyles();
-  const [notification, setNotification] = React.useState('1'); 
+  const [notification, setNotification] = React.useState('0'); 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -66,6 +58,15 @@ export default function Home() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const listNotifacation =()=>{
+    if (data.length == 0)
+      return <Typography style={{marginLeft: "20px", marginTop: '5px',marginBottom: '5px'}} >(Trống)</Typography>
+    else return data.map( function(data, index){
+      if(index < 5)
+        return <Typography style={{marginLeft: "20px", marginTop: '5px'}}><b>.</b> {data.thong_tin_sua.ho + ' ' + data.thong_tin_sua.ten}</Typography>
+    }.bind(this))
+
+  }
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   return (
@@ -98,14 +99,14 @@ export default function Home() {
       <div style={{margin: "20px"}}>
         <b>Yêu cầu sửa thông tin</b>
         <Divider />
-        {data ? data.map( function(data, index){
-          if(index < 5)
-            return <Typography style={{marginLeft: "20px"}}><b>.</b> {data.thong_tin_sua.ho + ' ' + data.thong_tin_sua.ten}</Typography>
-        }.bind(this))
-        : '...' }
+        {data ? listNotifacation() : null }
       </div>
-      <Button onClick={handleClose} style={{left: '65%'}} color="primary" size="small" >
-        <p style={{fontSize: "12px", textDecoration: 'underline'}}>Đóng</p></Button>
+      {/* <Button color="primary" size="small" >
+        <p style={{fontSize: "12px", textDecoration: 'underline'}}>Xử lí thông báo</p>
+      </Button> */}
+      <Button onClick={handleClose}  color="primary" size="small" style={{float:'right'}}>
+       Đóng
+      </Button>
       </Popover>
     </div>
   );

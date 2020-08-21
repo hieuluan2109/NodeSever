@@ -1,18 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import Collapse from "@material-ui/core/Collapse";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import StarBorder from "@material-ui/icons/StarBorder";
+
 import Accordion from "@material-ui/core/Accordion";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -42,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   accord: { background: "#ececec" },
   list: { display: "block" },
+ 
 }));
 
 export default function QuestionInList(props) {
@@ -56,7 +47,7 @@ export default function QuestionInList(props) {
     <div>
       {data == "" ? (
         <div className={classes.student}>
-          Không có câu hỏi nào trong bài thi này
+          Không có câu hỏi nào trong bài thi này     
         </div>
       ) : (
         data.dsCauHoi.map((row, index) => (
@@ -72,6 +63,7 @@ export default function QuestionInList(props) {
                   expandIcon={<ExpandMoreIcon />}
                   className={classes.accord}
                 >
+             
                   {/* <ListItem> */}
                   <ListItemText
                     primary={row.cau_hoi_id.noi_dung}
@@ -84,12 +76,14 @@ export default function QuestionInList(props) {
                     <ul>
                       <ListItemText primary={row1.label + ": " + row1.value} />
                     </ul>
+                   
                   ))}
                   {!row.cau_hoi_id.dap_an ? (
                     " "
                   ) : (
                     <ListItemText
                       primary={"Đáp Án: " + row.cau_hoi_id.dap_an.value}
+                     
                     />
                   )}
                 </AccordionDetails>

@@ -5,14 +5,7 @@ import HomePage from './Home'
         return (
             <div>
                 <HomePage />
-                <Topic
-                title="Danh Sách Chủ Đề"
-                stt="Số thứ tự"
-                name="Tên chủ đề"
-                description="Mô tả"
-                createdby="Người tạo"
-               
-                />
+                <Topic  />
             </div>
       
         );

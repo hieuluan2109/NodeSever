@@ -144,7 +144,6 @@ class AddTopic extends Component {
   render() {
     const { classes, children } = this.props;
     const { open, errors, success, status,tieu_de,mo_ta } = this.state;
-    // const { ho, ten, email, password,ngaysinh } = this.state;
     return (
       <div>
         <Button
@@ -170,7 +169,7 @@ class AddTopic extends Component {
               Để tạo danh mục, vui lòng điền đầy đủ các thông tin
             </DialogContentText>
             <div
-              style={{ textAlign: "center", color: "red", fontWeight: "bold" }}
+              style={{ textAlign: "center", color: "red" }}
             >
               {" "}
               {errors}
@@ -180,24 +179,30 @@ class AddTopic extends Component {
             <form onSubmit={this.handleSubmit}>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Tên danh mục</label>
-                <input
-                  className={classes.contentFormControl}
+                <TextField
+                  size="small"
                   name="tieu_de"
+                  variant="outlined"
+                  className={classes.contentFormControl}
                   type="text"
                   value={tieu_de}
                   onChange={this.handleChange}
-                  onBlur={this.checkvalidate}
+                  onKeyUp={this.checkvalidate}
                 />
+            
               </div>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Mô tả</label>
-                <input
-                  className={classes.contentFormControl}
+               
+                 <TextField
+                  size="small"
                   name="mo_ta"
+                  variant="outlined"
+                  className={classes.contentFormControl}
                   type="text"
                   value={mo_ta}
                   onChange={this.handleChange}
-                  onBlur={this.checkvalidate}
+                  onKeyUp={this.checkvalidate}
                 />
               </div>
              

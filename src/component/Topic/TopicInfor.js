@@ -30,45 +30,17 @@ const styles = (theme) => ({
     top: "10px",
     right: "25px",
   },
-  formInfo: {
-    marginTop: "107px",
-    marginRight: "6%",
-    marginLeft: "6%",
-    height: "70vh",
-    background: "white",
-  },
-  titleformInfo: {
-    position: "absolute",
-    marginTop: "65px",
-    marginLeft: 60,
-    fontSize: 17,
-  },
   formControl: {
     maxwidth: "700px",
+    marginTop:'20px'
   },
   titleFormControl: {
     width: "100px",
     float: "left",
-    paddingTop: "32px",
+    marginTop: "10px",
   },
   contentFormControl: {
     width: "400px",
-    borderRadius: "5px",
-    height: "30px",
-    paddingLeft: "10px",
-    marginTop: "25px",
-    outline: "none",
-    "&:focus": {
-      borderColor: "#3f51b5",
-    },
-  },
-  ngaysinh: {
-    position: "absolute",
-    marginTop: "30px",
-  },
-  contentNgaysinh: {
-    marginTop: "5px",
-    marginLeft: "100px",
   },
  
 });
@@ -111,7 +83,7 @@ class TopicInfor extends Component {
    
     const { classes,disable} = this.props;
     const { open,errors,status} = this.state;
-   const {tieu_de,mo_ta,nguoi_tao,ngay_tao}=this.props.data
+    const {tieu_de,mo_ta,nguoi_tao,ngay_tao,update}=this.props.data
 
 
 
@@ -139,9 +111,11 @@ class TopicInfor extends Component {
             <form onSubmit={this.props.onsubmit}>
             <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Tên danh mục</label>
-                <input
-                  className={classes.contentFormControl}
+                <TextField
+                  size="small"
                   name="tieu_de"
+                  variant="outlined"
+                  className={classes.contentFormControl}
                   type="text"
                   value={tieu_de}
                   onChange={this.props.change}
@@ -151,34 +125,56 @@ class TopicInfor extends Component {
               </div>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Mô tả</label>
-                <input
-                  className={classes.contentFormControl}
+                <TextField
+                  size="small"
+                  multiline={true}
                   name="mo_ta"
+                  variant="outlined"
+                  className={classes.contentFormControl}
                   type="text"
                   value={mo_ta}
                   onChange={this.props.change}
                   onBlur={this.Checkvalidate}
                   disabled={disable}
                 />
+                
               </div>
               <div className={classes.formControl} style={{display:this.props.display}}>
                 <label className={classes.titleFormControl}>Người tạo</label>
-                <input
-                  className={classes.contentFormControl}
+                <TextField
+                  size="small"
                   name="nguoi_tao"
+                  variant="outlined"
+                  className={classes.contentFormControl}
                   type="text"
                   value={nguoi_tao}
                   onChange={this.props.change}
                   disabled={disable}
                 />
+           
               </div>
               <div className={classes.formControl} style={{display:this.props.display}}>
                 <label className={classes.titleFormControl}>Ngày tạo</label>
-                <input
-                  className={classes.contentFormControl}
+                <TextField
+                  size="small"
                   name="ngay_tao"
+                  variant="outlined"
+                  className={classes.contentFormControl}
                   type="text"
                   value={ngay_tao}
+                  onChange={this.props.change}
+                  disabled={disable}
+                />
+              </div>
+              <div className={classes.formControl} style={{display:this.props.display}}>
+                <label className={classes.titleFormControl}>Cập nhật</label>
+                <TextField
+                  size="small"
+                  name="update"
+                  variant="outlined"
+                  className={classes.contentFormControl}
+                  type="text"
+                  value={update}
                   onChange={this.props.change}
                   disabled={disable}
                 />

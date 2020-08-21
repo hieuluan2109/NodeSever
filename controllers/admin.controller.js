@@ -60,36 +60,34 @@ module.exports = {
         const {email} = req.body;
         await NguoidungSchema
             .findOne({'email': email, 'loai': true})
-            .exec( async (err, data)=>{
-                if (err || !data)
-                    return res.status(400).json({'success': false, 'msg': 'Không tồn tại email '+email})
-                else {
-                    const code = await makeCode();
-                    sendForgotPasswordMail(email, code, data.ho+' ' + data.ten)
-                    const newRC = new QuenMatKhau({
-                        code: code,
-                        email: email
-                    });
-                    newRC.save()
-                    .then(s=> console.log(s))
-                    .catch(err => console.log(err));
-                    res.status(200).json({'success': true})
-                };
+            .then( async (data)=>{
+                const code = await makeCode();
+                sendForgotPasswordMail(email, code, data.ho+' ' + data.ten)
+                const newRC = new QuenMatKhau({
+                    code: code,
+                    email: email
+                });
+                newRC.save()
+                .then(s=> console.log(s))
+                .catch(err => console.log(err));
+                res.status(200).json({'success': true})
+            })
+            .catch(err=>{
+                return res.status(400).json({'success': false, 'msg': 'Không tồn tại email '+email})
             })
     },
     admin_change_password_with_code: async function (req, res) {
         const [{code, password, password1}, option ] = [ req.body, { new: true, useFindAndModify: false }] ;
         const update = {mat_khau: await hashPassWord(password)}
-        await QuenMatKhau.findOne({'code': code, 'expire' : {$gt : Date.now()}})
+        await QuenMatKhau.findOne({code: code, expire: {$gt: Date.now()}})
         .then(user => {
+            console.log(user)
             QuenMatKhau.findOneAndUpdate({'code': code}, {'expire': -user.expire}, option)
-            .then(up => { console.log(up) }).catch(err => console.log(error))
-            NguoidungSchema.findOneAndUpdate({email: user.email}, { $set: update }, option, function (err, updated) { // need some attention
-                if(err || !updated)
-                    res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) 
-                else res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công', 'data': updated}) 
+            .then(up => { console.log(up) }).catch(err => console.log(err))
+            NguoidungSchema.findOneAndUpdate({email: user.email}, { $set: update }, option) 
+            .then(updated=> res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'}))
+            .catch(err => res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'})) 
             })
-        })
         .catch(err => res.status(400).json({success: false, msg: 'Mã code đã hết hạn'}))
     },
     admin_get_notification: async function(req, res) {
